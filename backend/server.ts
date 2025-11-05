@@ -74,7 +74,7 @@ interface ErrorResponse {
 function safeJsonParse(value: any): any {
   if (typeof value === 'string') {
     try {
-      return JSON.parse(value);
+      return safeJsonParse(value);
     } catch {
       return value;
     }
@@ -284,7 +284,6 @@ app.post('/api/auth/signup', async (req: Request, res: Response) => {
       await client.query('COMMIT');
 
       const user = userResult.rows[0];
-      user.notification_preferences = JSON.parse(user.notification_preferences);
 
       // Generate JWT token
       const auth_token = jwt.sign({ user_id: user.user_id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
@@ -334,11 +333,9 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
     const expiresIn = remember_me ? '30d' : '7d';
     const auth_token = jwt.sign({ user_id: user.user_id, email: user.email }, JWT_SECRET, { expiresIn });
 
-    // Parse JSON fields
-    user.notification_preferences = JSON.parse(user.notification_preferences);
     user.last_login = now;
     user.updated_at = now;
-    delete user.password_hash; // Don't return password
+    delete user.password_hash;
 
     res.json({ user, auth_token });
   } catch (error) {
@@ -491,7 +488,6 @@ app.get('/api/users/me', authenticateToken, async (req: AuthRequest, res: Respon
     }
 
     const user = result.rows[0];
-    user.notification_preferences = JSON.parse(user.notification_preferences);
 
     res.json(user);
   } catch (error) {
@@ -577,7 +573,6 @@ app.patch('/api/users/me', authenticateToken, async (req: AuthRequest, res: Resp
 
     const result = await pool.query(query, updateValues);
     const user = result.rows[0];
-    user.notification_preferences = JSON.parse(user.notification_preferences);
 
     res.json(user);
   } catch (error) {
@@ -602,7 +597,6 @@ app.get('/api/users/me/statistics', authenticateToken, async (req: AuthRequest, 
     }
 
     const stats = result.rows[0];
-    stats.unique_cuisines_tried = JSON.parse(stats.unique_cuisines_tried);
 
     res.json(stats);
   } catch (error) {
@@ -811,7 +805,7 @@ app.get('/api/restaurants', async (req: Request, res: Response) => {
     // Parse JSON fields
     const restaurants = result.rows.map(r => ({
       ...r,
-      cuisine_types: typeof r.cuisine_types === 'string' ? JSON.parse(r.cuisine_types) : r.cuisine_types
+      cuisine_types: typeof r.cuisine_types === 'string' ? safeJsonParse(r.cuisine_types) : r.cuisine_types
     }));
 
     // Get total count
@@ -844,7 +838,7 @@ app.get('/api/restaurants/:restaurant_id', async (req: Request, res: Response) =
     }
 
     const restaurant = result.rows[0];
-    restaurant.cuisine_types = JSON.parse(restaurant.cuisine_types);
+    restaurant.cuisine_types = safeJsonParse(restaurant.cuisine_types);
 
     res.json(restaurant);
   } catch (error) {
@@ -920,8 +914,8 @@ app.get('/api/restaurants/:restaurant_id/menu', async (req: Request, res: Respon
 
       const items = itemsResult.rows.map(item => ({
         ...item,
-        dietary_preferences: JSON.parse(item.dietary_preferences),
-        allergen_info: JSON.parse(item.allergen_info)
+        dietary_preferences: safeJsonParse(item.dietary_preferences),
+        allergen_info: safeJsonParse(item.allergen_info)
       }));
 
       categories.push({
@@ -956,8 +950,8 @@ app.get('/api/restaurants/:restaurant_id/menu/items/:menu_item_id', async (req: 
     }
 
     const menu_item = itemResult.rows[0];
-    menu_item.dietary_preferences = JSON.parse(menu_item.dietary_preferences);
-    menu_item.allergen_info = JSON.parse(menu_item.allergen_info);
+    menu_item.dietary_preferences = safeJsonParse(menu_item.dietary_preferences);
+    menu_item.allergen_info = safeJsonParse(menu_item.allergen_info);
 
     // Get sizes
     const sizesResult = await pool.query(
@@ -1001,8 +995,8 @@ app.get('/api/restaurants/:restaurant_id/discounts', async (req: Request, res: R
 
     const discounts = result.rows.map(d => ({
       ...d,
-      excluded_items: JSON.parse(d.excluded_items),
-      valid_days: JSON.parse(d.valid_days)
+      excluded_items: safeJsonParse(d.excluded_items),
+      valid_days: safeJsonParse(d.valid_days)
     }));
 
     res.json({ discounts });
@@ -1174,8 +1168,8 @@ app.get('/api/discounts/:discount_id', async (req: Request, res: Response) => {
     }
 
     const discount = result.rows[0];
-    discount.excluded_items = JSON.parse(discount.excluded_items);
-    discount.valid_days = JSON.parse(discount.valid_days);
+    discount.excluded_items = safeJsonParse(discount.excluded_items);
+    discount.valid_days = safeJsonParse(discount.valid_days);
 
     res.json(discount);
   } catch (error) {
@@ -1351,7 +1345,7 @@ app.get('/api/favorites', authenticateToken, async (req: AuthRequest, res: Respo
         restaurant_id: row.restaurant_id,
         restaurant_name: row.restaurant_name,
         description: row.description,
-        cuisine_types: JSON.parse(row.cuisine_types),
+        cuisine_types: safeJsonParse(row.cuisine_types),
         price_range: row.price_range,
         street_address: row.street_address,
         apartment_suite: row.apartment_suite,
@@ -1875,8 +1869,8 @@ app.post('/api/cart/discount', authenticateToken, async (req: AuthRequest, res: 
     }
 
     const discount = discountResult.rows[0];
-    discount.excluded_items = JSON.parse(discount.excluded_items);
-    discount.valid_days = JSON.parse(discount.valid_days);
+    discount.excluded_items = safeJsonParse(discount.excluded_items);
+    discount.valid_days = safeJsonParse(discount.valid_days);
 
     // Validate minimum order
     const subtotal = cart.items.reduce((sum, item) => sum + item.item_total_price, 0);
@@ -2066,7 +2060,7 @@ app.post('/api/orders', authenticateToken, async (req: AuthRequest, res: Respons
       }
 
       // Update statistics
-      const cuisines = JSON.parse(restaurant.cuisine_types);
+      const cuisines = safeJsonParse(restaurant.cuisine_types);
       await client.query(
         `UPDATE user_statistics 
          SET total_orders_placed = total_orders_placed + 1,
@@ -2129,8 +2123,8 @@ app.post('/api/orders', authenticateToken, async (req: AuthRequest, res: Respons
 
       const items = itemsResult.rows.map(item => ({
         ...item,
-        selected_addons: JSON.parse(item.selected_addons),
-        selected_modifications: JSON.parse(item.selected_modifications)
+        selected_addons: safeJsonParse(item.selected_addons),
+        selected_modifications: safeJsonParse(item.selected_modifications)
       }));
 
       res.status(201).json({
@@ -2227,8 +2221,8 @@ app.get('/api/orders', authenticateToken, async (req: AuthRequest, res: Response
 
       const items = itemsResult.rows.map(item => ({
         ...item,
-        selected_addons: JSON.parse(item.selected_addons),
-        selected_modifications: JSON.parse(item.selected_modifications)
+        selected_addons: safeJsonParse(item.selected_addons),
+        selected_modifications: safeJsonParse(item.selected_modifications)
       }));
 
       orders.push({
@@ -2319,8 +2313,8 @@ app.get('/api/orders/:order_id', authenticateToken, async (req: AuthRequest, res
 
     const items = itemsResult.rows.map(item => ({
       ...item,
-      selected_addons: JSON.parse(item.selected_addons),
-      selected_modifications: JSON.parse(item.selected_modifications)
+      selected_addons: safeJsonParse(item.selected_addons),
+      selected_modifications: safeJsonParse(item.selected_modifications)
     }));
 
     res.json({
@@ -2448,8 +2442,8 @@ app.patch('/api/orders/:order_id', authenticateToken, async (req: AuthRequest, r
     const itemsResult = await pool.query('SELECT * FROM order_items WHERE order_id = $1', [order_id]);
     const items = itemsResult.rows.map(item => ({
       ...item,
-      selected_addons: JSON.parse(item.selected_addons),
-      selected_modifications: JSON.parse(item.selected_modifications)
+      selected_addons: safeJsonParse(item.selected_addons),
+      selected_modifications: safeJsonParse(item.selected_modifications)
     }));
 
     const updated = updatedOrderResult.rows[0];
@@ -2598,8 +2592,8 @@ app.post('/api/orders/:order_id/reorder', authenticateToken, async (req: AuthReq
         base_price: parseFloat(orderItem.base_price),
         selected_size: orderItem.selected_size,
         size_price_adjustment: parseFloat(orderItem.size_price_adjustment),
-        selected_addons: JSON.parse(orderItem.selected_addons),
-        selected_modifications: JSON.parse(orderItem.selected_modifications),
+        selected_addons: safeJsonParse(orderItem.selected_addons),
+        selected_modifications: safeJsonParse(orderItem.selected_modifications),
         special_instructions: orderItem.special_instructions,
         quantity: orderItem.quantity,
         item_total_price: parseFloat(orderItem.item_total_price)
@@ -3133,9 +3127,6 @@ app.get('/api/users/me/badges', authenticateToken, async (req: AuthRequest, res:
       [req.user.user_id]
     );
     const stats = statsResult.rows[0];
-    if (stats) {
-      stats.unique_cuisines_tried = JSON.parse(stats.unique_cuisines_tried);
-    }
 
     const earnedBadgeIds = new Set(earnedResult.rows.map(ub => ub.badge_id));
     const earned_badges = [];
@@ -3700,7 +3691,7 @@ app.get('/api/recommendations', authenticateToken, async (req: AuthRequest, res:
 
     const preferredCuisines = new Set();
     orderHistoryResult.rows.forEach(row => {
-      const cuisines = JSON.parse(row.cuisine_types);
+      const cuisines = safeJsonParse(row.cuisine_types);
       cuisines.forEach(c => preferredCuisines.add(c));
     });
 
@@ -3738,7 +3729,7 @@ app.get('/api/recommendations', authenticateToken, async (req: AuthRequest, res:
     );
 
     const recommendations = recommendationsResult.rows.map(r => {
-      const cuisines = JSON.parse(r.cuisine_types);
+      const cuisines = safeJsonParse(r.cuisine_types);
       let reason = 'New restaurant you might like';
       
       const hasPreferredCuisine = cuisines.some(c => preferredCuisines.has(c));
@@ -3826,7 +3817,7 @@ app.get('/api/weekly-picks', async (req: Request, res: Response) => {
         restaurant_id: row.restaurant_id,
         restaurant_name: row.restaurant_name,
         description: row.description,
-        cuisine_types: JSON.parse(row.cuisine_types),
+        cuisine_types: safeJsonParse(row.cuisine_types),
         price_range: row.price_range,
         street_address: row.street_address,
         apartment_suite: row.apartment_suite,
