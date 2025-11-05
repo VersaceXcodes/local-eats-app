@@ -1,0 +1,19 @@
+{
+  "timestamp": 1762361394687,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "GV_Footer",
+      "version": "1762361317806"
+    }
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/vitereact/src/components/views/GV_Footer.tsx",
+      "type": "text",
+      "size": 14629,
+      "dependencies": false
+    }
+  ]
+}

@@ -1,0 +1,3107 @@
+openapi: 3.0.0
+info:
+  title: Local Eats API
+  description: API for the Local Eats restaurant discovery and ordering platform
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    SignUpRequest:
+      type: object
+      required:
+        - email
+        - password
+        - full_name
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        full_name:
+          type: string
+          minLength: 1
+        phone_number:
+          type: string
+          nullable: true
+        profile_picture_url:
+          type: string
+          format: uri
+          nullable: true
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        remember_me:
+          type: boolean
+          default: false
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+        auth_token:
+          type: string
+    PasswordResetRequestInput:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+    PasswordResetCompleteInput:
+      type: object
+      required:
+        - reset_token
+        - new_password
+      properties:
+        reset_token:
+          type: string
+        new_password:
+          type: string
+          minLength: 8
+    User:
+      type: object
+      properties:
+        user_id:
+          type: string
+        email:
+          type: string
+        full_name:
+          type: string
+        phone_number:
+          type: string
+          nullable: true
+        profile_picture_url:
+          type: string
+          nullable: true
+        is_verified:
+          type: boolean
+        member_since:
+          type: string
+          format: date-time
+        notification_preferences:
+          $ref: "#/components/schemas/NotificationPreferences"
+        location_permission_granted:
+          type: boolean
+        profile_public:
+          type: boolean
+        reviews_public:
+          type: boolean
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    NotificationPreferences:
+      type: object
+      properties:
+        order_updates_email:
+          type: boolean
+        order_updates_push:
+          type: boolean
+        promotions_email:
+          type: boolean
+        promotions_push:
+          type: boolean
+        weekly_picks_email:
+          type: boolean
+        weekly_picks_push:
+          type: boolean
+        new_restaurants_email:
+          type: boolean
+        new_restaurants_push:
+          type: boolean
+        review_responses_email:
+          type: boolean
+        review_responses_push:
+          type: boolean
+    UpdateUserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        full_name:
+          type: string
+        phone_number:
+          type: string
+          nullable: true
+        profile_picture_url:
+          type: string
+          format: uri
+          nullable: true
+        notification_preferences:
+          $ref: "#/components/schemas/NotificationPreferences"
+        location_permission_granted:
+          type: boolean
+        profile_public:
+          type: boolean
+        reviews_public:
+          type: boolean
+    UserStatistics:
+      type: object
+      properties:
+        stat_id:
+          type: string
+        user_id:
+          type: string
+        total_reviews_written:
+          type: integer
+        total_restaurants_visited:
+          type: integer
+        total_favorites_saved:
+          type: integer
+        total_orders_placed:
+          type: integer
+        total_badges_earned:
+          type: integer
+        total_discounts_redeemed:
+          type: integer
+        unique_cuisines_tried:
+          type: array
+          items:
+            type: string
+        updated_at:
+          type: string
+          format: date-time
+    Restaurant:
+      type: object
+      properties:
+        restaurant_id:
+          type: string
+        restaurant_name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        cuisine_types:
+          type: array
+          items:
+            type: string
+        price_range:
+          type: integer
+          minimum: 1
+          maximum: 4
+        street_address:
+          type: string
+        apartment_suite:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+        zip_code:
+          type: string
+        latitude:
+          type: number
+        longitude:
+          type: number
+        phone_number:
+          type: string
+        primary_hero_image_url:
+          type: string
+          nullable: true
+        average_rating:
+          type: number
+        total_review_count:
+          type: integer
+        total_order_count:
+          type: integer
+        is_currently_open:
+          type: boolean
+        accepts_delivery:
+          type: boolean
+        accepts_pickup:
+          type: boolean
+        delivery_fee:
+          type: number
+        minimum_order_amount:
+          type: number
+        delivery_radius_miles:
+          type: number
+        estimated_prep_time_minutes:
+          type: integer
+        estimated_delivery_time_minutes:
+          type: integer
+        is_featured:
+          type: boolean
+        featured_week_start:
+          type: string
+          format: date
+          nullable: true
+        featured_description:
+          type: string
+          nullable: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    RestaurantListResponse:
+      type: object
+      properties:
+        restaurants:
+          type: array
+          items:
+            $ref: "#/components/schemas/Restaurant"
+        total_count:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+    RestaurantHours:
+      type: object
+      properties:
+        hours_id:
+          type: string
+        restaurant_id:
+          type: string
+        day_of_week:
+          type: integer
+          minimum: 0
+          maximum: 6
+        open_time:
+          type: string
+          nullable: true
+        close_time:
+          type: string
+          nullable: true
+        is_closed:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    RestaurantPhoto:
+      type: object
+      properties:
+        photo_id:
+          type: string
+        restaurant_id:
+          type: string
+        photo_url:
+          type: string
+        caption:
+          type: string
+          nullable: true
+        display_order:
+          type: integer
+        uploaded_by_user_id:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+    MenuCategory:
+      type: object
+      properties:
+        category_id:
+          type: string
+        restaurant_id:
+          type: string
+        category_name:
+          type: string
+        display_order:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    MenuItem:
+      type: object
+      properties:
+        menu_item_id:
+          type: string
+        restaurant_id:
+          type: string
+        category_id:
+          type: string
+        item_name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        base_price:
+          type: number
+        item_photo_url:
+          type: string
+          nullable: true
+        dietary_preferences:
+          type: array
+          items:
+            type: string
+        allergen_info:
+          type: array
+          items:
+            type: string
+        spice_level:
+          type: integer
+          nullable: true
+        is_popular:
+          type: boolean
+        is_available:
+          type: boolean
+        display_order:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    MenuItemSize:
+      type: object
+      properties:
+        size_id:
+          type: string
+        menu_item_id:
+          type: string
+        size_name:
+          type: string
+        price_adjustment:
+          type: number
+        display_order:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+    MenuItemAddon:
+      type: object
+      properties:
+        addon_id:
+          type: string
+        menu_item_id:
+          type: string
+        addon_name:
+          type: string
+        addon_price:
+          type: number
+        display_order:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+    MenuItemDetail:
+      type: object
+      properties:
+        menu_item:
+          $ref: "#/components/schemas/MenuItem"
+        sizes:
+          type: array
+          items:
+            $ref: "#/components/schemas/MenuItemSize"
+        addons:
+          type: array
+          items:
+            $ref: "#/components/schemas/MenuItemAddon"
+    Discount:
+      type: object
+      properties:
+        discount_id:
+          type: string
+        restaurant_id:
+          type: string
+        discount_type:
+          type: string
+        discount_value:
+          type: number
+        coupon_code:
+          type: string
+          nullable: true
+        qr_code_data:
+          type: string
+          nullable: true
+        description:
+          type: string
+        terms_conditions:
+          type: string
+          nullable: true
+        minimum_order_amount:
+          type: number
+          nullable: true
+        excluded_items:
+          type: array
+          items:
+            type: string
+        valid_days:
+          type: array
+          items:
+            type: integer
+        is_one_time_use:
+          type: boolean
+        max_redemptions_per_user:
+          type: integer
+          nullable: true
+        total_redemption_limit:
+          type: integer
+          nullable: true
+        current_redemption_count:
+          type: integer
+        is_active:
+          type: boolean
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        is_local_picks_exclusive:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    RedeemDiscountRequest:
+      type: object
+      required:
+        - redemption_method
+      properties:
+        redemption_method:
+          type: string
+          enum:
+            - qr_code
+            - coupon_code
+            - in_app
+    QRCodeResponse:
+      type: object
+      properties:
+        qr_code_data:
+          type: string
+        alphanumeric_code:
+          type: string
+        discount:
+          $ref: "#/components/schemas/Discount"
+    Favorite:
+      type: object
+      properties:
+        favorite_id:
+          type: string
+        user_id:
+          type: string
+        restaurant_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    CreateFavoriteRequest:
+      type: object
+      required:
+        - restaurant_id
+      properties:
+        restaurant_id:
+          type: string
+    FavoritesListResponse:
+      type: object
+      properties:
+        favorites:
+          type: array
+          items:
+            type: object
+            properties:
+              favorite:
+                $ref: "#/components/schemas/Favorite"
+              restaurant:
+                $ref: "#/components/schemas/Restaurant"
+        total_count:
+          type: integer
+    CartItem:
+      type: object
+      properties:
+        menu_item_id:
+          type: string
+        item_name:
+          type: string
+        base_price:
+          type: number
+        selected_size:
+          type: string
+          nullable: true
+        size_price_adjustment:
+          type: number
+        selected_addons:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        selected_modifications:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        special_instructions:
+          type: string
+          nullable: true
+        quantity:
+          type: integer
+        item_total_price:
+          type: number
+    Cart:
+      type: object
+      properties:
+        restaurant_id:
+          type: string
+          nullable: true
+        restaurant_name:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItem"
+        applied_discount:
+          type: object
+          nullable: true
+          properties:
+            discount_id:
+              type: string
+            code:
+              type: string
+            discount_amount:
+              type: number
+            discount_type:
+              type: string
+        subtotal:
+          type: number
+        delivery_fee:
+          type: number
+        tax:
+          type: number
+        tip:
+          type: number
+        grand_total:
+          type: number
+    AddToCartRequest:
+      type: object
+      required:
+        - menu_item_id
+        - quantity
+      properties:
+        menu_item_id:
+          type: string
+        selected_size:
+          type: string
+          nullable: true
+        selected_addons:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        selected_modifications:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        special_instructions:
+          type: string
+          nullable: true
+        quantity:
+          type: integer
+          minimum: 1
+    UpdateCartItemRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          minimum: 1
+        selected_size:
+          type: string
+          nullable: true
+        selected_addons:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        selected_modifications:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        special_instructions:
+          type: string
+          nullable: true
+    ApplyCouponRequest:
+      type: object
+      required:
+        - coupon_code
+      properties:
+        coupon_code:
+          type: string
+    Order:
+      type: object
+      properties:
+        order_id:
+          type: string
+        user_id:
+          type: string
+        restaurant_id:
+          type: string
+        order_type:
+          type: string
+        order_status:
+          type: string
+        delivery_street_address:
+          type: string
+          nullable: true
+        delivery_apartment_suite:
+          type: string
+          nullable: true
+        delivery_city:
+          type: string
+          nullable: true
+        delivery_state:
+          type: string
+          nullable: true
+        delivery_zip_code:
+          type: string
+          nullable: true
+        special_instructions:
+          type: string
+          nullable: true
+        subtotal:
+          type: number
+        discount_amount:
+          type: number
+        discount_id:
+          type: string
+          nullable: true
+        delivery_fee:
+          type: number
+        tax:
+          type: number
+        tip:
+          type: number
+        grand_total:
+          type: number
+        payment_method_id:
+          type: string
+          nullable: true
+        payment_status:
+          type: string
+        estimated_delivery_time:
+          type: string
+          format: date-time
+          nullable: true
+        estimated_pickup_time:
+          type: string
+          format: date-time
+          nullable: true
+        order_received_at:
+          type: string
+          format: date-time
+          nullable: true
+        preparing_started_at:
+          type: string
+          format: date-time
+          nullable: true
+        ready_at:
+          type: string
+          format: date-time
+          nullable: true
+        out_for_delivery_at:
+          type: string
+          format: date-time
+          nullable: true
+        delivered_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancelled_at:
+          type: string
+          format: date-time
+          nullable: true
+        cancellation_reason:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    OrderItem:
+      type: object
+      properties:
+        order_item_id:
+          type: string
+        order_id:
+          type: string
+        menu_item_id:
+          type: string
+        item_name:
+          type: string
+        base_price:
+          type: number
+        selected_size:
+          type: string
+          nullable: true
+        size_price_adjustment:
+          type: number
+        selected_addons:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        selected_modifications:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              price:
+                type: number
+        special_instructions:
+          type: string
+          nullable: true
+        quantity:
+          type: integer
+        item_total_price:
+          type: number
+        created_at:
+          type: string
+          format: date-time
+    OrderWithItems:
+      type: object
+      properties:
+        order:
+          $ref: "#/components/schemas/Order"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItem"
+        restaurant:
+          $ref: "#/components/schemas/Restaurant"
+    CreateOrderRequest:
+      type: object
+      required:
+        - restaurant_id
+        - order_type
+      properties:
+        restaurant_id:
+          type: string
+        order_type:
+          type: string
+          enum:
+            - delivery
+            - pickup
+        delivery_street_address:
+          type: string
+          nullable: true
+        delivery_apartment_suite:
+          type: string
+          nullable: true
+        delivery_city:
+          type: string
+          nullable: true
+        delivery_state:
+          type: string
+          nullable: true
+        delivery_zip_code:
+          type: string
+          nullable: true
+        special_instructions:
+          type: string
+          nullable: true
+        discount_id:
+          type: string
+          nullable: true
+        payment_method_id:
+          type: string
+          nullable: true
+        tip:
+          type: number
+    UpdateOrderRequest:
+      type: object
+      properties:
+        order_status:
+          type: string
+          enum:
+            - order_received
+            - preparing
+            - ready
+            - out_for_delivery
+            - delivered
+            - cancelled
+        special_instructions:
+          type: string
+          nullable: true
+        tip:
+          type: number
+        cancellation_reason:
+          type: string
+          nullable: true
+    OrdersListResponse:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderWithItems"
+        total_count:
+          type: integer
+    Review:
+      type: object
+      properties:
+        review_id:
+          type: string
+        user_id:
+          type: string
+        restaurant_id:
+          type: string
+        order_id:
+          type: string
+          nullable: true
+        star_rating:
+          type: integer
+        review_title:
+          type: string
+          nullable: true
+        review_text:
+          type: string
+        is_verified_visit:
+          type: boolean
+        helpful_count:
+          type: integer
+        is_edited:
+          type: boolean
+        edited_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    ReviewWithUser:
+      type: object
+      properties:
+        review:
+          $ref: "#/components/schemas/Review"
+        user:
+          type: object
+          properties:
+            user_id:
+              type: string
+            full_name:
+              type: string
+            profile_picture_url:
+              type: string
+              nullable: true
+        photos:
+          type: array
+          items:
+            type: object
+            properties:
+              photo_id:
+                type: string
+              photo_url:
+                type: string
+              display_order:
+                type: integer
+        is_helpful_by_current_user:
+          type: boolean
+    ReviewsListResponse:
+      type: object
+      properties:
+        reviews:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReviewWithUser"
+        total_count:
+          type: integer
+        average_rating:
+          type: number
+        rating_distribution:
+          type: object
+          properties:
+            five_star:
+              type: integer
+            four_star:
+              type: integer
+            three_star:
+              type: integer
+            two_star:
+              type: integer
+            one_star:
+              type: integer
+    CreateReviewRequest:
+      type: object
+      required:
+        - restaurant_id
+        - star_rating
+        - review_text
+      properties:
+        restaurant_id:
+          type: string
+        order_id:
+          type: string
+          nullable: true
+        star_rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        review_title:
+          type: string
+          nullable: true
+        review_text:
+          type: string
+          minLength: 10
+          maxLength: 2000
+        is_verified_visit:
+          type: boolean
+    UpdateReviewRequest:
+      type: object
+      properties:
+        star_rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        review_title:
+          type: string
+          nullable: true
+        review_text:
+          type: string
+          minLength: 10
+          maxLength: 2000
+    ReportReviewRequest:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          enum:
+            - spam
+            - inappropriate_content
+            - fake_review
+            - offensive_language
+            - other
+        additional_details:
+          type: string
+          nullable: true
+    Badge:
+      type: object
+      properties:
+        badge_id:
+          type: string
+        badge_name:
+          type: string
+        badge_description:
+          type: string
+        badge_icon_url:
+          type: string
+          nullable: true
+        criteria_type:
+          type: string
+        criteria_value:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+    UserBadge:
+      type: object
+      properties:
+        user_badge_id:
+          type: string
+        user_id:
+          type: string
+        badge_id:
+          type: string
+        is_showcased:
+          type: boolean
+        showcase_order:
+          type: integer
+          nullable: true
+        earned_at:
+          type: string
+          format: date-time
+    UserBadgeWithDetails:
+      type: object
+      properties:
+        user_badge:
+          $ref: "#/components/schemas/UserBadge"
+        badge:
+          $ref: "#/components/schemas/Badge"
+        progress:
+          type: object
+          properties:
+            current_value:
+              type: integer
+            target_value:
+              type: integer
+            percentage:
+              type: number
+    Verification:
+      type: object
+      properties:
+        verification_id:
+          type: string
+        user_id:
+          type: string
+        restaurant_id:
+          type: string
+        verification_method:
+          type: string
+        order_id:
+          type: string
+          nullable: true
+        verified_at:
+          type: string
+          format: date-time
+    CreateVerificationRequest:
+      type: object
+      required:
+        - restaurant_id
+        - verification_method
+      properties:
+        restaurant_id:
+          type: string
+        verification_method:
+          type: string
+          enum:
+            - order
+            - qr_code
+            - location
+            - manual
+        order_id:
+          type: string
+          nullable: true
+    SavedAddress:
+      type: object
+      properties:
+        address_id:
+          type: string
+        user_id:
+          type: string
+        address_label:
+          type: string
+        street_address:
+          type: string
+        apartment_suite:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+        zip_code:
+          type: string
+        is_default:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CreateAddressRequest:
+      type: object
+      required:
+        - address_label
+        - street_address
+        - city
+        - state
+        - zip_code
+      properties:
+        address_label:
+          type: string
+        street_address:
+          type: string
+        apartment_suite:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+          length: 2
+        zip_code:
+          type: string
+        is_default:
+          type: boolean
+    UpdateAddressRequest:
+      type: object
+      properties:
+        address_label:
+          type: string
+        street_address:
+          type: string
+        apartment_suite:
+          type: string
+          nullable: true
+        city:
+          type: string
+        state:
+          type: string
+        zip_code:
+          type: string
+        is_default:
+          type: boolean
+    SavedPaymentMethod:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+        user_id:
+          type: string
+        payment_label:
+          type: string
+        card_type:
+          type: string
+        last_four_digits:
+          type: string
+        expiration_month:
+          type: string
+        expiration_year:
+          type: string
+        billing_zip_code:
+          type: string
+        is_default:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CreatePaymentMethodRequest:
+      type: object
+      required:
+        - payment_label
+        - card_type
+        - last_four_digits
+        - expiration_month
+        - expiration_year
+        - billing_zip_code
+      properties:
+        payment_label:
+          type: string
+        card_type:
+          type: string
+          enum:
+            - Visa
+            - Mastercard
+            - Amex
+            - Discover
+        last_four_digits:
+          type: string
+          length: 4
+        expiration_month:
+          type: string
+          pattern: ^(0[1-9]|1[0-2])$
+        expiration_year:
+          type: string
+          pattern: ^\d{4}$
+        billing_zip_code:
+          type: string
+        is_default:
+          type: boolean
+    Notification:
+      type: object
+      properties:
+        notification_id:
+          type: string
+        user_id:
+          type: string
+        notification_type:
+          type: string
+        message:
+          type: string
+        action_url:
+          type: string
+          nullable: true
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        read_at:
+          type: string
+          format: date-time
+          nullable: true
+    NotificationsListResponse:
+      type: object
+      properties:
+        notifications:
+          type: array
+          items:
+            $ref: "#/components/schemas/Notification"
+        unread_count:
+          type: integer
+    Recommendation:
+      type: object
+      properties:
+        restaurant:
+          $ref: "#/components/schemas/Restaurant"
+        reason:
+          type: string
+    RecommendationsResponse:
+      type: object
+      properties:
+        recommendations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Recommendation"
+    DismissRecommendationRequest:
+      type: object
+      required:
+        - restaurant_id
+      properties:
+        restaurant_id:
+          type: string
+    WeeklyLocalPick:
+      type: object
+      properties:
+        pick_id:
+          type: string
+        restaurant_id:
+          type: string
+        week_start_date:
+          type: string
+          format: date
+        week_end_date:
+          type: string
+          format: date
+        featured_description:
+          type: string
+          nullable: true
+        display_order:
+          type: integer
+        selection_criteria:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+    WeeklyPickWithRestaurant:
+      type: object
+      properties:
+        pick:
+          $ref: "#/components/schemas/WeeklyLocalPick"
+        restaurant:
+          $ref: "#/components/schemas/Restaurant"
+    WeeklyPicksResponse:
+      type: object
+      properties:
+        picks:
+          type: array
+          items:
+            $ref: "#/components/schemas/WeeklyPickWithRestaurant"
+        week_start_date:
+          type: string
+          format: date
+        week_end_date:
+          type: string
+          format: date
+    SearchSuggestion:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - restaurant
+            - cuisine
+            - dish
+        value:
+          type: string
+        restaurant_id:
+          type: string
+          nullable: true
+    SearchSuggestionsResponse:
+      type: object
+      properties:
+        suggestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchSuggestion"
+    SearchHistory:
+      type: object
+      properties:
+        search_id:
+          type: string
+        user_id:
+          type: string
+        search_query:
+          type: string
+        search_type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          nullable: true
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+paths:
+  /auth/signup:
+    post:
+      operationId: signup
+      summary: Register a new user account
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignUpRequest"
+      responses:
+        "201":
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Invalid input or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /auth/login:
+    post:
+      operationId: login
+      summary: Authenticate user and return token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /auth/logout:
+    post:
+      operationId: logout
+      summary: Logout current user
+      tags:
+        - Authentication
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /auth/password-reset/request:
+    post:
+      operationId: requestPasswordReset
+      summary: Request password reset email
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordResetRequestInput"
+      responses:
+        "200":
+          description: Password reset email sent if account exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /auth/password-reset/complete:
+    post:
+      operationId: completePasswordReset
+      summary: Complete password reset with token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordResetCompleteInput"
+      responses:
+        "200":
+          description: Password successfully reset
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Invalid or expired token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/me:
+    get:
+      operationId: getCurrentUser
+      summary: Get current authenticated user profile
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      operationId: updateCurrentUser
+      summary: Update current user profile
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+      responses:
+        "200":
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/me/statistics:
+    get:
+      operationId: getCurrentUserStatistics
+      summary: Get current user statistics
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User statistics retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserStatistics"
+  /users/me/reviews:
+    get:
+      operationId: getCurrentUserReviews
+      summary: Get all reviews by current user
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: User reviews retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewsListResponse"
+  /restaurants:
+    get:
+      operationId: searchRestaurants
+      summary: Search and browse restaurants with filters
+      tags:
+        - Restaurants
+      parameters:
+        - name: query
+          in: query
+          description: Search query for restaurant name, cuisine, or dish
+          schema:
+            type: string
+        - name: cuisine_types
+          in: query
+          description: Filter by cuisine types (comma-separated)
+          schema:
+            type: string
+        - name: price_min
+          in: query
+          description: Minimum price range (1-4)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 4
+        - name: price_max
+          in: query
+          description: Maximum price range (1-4)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 4
+        - name: distance_max
+          in: query
+          description: Maximum distance in miles
+          schema:
+            type: number
+        - name: rating_min
+          in: query
+          description: Minimum rating (0-5)
+          schema:
+            type: number
+            minimum: 0
+            maximum: 5
+        - name: dietary_preferences
+          in: query
+          description: Filter by dietary preferences (comma-separated)
+          schema:
+            type: string
+        - name: open_now
+          in: query
+          description: Filter to only open restaurants
+          schema:
+            type: boolean
+        - name: has_discount
+          in: query
+          description: Filter to only restaurants with discounts
+          schema:
+            type: boolean
+        - name: is_featured
+          in: query
+          description: Filter to only featured restaurants
+          schema:
+            type: boolean
+        - name: sort_by
+          in: query
+          description: Sort field
+          schema:
+            type: string
+            enum:
+              - recommended
+              - distance
+              - rating
+              - price_low
+              - price_high
+              - newest
+              - popular
+            default: recommended
+        - name: latitude
+          in: query
+          description: User latitude for distance calculations
+          schema:
+            type: number
+        - name: longitude
+          in: query
+          description: User longitude for distance calculations
+          schema:
+            type: number
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Restaurants retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestaurantListResponse"
+  /restaurants/{restaurant_id}:
+    get:
+      operationId: getRestaurantById
+      summary: Get detailed restaurant information
+      tags:
+        - Restaurants
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Restaurant details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Restaurant"
+        "404":
+          description: Restaurant not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /restaurants/{restaurant_id}/hours:
+    get:
+      operationId: getRestaurantHours
+      summary: Get restaurant operating hours
+      tags:
+        - Restaurants
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Hours retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hours:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/RestaurantHours"
+  /restaurants/{restaurant_id}/photos:
+    get:
+      operationId: getRestaurantPhotos
+      summary: Get restaurant photo gallery
+      tags:
+        - Restaurants
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Photos retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  photos:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/RestaurantPhoto"
+  /restaurants/{restaurant_id}/menu:
+    get:
+      operationId: getRestaurantMenu
+      summary: Get complete restaurant menu with categories and items
+      tags:
+        - Restaurants
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Menu retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        category:
+                          $ref: "#/components/schemas/MenuCategory"
+                        items:
+                          type: array
+                          items:
+                            $ref: "#/components/schemas/MenuItem"
+  /restaurants/{restaurant_id}/menu/items/{menu_item_id}:
+    get:
+      operationId: getMenuItemDetail
+      summary: Get detailed menu item with customization options
+      tags:
+        - Menu
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: menu_item_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Menu item details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MenuItemDetail"
+  /restaurants/{restaurant_id}/discounts:
+    get:
+      operationId: getRestaurantDiscounts
+      summary: Get all active discounts for restaurant
+      tags:
+        - Discounts
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Discounts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  discounts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Discount"
+  /restaurants/{restaurant_id}/reviews:
+    get:
+      operationId: getRestaurantReviews
+      summary: Get all reviews for a restaurant
+      tags:
+        - Reviews
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: min_rating
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+        - name: max_rating
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+        - name: is_verified_visit
+          in: query
+          schema:
+            type: boolean
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            enum:
+              - created_at
+              - star_rating
+              - helpful_count
+            default: created_at
+        - name: sort_order
+          in: query
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Reviews retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewsListResponse"
+  /discounts/{discount_id}:
+    get:
+      operationId: getDiscountById
+      summary: Get discount details
+      tags:
+        - Discounts
+      parameters:
+        - name: discount_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Discount retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Discount"
+  /discounts/{discount_id}/redeem:
+    post:
+      operationId: redeemDiscount
+      summary: Redeem a discount
+      tags:
+        - Discounts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: discount_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedeemDiscountRequest"
+      responses:
+        "200":
+          description: Discount redeemed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /discounts/{discount_id}/qr-code:
+    get:
+      operationId: getDiscountQRCode
+      summary: Get QR code for discount redemption
+      tags:
+        - Discounts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: discount_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: QR code retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QRCodeResponse"
+  /favorites:
+    get:
+      operationId: getUserFavorites
+      summary: Get user's favorite restaurants
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cuisine_types
+          in: query
+          description: Filter favorites by cuisine (comma-separated)
+          schema:
+            type: string
+        - name: price_min
+          in: query
+          schema:
+            type: integer
+        - name: price_max
+          in: query
+          schema:
+            type: integer
+        - name: open_now
+          in: query
+          schema:
+            type: boolean
+        - name: sort_by
+          in: query
+          schema:
+            type: string
+            enum:
+              - recently_added
+              - alphabetical
+              - distance
+              - rating
+            default: recently_added
+      responses:
+        "200":
+          description: Favorites retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FavoritesListResponse"
+    post:
+      operationId: addFavorite
+      summary: Add restaurant to favorites
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateFavoriteRequest"
+      responses:
+        "201":
+          description: Restaurant added to favorites
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Favorite"
+    delete:
+      operationId: batchDeleteFavorites
+      summary: Remove multiple restaurants from favorites
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - restaurant_ids
+              properties:
+                restaurant_ids:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Favorites removed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /favorites/{restaurant_id}:
+    delete:
+      operationId: removeFavorite
+      summary: Remove restaurant from favorites
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: restaurant_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Favorite removed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /cart:
+    get:
+      operationId: getCart
+      summary: Get current shopping cart
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Cart retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    delete:
+      operationId: clearCart
+      summary: Clear all items from cart
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Cart cleared
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /cart/items:
+    post:
+      operationId: addToCart
+      summary: Add item to cart
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddToCartRequest"
+      responses:
+        "201":
+          description: Item added to cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /cart/items/{menu_item_id}:
+    patch:
+      operationId: updateCartItem
+      summary: Update cart item quantity or customizations
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: menu_item_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCartItemRequest"
+      responses:
+        "200":
+          description: Cart item updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+    delete:
+      operationId: removeFromCart
+      summary: Remove item from cart
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: menu_item_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Item removed from cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /cart/discount:
+    post:
+      operationId: applyCartDiscount
+      summary: Apply discount code to cart
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplyCouponRequest"
+      responses:
+        "200":
+          description: Discount applied
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "400":
+          description: Invalid or expired coupon
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      operationId: removeCartDiscount
+      summary: Remove applied discount from cart
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Discount removed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /orders:
+    get:
+      operationId: getOrders
+      summary: Get user's order history
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: order_type
+          in: query
+          schema:
+            type: string
+            enum:
+              - delivery
+              - pickup
+        - name: order_status
+          in: query
+          schema:
+            type: string
+            enum:
+              - order_received
+              - preparing
+              - ready
+              - out_for_delivery
+              - delivered
+              - cancelled
+        - name: restaurant_id
+          in: query
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Orders retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrdersListResponse"
+    post:
+      operationId: createOrder
+      summary: Place a new order
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateOrderRequest"
+      responses:
+        "201":
+          description: Order created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderWithItems"
+        "400":
+          description: Invalid order data or payment failed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /orders/{order_id}:
+    get:
+      operationId: getOrderById
+      summary: Get order details
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderWithItems"
+        "404":
+          description: Order not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      operationId: updateOrder
+      summary: Update order (status, tip, cancel)
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrderRequest"
+      responses:
+        "200":
+          description: Order updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderWithItems"
+    delete:
+      operationId: cancelOrder
+      summary: Cancel an order
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cancellation_reason:
+                  type: string
+      responses:
+        "200":
+          description: Order cancelled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Order cannot be cancelled
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /orders/{order_id}/reorder:
+    post:
+      operationId: reorder
+      summary: Add items from previous order to cart
+      tags:
+        - Orders
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Items added to cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  /reviews:
+    post:
+      operationId: createReview
+      summary: Write a new review
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReviewRequest"
+      responses:
+        "201":
+          description: Review created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
+  /reviews/{review_id}:
+    get:
+      operationId: getReviewById
+      summary: Get review details
+      tags:
+        - Reviews
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Review retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReviewWithUser"
+    patch:
+      operationId: updateReview
+      summary: Update a review
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateReviewRequest"
+      responses:
+        "200":
+          description: Review updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
+    delete:
+      operationId: deleteReview
+      summary: Delete a review
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Review deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /reviews/{review_id}/photos:
+    post:
+      operationId: uploadReviewPhotos
+      summary: Upload photos for a review
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - photo_urls
+              properties:
+                photo_urls:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                  maxItems: 10
+      responses:
+        "201":
+          description: Photos uploaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /reviews/{review_id}/helpful:
+    post:
+      operationId: markReviewHelpful
+      summary: Mark review as helpful
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Review marked as helpful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+    delete:
+      operationId: unmarkReviewHelpful
+      summary: Remove helpful mark from review
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Helpful mark removed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /reviews/{review_id}/report:
+    post:
+      operationId: reportReview
+      summary: Report a review for moderation
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: review_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportReviewRequest"
+      responses:
+        "200":
+          description: Review reported
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /badges:
+    get:
+      operationId: getAllBadges
+      summary: Get all available badges
+      tags:
+        - Badges
+      responses:
+        "200":
+          description: Badges retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  badges:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Badge"
+  /users/me/badges:
+    get:
+      operationId: getUserBadges
+      summary: Get current user's badges with progress
+      tags:
+        - Badges
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User badges retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  earned_badges:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserBadgeWithDetails"
+                  locked_badges:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserBadgeWithDetails"
+  /users/me/badges/{badge_id}/showcase:
+    patch:
+      operationId: updateBadgeShowcase
+      summary: Update badge showcase settings
+      tags:
+        - Badges
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: badge_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - is_showcased
+              properties:
+                is_showcased:
+                  type: boolean
+                showcase_order:
+                  type: integer
+                  nullable: true
+      responses:
+        "200":
+          description: Badge showcase updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /verifications:
+    post:
+      operationId: createVerification
+      summary: Verify a restaurant visit
+      tags:
+        - Verification
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateVerificationRequest"
+      responses:
+        "201":
+          description: Visit verified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Verification"
+  /addresses:
+    get:
+      operationId: getSavedAddresses
+      summary: Get user's saved addresses
+      tags:
+        - Addresses
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Addresses retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addresses:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SavedAddress"
+    post:
+      operationId: createAddress
+      summary: Add a new saved address
+      tags:
+        - Addresses
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAddressRequest"
+      responses:
+        "201":
+          description: Address created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedAddress"
+  /addresses/{address_id}:
+    patch:
+      operationId: updateAddress
+      summary: Update a saved address
+      tags:
+        - Addresses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: address_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAddressRequest"
+      responses:
+        "200":
+          description: Address updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedAddress"
+    delete:
+      operationId: deleteAddress
+      summary: Delete a saved address
+      tags:
+        - Addresses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: address_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Address deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /payment-methods:
+    get:
+      operationId: getSavedPaymentMethods
+      summary: Get user's saved payment methods
+      tags:
+        - Payment Methods
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Payment methods retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payment_methods:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SavedPaymentMethod"
+    post:
+      operationId: createPaymentMethod
+      summary: Add a new saved payment method
+      tags:
+        - Payment Methods
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePaymentMethodRequest"
+      responses:
+        "201":
+          description: Payment method created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavedPaymentMethod"
+  /payment-methods/{payment_method_id}:
+    delete:
+      operationId: deletePaymentMethod
+      summary: Delete a saved payment method
+      tags:
+        - Payment Methods
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: payment_method_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Payment method deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /notifications:
+    get:
+      operationId: getNotifications
+      summary: Get user notifications
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: notification_type
+          in: query
+          schema:
+            type: string
+            enum:
+              - order_update
+              - promotion
+              - new_restaurant
+              - badge_earned
+              - review_response
+              - weekly_picks
+              - discount
+        - name: is_read
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Notifications retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotificationsListResponse"
+    delete:
+      operationId: clearAllNotifications
+      summary: Delete all notifications
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Notifications cleared
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /notifications/{notification_id}/read:
+    patch:
+      operationId: markNotificationRead
+      summary: Mark notification as read
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: notification_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Notification marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /notifications/read-all:
+    patch:
+      operationId: markAllNotificationsRead
+      summary: Mark all notifications as read
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: All notifications marked as read
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /notifications/{notification_id}:
+    delete:
+      operationId: deleteNotification
+      summary: Delete a notification
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: notification_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Notification deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /recommendations:
+    get:
+      operationId: getRecommendations
+      summary: Get personalized restaurant recommendations
+      tags:
+        - Recommendations
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Recommendations retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecommendationsResponse"
+  /recommendations/dismiss:
+    post:
+      operationId: dismissRecommendation
+      summary: Dismiss a restaurant recommendation
+      tags:
+        - Recommendations
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DismissRecommendationRequest"
+      responses:
+        "200":
+          description: Recommendation dismissed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+  /weekly-picks:
+    get:
+      operationId: getWeeklyPicks
+      summary: Get weekly local picks
+      tags:
+        - Weekly Picks
+      parameters:
+        - name: week_of
+          in: query
+          description: Week date (YYYY-MM-DD format, defaults to current week)
+          schema:
+            type: string
+            format: date
+      responses:
+        "200":
+          description: Weekly picks retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeeklyPicksResponse"
+  /search/suggestions:
+    get:
+      operationId: getSearchSuggestions
+      summary: Get autocomplete search suggestions
+      tags:
+        - Search
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Suggestions retrieved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchSuggestionsResponse"
+  /search/recent:
+    get:
+      operationId: getRecentSearches
+      summary: Get user's recent searches
+      tags:
+        - Search
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Recent searches retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  searches:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SearchHistory"
+    delete:
+      operationId: clearSearchHistory
+      summary: Clear search history
+      tags:
+        - Search
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Search history cleared
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"

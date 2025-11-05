@@ -1,0 +1,19 @@
+{
+  "timestamp": 1762361449080,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "GV_BottomNav",
+      "version": "1762361317765"
+    }
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/vitereact/src/components/views/GV_BottomNav.tsx",
+      "type": "text",
+      "size": 14380,
+      "dependencies": false
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "timestamp": 1762361440885,
+  "operation": {
+    "id": "settings:config:package"
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/vitereact/package.json",
+      "type": "text",
+      "size": 3030,
+      "dependencies": true
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "timestamp": 1762361316044,
+  "operation": {
+    "id": "webapp:react:root",
+    "refs": {
+      "id": "app",
+      "version": "1762361244820"
+    }
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/vitereact/src/App.tsx",
+      "type": "text",
+      "size": 12329,
+      "dependencies": false
+    }
+  ]
+}
