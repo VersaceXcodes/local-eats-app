@@ -1,130 +1,255 @@
-TASK: Create real API E2E auth tests (register -> logout -> sign-in) for a Vite+React+TS app using Vitest.
 
-AGENT FILE CONTEXT - YOU MUST READ THESE FILES IN THE SANDBOX FIRST:
-Before generating or fixing tests:
-1) Read Store (Zustand) to confirm auth state shape, selectors, and actions.
-   Candidates (first that exists):
-   - /app/vitereact/src/store/main.tsx
-2) Read Backend server for auth API endpoints (paths, payloads, responses).
-   Candidates:
-   - /app/backend/server.ts
-3) Read Database schema (to understand constraints/defaults).
-   Candidates:
-   - /app/backend/db.sql
-   Summarize only relevant parts (users table, unique email, required fields).
-4) Read Frontend routes/config for aliases and navigation.
-   - /app/vitereact/tsconfig.json (paths)
-   - /app/vitereact/vite.config.ts (resolve.alias)
-   - /app/vitereact/src/App.tsx (confirm login route path, e.g., "/login")
-- Do NOT mock the API. Use the real backend running at ${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"}.
-- Prefer direct component import if an auth view exists; otherwise test the App-level route.
-- Place tests at: /app/vitereact/src/__tests__/auth.e2e.test.tsx
-- Ensure vitest config exists (vitest.config.ts with jsdom, globals, setupFiles ./src/test/setup.ts) and src/test/setup.ts imports @testing-library/jest-dom.
-- Ensure .env.test sets VITE_API_BASE_URL=http://localhost:3000.
-- If "@/..." aliases are used but not configured, add Vite resolve.alias and tsconfig paths so "@/store/main" and "@/App" resolve correctly.
-- Use a unique email per run to avoid duplicates (e.g., user${Date.now()}@example.com).
-- Use BrowserRouter wrapper for direct view tests; use MemoryRouter initialEntries=[ "/login" ] for App-level tests.
-- Never mock network; keep assertions on Zustand store:
-  state.authentication_state.authentication_status.is_authenticated === true and state.authentication_state.auth_token truthy.
-- Make selectors resilient to label/button variants:
-  labels: /email address|email/i, /password/i;
-  buttons: /sign in|log in|register|sign up|create/i.
+You are tasked with generating comprehensive test artifacts for a web application.
+📊 CONTEXT PROVIDED:
 
-Discovery instructions:
-- Search for auth view under /app/vitereact/src/components/views (depth<=2) with filename containing /(login|signin|auth)/i.
-- If found, import its default export and render it directly.
-Outputs to create/update in /app/vitereact:
-- vitest.config.ts
-- src/test/setup.ts
-- .env.test
-- src/__tests__/auth.e2e.test.tsx
+PACKAGE.JSON ANALYSIS:
+Dependencies: concurrently
+Dev Dependencies: @flydotio/dockerfile
+Scripts: dev
 
-Constraints:
-- No additional libraries beyond vitest/@testing-library/jsdom/user-event/react-dom testing utilities.
-- Keep code TypeScript-friendly (tsx).
 
-Additional guardrails:
-- Do NOT hardcode real credentials in the test.
-- If a sign-in-only flow is required, read VITE_REAL_TEST_EMAIL and VITE_REAL_TEST_PASSWORD from .env.test when present.
-- Prefer a register-first flow with a unique timestamped email to avoid collisions.
-- Always import the Zustand store via "@/store/main" and repair Vite/tsconfig aliases if they are missing.
+DATABASE SCHEMA AND SEED DATA (sample):
+-- ============================================
+-- TABLE CREATION
+-- ============================================
 
-REFERENCE-ONLY EXAMPLE (do NOT copy credentials; adapt patterns only):
-```tsx
-import React from 'react';
-import { describe, it, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
-
-import UV_SignIn from './UV_SignIn';
-import { useAppStore } from '@/store/main';
-
-// IMPORTANT: For reference only. Do NOT hardcode real credentials.
-// If a sign-in-only flow is needed, read REAL_TEST_EMAIL and REAL_TEST_PASSWORD from .env.test.
-// Otherwise prefer register-first with a timestamped unique email in a separate test.
-
-const Wrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <BrowserRouter>{children}</BrowserRouter>
+-- users table
+CREATE TABLE users (
+    user_id TEXT PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    phone_number TEXT,
+    profile_picture_url TEXT,
+    is_verified BOOLEAN NOT NULL DEFAULT false,
+    member_since TEXT NOT NULL,
+    notification_preferences JSONB NOT NULL DEFAULT '{"order_updates_email":true,"order_updates_push":true,"promotions_email":true,"promotions_push":true,"weekly_picks_email":true,"weekly_picks_push":true,"new_restaurants_email":false,"new_restaurants_push":false,"review_responses_email":true,"review_responses_push":true}',
+    location_permission_granted BOOLEAN NOT NULL DEFAULT false,
+    profile_public BOOLEAN NOT NULL DEFAULT true,
+    reviews_public BOOLEAN NOT NULL DEFAULT true,
+    last_login TEXT,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
 );
 
-describe('UV_SignIn (Vitest, real API)', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    // Ensure store starts not loading and unauthenticated (no token)
-    useAppStore.setState((state) => ({
-      authentication_state: {
-        ...state.authentication_state,
-        auth_token: null,
-        authentication_status: {
-          is_authenticated: false,
-          is_loading: false,
-        },
-        error_message: null,
-      },
-      current_workspace: null,
-    }));
-  });
+-- restaurants table
+CREATE TABLE restaurants (
+    restaurant_id TEXT PRIMARY KEY,
+    restaurant_name TEXT NOT NULL,
+    description TEXT,
+    cuisine_types JSONB NOT NULL DEFAULT '[]',
+    price_range INTEGER NOT NULL,
+    street_address TEXT NOT NULL,
+    apartment_suite TEXT,
+    city TEXT NOT NULL,
+    state TEXT NOT NULL,
+    zip_code TEXT NOT NULL,
+    latitude NUMERIC NOT NULL,
+    longitude NUMERIC NOT NULL,
+    phone_number TEXT NOT NULL,
+    primary_hero_image_url TEXT,
+    average_rating NUMERIC NOT NULL DEFAULT 0,
+    total_review_count INTEGER NOT NULL DEFAULT 0,
+    total_order_count INTEGER NOT NULL DEFAULT 0,
+    is_currently_open BOOLEAN NOT NULL DEFAULT false,
+    accepts_delivery BOOLEAN NOT NULL DEFAULT true,
+    accepts_pickup BOOLEAN NOT NULL DEFAULT true,
+    delivery_fee NUMERIC NOT NULL DEFAULT 0,
+    minimum_order_amount NUMERIC NOT NULL DEFAULT 0,
+    delivery_radius_miles NUMERIC NOT NULL DEFAULT 5,
+    estimated_prep_time_minutes INTEGER NOT NULL DEFAULT 30,
+    estimated_...
 
-  it('signs in successfully with valid credentials', async () => {
-    render(<UV_SignIn />, { wrapper: Wrapper });
 
-    const emailInput = await screen.findByLabelText(/email address/i);
-    const passwordInput = await screen.findByLabelText(/password/i);
-    const submitButton = await screen.findByRole('button', { name: /sign in to your account/i });
+BACKEND API ENDPOINTS (extracted from server code):
+app.post('/api/auth/signup'
+app.post('/api/auth/login'
+app.post('/api/auth/logout'
+app.post('/api/auth/password-reset/request'
+app.post('/api/auth/password-reset/complete'
+app.get('/api/users/me'
+app.patch('/api/users/me'
+app.get('/api/users/me/statistics'
+app.get('/api/users/me/reviews'
+app.get('/api/restaurants'
+app.get('/api/restaurants/:restaurant_id'
+app.get('/api/restaurants/:restaurant_id/hours'
+app.get('/api/restaurants/:restaurant_id/photos'
+app.get('/api/restaurants/:restaurant_id/menu'
+app.get('/api/restaurants/:restaurant_id/menu/items/:menu_item_id'
+app.get('/api/restaurants/:restaurant_id/discounts'
+app.get('/api/restaurants/:restaurant_id/reviews'
+app.get('/api/discounts/:discount_id'
+app.post('/api/discounts/:discount_id/redeem'
+app.get('/api/discounts/:discount_id/qr-code'
+app.get('/api/favorites'
+app.post('/api/favorites'
+app.delete('/api/favorites/:restaurant_id'
+app.delete('/api/favorites'
+app.get('/api/cart'
+app.post('/api/cart/items'
+app.patch('/api/cart/items/:menu_item_id'
+app.delete('/api/cart/items/:menu_item_id'
+app.delete('/api/cart'
+app.post('/api/cart/discount'
+app.delete('/api/cart/discount'
+app.post('/api/orders'
+app.get('/api/orders'
+app.get('/api/orders/:order_id'
+app.patch('/api/orders/:order_id'
+app.delete('/api/orders/:order_id'
+app.post('/api/orders/:order_id/reorder'
+app.post('/api/reviews'
+app.get('/api/reviews/:review_id'
+app.patch('/api/reviews/:review_id'
+app.delete('/api/reviews/:review_id'
+app.post('/api/reviews/:review_id/photos'
+app.post('/api/reviews/:review_id/helpful'
+app.delete('/api/reviews/:review_id/helpful'
+app.post('/api/reviews/:review_id/report'
+app.get('/api/badges'
+app.get('/api/users/me/badges'
+app.patch('/api/users/me/badges/:badge_id/showcase'
+app.post('/api/verifications'
+app.get('/api/addresses'
+app.post('/api/addresses'
+app.patch('/api/addresses/:address_id'
+app.delete('/api/addresses/:address_id'
+app.get('/api/payment-methods'
+app.post('/api/payment-methods'
+app.delete('/api/payment-methods/:payment_method_id'
+app.get('/api/notifications'
+app.patch('/api/notifications/:notification_id/read'
+app.patch('/api/notifications/read-all'
+app.delete('/api/notifications/:notification_id'
+app.delete('/api/notifications'
+app.get('/api/recommendations'
+app.post('/api/recommendations/dismiss'
+app.get('/api/weekly-picks'
+app.get('/api/search/suggestions'
+app.get('/api/search/recent'
+app.delete('/api/search/recent'
+app.get('/api/health'
 
-    // Ensure inputs are enabled before typing
-    await waitFor(() => {
-      expect(emailInput).not.toBeDisabled();
-      expect(passwordInput).not.toBeDisabled();
-    });
-
-    const user = userEvent.setup();
-    // DO NOT hardcode credentials. If env vars exist, use them:
-    // const REAL_EMAIL = import.meta.env.VITE_REAL_TEST_EMAIL;
-    // const REAL_PASSWORD = import.meta.env.VITE_REAL_TEST_PASSWORD;
-
-    // Example (reference-only):
-    // await user.type(emailInput, REAL_EMAIL);
-    // await user.type(passwordInput, REAL_PASSWORD);
-
-    // Button should enable once both fields are filled
-    await waitFor(() => expect(submitButton).not.toBeDisabled());
-    await user.click(submitButton);
-
-    // Loading indicator appears after submit
-    await waitFor(() => expect(screen.getByText(/signing in/i)).toBeInTheDocument());
-
-    // Wait for auth to complete and store to reflect authenticated state
-    await waitFor(
-      () => {
-        const state = useAppStore.getState();
-        expect(state.authentication_state.authentication_status.is_authenticated).toBe(true);
-        expect(state.authentication_state.auth_token).toBeTruthy();
-      },
-      { timeout: 20000 }
-    );
-  }, 30000);
-});
-```
+Frontend URL: https://123local-eats-app.launchpulse.ai
+Backend URL: https://123local-eats-app.launchpulse.ai
+🎯 YOUR CRITICAL TASKS - ANALYZE, FIX ISSUES, AND CREATE TEST FILES:
+STEP 2: Create test_users.json
+🔐 INTELLIGENT TEST USER CREATION:
+1. **ANALYZE DATABASE SCHEMA** (from db.sql):
+   - Find user table structure (users, user, accounts, etc.)
+   - Identify role/user_type field and possible values
+   - Detect required fields (name, email, password structure)
+   - Extract existing seed data if available
+2. **ANALYZE BACKEND API** (from server files):
+   - Find registration endpoint (/api/auth/register, /register, etc.)
+   - Find login endpoint (/api/auth/login, /login, etc.)
+   - Determine required payload structure
+   - Identify authentication flow
+3. **CREATE & VERIFY TEST USERS**:
+   - If seed data exists: extract credentials with known test passwords
+   - If no seed data: create users via API with curl commands
+   - Test login for each user to ensure credentials work
+   - Support different roles: admin, user, guest, host, customer etc. based on the database schema and seed data
+4. **GENERATE test_users.json**:
+{
+  "generated_at": "2024-01-20T10:30:00Z",
+  "user_structure": {
+    "table_name": "users",
+    "role_field": "role",
+    "registration_endpoint": "/api/auth/register",
+    "login_endpoint": "/api/auth/login"
+  },
+  "total_users": 4,
+  "verified_users": 4,
+  "users": [
+    {
+      "email": "admin@test.com",
+      "password": "AdminPass123!",
+      "role": "admin",
+      "name": "Admin User",
+      "verified": true,
+      "token": "jwt_token_here"
+    }
+    // ... create for each detected role
+  ],
+  "by_role": {
+    "admin": [{"email": "admin@test.com", "password": "AdminPass123!", "verified": true}],
+    "user": [{"email": "user@test.com", "password": "UserPass123!", "verified": true}]
+    // ... organize by role for easy browser agent access
+  }
+}
+**CRITICAL**: Use actual project structure, not template data!
+STEP 3: Create code_summary.json
+{
+  "tech_stack": ["React", "Vite", "TypeScript", "Express", "PostgreSQL", "Node.js"],
+  "features": [
+    {
+      "name": "User Authentication",
+      "description": "Login, logout, session management",
+      "files": ["src/components/Login.tsx", "src/api/auth.ts"]
+    },
+    {
+      "name": "Dashboard",
+      "description": "Main application dashboard",
+      "files": ["src/components/Dashboard.tsx"]
+    }
+  ],
+  "database_tables": ["users", "projects"],
+  "api_endpoints": ["/api/auth", "/api/users"]
+}
+STEP 4: test_cases.json 
+  "testCases": [
+    {
+      "id": "functional-app-test",
+      "name": "Functional Application Test",
+      "category": "functionality",
+      "priority": "high",
+      "description": "Verify the application has actual functionality beyond basic placeholder",
+      "steps": [
+        "Navigate to application",
+        "Verify multiple interactive elements exist (buttons, forms, links)",
+        "Check for proper navigation structure",
+        "Verify application has real features, not just 'Vite + React' text"
+      ],
+      "expectedOutcome": "Application shows functional features and interactivity",
+      "failureCondition": "If page only shows 'Vite + React' placeholder, this test should FAIL"
+    },
+    {
+      "id": "ui-components-test", 
+      "name": "UI Components Test",
+      "category": "interface",
+      "priority": "high",
+      "description": "Test that UI components are properly implemented",
+      "steps": [
+        "Check for buttons and verify they're clickable",
+        "Look for forms and input fields",
+        "Verify navigation menu exists",
+        "Test responsive design elements"
+      ],
+      "expectedOutcome": "Multiple interactive UI components found and functional"
+    },
+    {
+      "id": "content-quality-test",
+      "name": "Content Quality Test", 
+      "category": "content",
+      "priority": "high",
+      "description": "Verify application has meaningful content",
+      "steps": [
+        "Check page has substantial content beyond placeholder",
+        "Verify proper heading structure",
+        "Look for actual application features",
+        "Ensure professional appearance"
+      ],
+      "expectedOutcome": "Application demonstrates real functionality and professional design"
+    }
+  ]
+}
+CRITICAL REQUIREMENTS:
+1. You MUST FIRST analyze and fix any technical issues in the React application
+2. You MUST create all 3 JSON files: code_summary.json, test_cases.json, and test_users.json
+3. Each file must be valid JSON
+4. The test_cases.json and test_users.json files are especially important - do not skip them
+5. Focus on fixing broken functionality, not adding new features
+Start by checking if the application runs properly, fix any technical issues, then let Stagehand test the existing functionality.
 
