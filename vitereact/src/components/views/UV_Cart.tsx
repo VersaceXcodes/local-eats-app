@@ -209,6 +209,10 @@ const UV_Cart: React.FC = () => {
   const [couponInput, setCouponInput] = useState('');
   const [orderInstructions, setOrderInstructions] = useState('');
   const [toasts, setToasts] = useState<Toast[]>([]);
+  const [pendingRemoval, setPendingRemoval] = useState<{
+    item: CartItem;
+    timeoutId: NodeJS.Timeout;
+  } | null>(null);
 
   // ========================================================================
   // TOAST MANAGEMENT
