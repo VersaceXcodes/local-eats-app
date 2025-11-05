@@ -27,31 +27,17 @@ const pool = new Pool(
 async function initDb() {
   const client = await pool.connect();
   try {
-    // Begin transaction
-    await client.query('BEGIN');
+    console.log('Reading SQL file...');
+    const sql = fs.readFileSync(`./db.sql`, "utf-8");
     
-    // Read and split SQL commands
-    const dbInitCommands = fs
-      .readFileSync(`./db.sql`, "utf-8")
-      .toString()
-      .split(/(?=CREATE TABLE |INSERT INTO)/);
-
-    // Execute each command
-    for (let cmd of dbInitCommands) {
-      console.dir({ "backend:db:init:command": cmd });
-      await client.query(cmd);
-    }
-
-    // Commit transaction
-    await client.query('COMMIT');
+    console.log('Executing SQL commands...');
+    await client.query(sql);
+    
     console.log('Database initialization completed successfully');
   } catch (e) {
-    // Rollback on error
-    await client.query('ROLLBACK');
     console.error('Database initialization failed:', e);
     throw e;
   } finally {
-    // Release client back to pool
     client.release();
   }
 }

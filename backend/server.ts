@@ -42,6 +42,17 @@ interface ErrorResponse {
   timestamp: string;
 }
 
+function safeJsonParse(value: any): any {
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  }
+  return value;
+}
+
 function createErrorResponse(
   message: string,
   error?: any,
@@ -757,7 +768,7 @@ app.get('/api/restaurants', async (req, res) => {
     // Parse JSON fields
     const restaurants = result.rows.map(r => ({
       ...r,
-      cuisine_types: JSON.parse(r.cuisine_types)
+      cuisine_types: typeof r.cuisine_types === 'string' ? JSON.parse(r.cuisine_types) : r.cuisine_types
     }));
 
     // Get total count

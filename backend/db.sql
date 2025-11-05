@@ -1043,9 +1043,6 @@ INSERT INTO saved_addresses (address_id, user_id, address_label, street_address,
 ('addr_021', 'user_009', 'Gym Address', '792 Fitness Plaza', NULL, 'Portland', 'OR', '97218', false, '2023-10-10T12:00:00Z', '2023-10-10T12:00:00Z'),
 ('addr_022', 'user_011', 'Friend''s Place', '803 Couch Street', 'Apt 10', 'Portland', 'OR', '97219', false, '2023-12-05T15:00:00Z', '2023-12-05T15:00:00Z'),
 ('addr_023', 'user_013', 'Studio', '914 Art District', 'Studio B', 'Portland', 'OR', '97220', false, '2024-01-02T11:00:00Z', '2024-01-02T11:00:00Z'),
-('addr_```postgresql
--- Continue from saved_addresses
-('addr_023', 'user_013', 'Studio', '914 Art District', 'Studio B', 'Portland', 'OR', '97220', false, '2024-01-02T11:00:00Z', '2024-01-02T11:00:00Z'),
 ('addr_024', 'user_002', 'Vacation Home', '125 Beach Road', NULL, 'Portland', 'OR', '97221', false, '2023-07-15T14:00:00Z', '2023-07-15T14:00:00Z'),
 ('addr_025', 'user_008', 'Sister''s House', '236 Family Avenue', NULL, 'Portland', 'OR', '97222', false, '2023-11-20T16:00:00Z', '2023-11-20T16:00:00Z');
 
@@ -1296,7 +1293,7 @@ INSERT INTO reviews (review_id, user_id, restaurant_id, order_id, star_rating, r
 ('review_034', 'user_005', 'rest_010', 'order_048', 5, 'Romantic and delicious', 'Perfect date night spot. The duck confit was amazing. Great wine selection too.', true, 14, false, NULL, '2023-12-18T11:00:00Z', '2023-12-18T11:00:00Z'),
 ('review_035', 'user_008', 'rest_006', NULL, 3, 'Average', 'Food was okay but nothing special. Service was a bit slow. Might give it another try.', false, 2, false, NULL, '2024-01-02T13:00:00Z', '2024-01-02T13:00:00Z'),
 ('review_036', 'user_009', 'rest_016', NULL, 5, 'Can''t get enough', 'Been here five times this month. The ramen is addictive! Try the spicy miso.', false, 11, false, NULL, '2024-01-05T17:00:00Z', '2024-01-05T17:00:00Z'),
-('review_037', 'user_010', 'user_007', NULL, 4, 'Great for groups', 'Took a group of friends here and everyone loved their meals. The tableside guacamole is a must!', false, 6, true, '2024-01-04T15:00:00Z', '2024-01-03T12:00:00Z', '2024-01-04T15:00:00Z'),
+('review_037', 'user_010', 'rest_007', NULL, 4, 'Great for groups', 'Took a group of friends here and everyone loved their meals. The tableside guacamole is a must!', false, 6, true, '2024-01-04T15:00:00Z', '2024-01-03T12:00:00Z', '2024-01-04T15:00:00Z'),
 ('review_038', 'user_012', 'rest_018', 'order_027', 4, 'Good pizza delivery', 'Pizza arrived hot and fresh. The truffle mushroom pizza was excellent. Good value.', true, 5, false, NULL, '2024-01-09T10:00:00Z', '2024-01-09T10:00:00Z'),
 ('review_039', 'user_013', 'rest_003', 'order_028', 5, 'Sushi perfection', 'The fish quality is unmatched. Presentation is beautiful. A bit pricey but worth every penny.', true, 19, false, NULL, '2024-01-08T11:00:00Z', '2024-01-08T11:00:00Z'),
 ('review_040', 'user_015', 'rest_002', 'order_030', 4, 'Tasty Indian', 'The tandoori chicken was delicious and the paneer tikka was great too. Delivery was prompt.', true, 7, false, NULL, '2024-01-07T10:00:00Z', '2024-01-07T10:00:00Z');
