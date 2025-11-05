@@ -28,7 +28,7 @@ const UV_Login: React.FC = () => {
 
   // Extract redirect URL from query params or location state
   const searchParams = new URLSearchParams(location.search);
-  const redirectUrl = searchParams.get('redirect') || (location.state as any)?.from || '/';
+  const redirectUrl = searchParams.get('redirect') || ((location.state as any)?.from) || '/';
 
   // ============================================================================
   // STORE SELECTORS (CRITICAL: Individual selectors to avoid infinite loops)

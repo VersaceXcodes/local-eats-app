@@ -1,185 +1,63 @@
-VALIDATION FAILURE - Backend TypeScript Compilation (Attempt 1/100)
+VALIDATION FAILURE - SQL Validation (Attempt 1/100)
 
-The project validation failed at the "Backend TypeScript Compilation" step. You need to analyze the error and fix it.
+The project validation failed at the "SQL Validation" step. You need to analyze the error and fix it.
 
 ## Error Details:
-server.ts(128,172): error TS2339: Property 'user_id' does not exist on type 'string | JwtPayload'.
-  Property 'user_id' does not exist on type 'string'.
-server.ts(457,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(481,90): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(492,48): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(494,144): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(545,27): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(568,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(591,28): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(592,29): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(601,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(629,24): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(630,26): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(631,36): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(643,98): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(680,38): error TS2339: Property 'split' does not exist on type 'string | ParsedQs | (string | ParsedQs)[]'.
-  Property 'split' does not exist on type '(string | ParsedQs)[]'.
-server.ts(693,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(698,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(705,35): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(724,34): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(725,34): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(729,218): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(764,31): error TS2345: Argument of type 'string | 20 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(764,48): error TS2345: Argument of type 'string | 0 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(779,59): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-server.ts(779,68): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-server.ts(779,96): error TS2345: Argument of type 'string | 20 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(987,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-server.ts(987,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(993,24): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-server.ts(993,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(1012,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
-server.ts(1012,31): error TS2345: Argument of type 'string | 20 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(1012,48): error TS2345: Argument of type 'string | 0 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(1023,35): error TS2339: Property 'user_id' does not exist on type 'string | JwtPayload'.
-  Property 'user_id' does not exist on type 'string'.
-server.ts(1165,27): error TS2339: Property 'user' does not exist on type 'Request<{ discount_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1201,76): error TS2339: Property 'user' does not exist on type 'Request<{ discount_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1238,28): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1242,38): error TS2339: Property 'split' does not exist on type 'string | ParsedQs | (string | ParsedQs)[]'.
-  Property 'split' does not exist on type '(string | ParsedQs)[]'.
-server.ts(1254,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(1260,33): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(1354,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1370,27): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1376,19): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1408,14): error TS2339: Property 'user' does not exist on type 'Request<{ restaurant_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1415,21): error TS2339: Property 'user' does not exist on type 'Request<{ restaurant_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1453,14): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1462,36): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1524,32): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1592,30): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1653,19): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1679,32): error TS2339: Property 'user' does not exist on type 'Request<{ menu_item_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1719,19): error TS2339: Property 'user' does not exist on type 'Request<{ menu_item_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1750,32): error TS2339: Property 'user' does not exist on type 'Request<{ menu_item_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1756,19): error TS2339: Property 'user' does not exist on type 'Request<{ menu_item_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1788,22): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1808,32): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1846,19): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1875,32): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1878,21): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1920,32): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1966,20): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(1989,25): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2031,14): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2045,66): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2055,21): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2062,24): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2066,13): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2117,28): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2158,31): error TS2345: Argument of type 'string | 20 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(2158,48): error TS2345: Argument of type 'string | 0 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(2247,22): error TS2339: Property 'user' does not exist on type 'Request<{ order_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2329,22): error TS2339: Property 'user' does not exist on type 'Request<{ order_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2373,27): error TS2339: Property 'user' does not exist on type 'Request<{ order_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2459,22): error TS2339: Property 'user' does not exist on type 'Request<{ order_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2504,22): error TS2339: Property 'user' does not exist on type 'Request<{ order_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2550,19): error TS2339: Property 'user' does not exist on type 'Request<{ order_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2577,92): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2595,25): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2611,19): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2664,31): error TS2339: Property 'user_id' does not exist on type 'string | JwtPayload'.
-  Property 'user_id' does not exist on type 'string'.
-server.ts(2720,32): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2819,32): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2844,19): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2888,46): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2918,23): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2933,42): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(2970,25): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3011,23): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3023,34): error TS2339: Property 'user' does not exist on type 'Request<{ review_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3068,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3074,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3144,12): error TS2339: Property 'user' does not exist on type 'Request<{ badge_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3153,42): error TS2339: Property 'user' does not exist on type 'Request<{ badge_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3177,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3189,29): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3194,20): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3218,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3234,98): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3249,16): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3258,26): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3287,24): error TS2339: Property 'user' does not exist on type 'Request<{ address_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3301,16): error TS2339: Property 'user' does not exist on type 'Request<{ address_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3351,29): error TS2339: Property 'user' does not exist on type 'Request<{ address_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3388,24): error TS2339: Property 'user' does not exist on type 'Request<{ address_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3406,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3422,104): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3436,16): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3445,33): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3473,31): error TS2339: Property 'user' does not exist on type 'Request<{ payment_method_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3496,28): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3511,31): error TS2345: Argument of type 'string | 50 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(3511,48): error TS2345: Argument of type 'string | 0 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(3524,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3548,34): error TS2339: Property 'user' does not exist on type 'Request<{ notification_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3568,17): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3588,29): error TS2339: Property 'user' does not exist on type 'Request<{ notification_id: string; }, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3606,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3627,28): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(3636,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3648,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3655,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3725,26): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3820,19): error TS2365: Operator '<' cannot be applied to types 'string | number | ParsedQs | (string | ParsedQs)[]' and 'number'.
-server.ts(3829,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-server.ts(3845,27): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
-server.ts(3851,48): error TS2339: Property 'toLowerCase' does not exist on type 'string | ParsedQs | (string | ParsedQs)[]'.
-  Property 'toLowerCase' does not exist on type '(string | ParsedQs)[]'.
-server.ts(3861,59): error TS2345: Argument of type 'string | 10 | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-server.ts(3874,28): error TS2345: Argument of type 'string | ParsedQs | (string | ParsedQs)[]' is not assignable to parameter of type 'string'.
-  Type 'ParsedQs' is not assignable to type 'string'.
-server.ts(3878,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3896,12): error TS2339: Property 'user' does not exist on type 'Request<{}, any, any, ParsedQs, Record<string, any>>'.
-server.ts(3926,12): error TS2769: No overload matches this call.
-  Overload 1 of 6, '(port: number, hostname: string, backlog: number, callback?: () => void): Server<typeof IncomingMessage, typeof ServerResponse>', gave the following error.
-    Argument of type 'string | 3000' is not assignable to parameter of type 'number'.
-      Type 'string' is not assignable to type 'number'.
-  Overload 2 of 6, '(port: number, hostname: string, callback?: () => void): Server<typeof IncomingMessage, typeof ServerResponse>', gave the following error.
-    Argument of type 'string | 3000' is not assignable to parameter of type 'number'.
-      Type 'string' is not assignable to type 'number'.
+❌ Database error detected in stderr: Database initialization failed: error: relation "users" already exists
+    at /app/backend/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async initDb (file:///app/backend/initdb.js:34:5) {
+  length: 99,
+  severity: 'ERROR',
+  code: '42P07',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'heap.c',
+  line: '1160',
+  routine: 'heap_create_with_catalog'
+}
+error: relation "users" already exists
+    at /app/backend/node_modules/pg/lib/client.js:545:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async initDb (file:///app/backend/initdb.js:34:5) {
+  length: 99,
+  severity: 'ERROR',
+  code: '42P07',
+  detail: undefined,
+  hint: undefined,
+  position: undefined,
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'heap.c',
+  line: '1160',
+  routine: 'heap_create_with_catalog'
+}
+
 
 
 ## Validation Context:
-- Step: Backend TypeScript Compilation
-- Working Directory: /app/backend
+- Step: SQL Validation
+- Working Directory: /app/vitereact
 - Attempt: 1/100
 - Previous failures for this step: 1
 
 ## Project Memory Summary:
-- Total validation attempts: 4
+- Total validation attempts: 6
 - Common issues encountered: None
 - Known dependencies: @hookform/resolvers, @radix-ui/react-accordion, @radix-ui/react-alert-dialog, @radix-ui/react-aspect-ratio, @radix-ui/react-avatar, @radix-ui/react-checkbox, @radix-ui/react-collapsible, @radix-ui/react-context-menu, @radix-ui/react-dialog, @radix-ui/react-dropdown-menu
 - Missing dependencies: None
@@ -297,11 +175,11 @@ PROTECTED DIRECTORIES (DO NOT MODIFY):
 
 
 
-## Previous Validation Failures for Backend TypeScript Compilation:
-- 5:21:43 PM: 
+## Previous Validation Failures for SQL Validation:
+- 5:29:53 PM: 
 
 ## Your Task:
-1. **Analyze the Error**: Understand what specifically went wrong in the Backend TypeScript Compilation step
+1. **Analyze the Error**: Understand what specifically went wrong in the SQL Validation step
 2. **Check Previous Attempts**: Consider if this is a recurring issue based on validation history
 3. **Locate the Problem**: Identify which files need to be modified
 4. **Apply Fixes**: Use the available tools to fix the specific issues
@@ -312,7 +190,7 @@ PROTECTED DIRECTORIES (DO NOT MODIFY):
 
 
 ## Important Notes:
-- You are working in a Modal Sandbox environment at /app/backend
+- You are working in a Modal Sandbox environment at /app/vitereact
 - Make changes to the actual project files that will be used in the next validation attempt
 - Always check packages are installed correctly, if not, install them, npm install
 - For TypeScript errors: Fix type issues, missing imports, etc.

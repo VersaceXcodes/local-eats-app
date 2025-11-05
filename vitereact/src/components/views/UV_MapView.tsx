@@ -183,6 +183,7 @@ const UV_MapView: React.FC = () => {
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
   const [showSearchThisArea, setShowSearchThisArea] = useState(false);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
+  const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
     cuisine_types: searchParams.get('cuisine_types')?.split(',').filter(Boolean) || [],

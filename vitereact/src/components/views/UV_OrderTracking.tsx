@@ -297,6 +297,7 @@ const UV_OrderTracking: React.FC = () => {
     () => orderData ? buildStatusHistory(orderData.order) : [],
     [orderData]
   );
+  const currentStatus = orderData?.order.order_status || 'order_received';
   const canCancel = currentStatus === 'order_received';
   const shouldPoll = currentStatus !== 'delivered' && currentStatus !== 'cancelled';
 

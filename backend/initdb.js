@@ -27,6 +27,19 @@ const pool = new Pool(
 async function initDb() {
   const client = await pool.connect();
   try {
+    console.log('Checking if database is already initialized...');
+    const checkTable = await client.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'users'
+      );
+    `);
+    
+    if (checkTable.rows[0].exists) {
+      console.log('Database already initialized. Skipping initialization.');
+      return;
+    }
+    
     console.log('Reading SQL file...');
     const sql = fs.readFileSync(`./db.sql`, "utf-8");
     
