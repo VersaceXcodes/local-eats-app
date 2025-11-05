@@ -5,19 +5,18 @@ import axios from 'axios';
 import { useAppStore } from '@/store/main';
 import {
   Bell,
-  BellOff,
-  Check,
-  CheckCheck,
-  Trash2,
   ShoppingBag,
   Tag,
   Trophy,
   MessageCircle,
+  Check,
+  CheckCheck,
+  Trash2,
   User,
   AlertCircle,
   ChevronRight,
   Loader2,
-  X
+  BellOff
 } from 'lucide-react';
 
 // ============================================================================
@@ -163,8 +162,7 @@ const UV_Notifications: React.FC = () => {
   const {
     data: notificationsData,
     isLoading,
-    error,
-    refetch
+    error
   } = useQuery<NotificationsResponse>({
     queryKey: ['notifications', activeFilter, pagination.offset],
     queryFn: async () => {

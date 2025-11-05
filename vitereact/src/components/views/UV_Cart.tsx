@@ -129,16 +129,7 @@ const removeCouponCode = async (authToken: string): Promise<CartData> => {
   return response.data;
 };
 
-const clearCartAPI = async (authToken: string): Promise<void> => {
-  await axios.delete(
-    `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/cart`,
-    {
-      headers: {
-        'Authorization': `Bearer ${authToken}`,
-      },
-    }
-  );
-};
+
 
 // ============================================================================
 // TOAST COMPONENT
@@ -209,10 +200,6 @@ const UV_Cart: React.FC = () => {
   const [couponInput, setCouponInput] = useState('');
   const [orderInstructions, setOrderInstructions] = useState('');
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [pendingRemoval, setPendingRemoval] = useState<{
-    item: CartItem;
-    timeoutId: NodeJS.Timeout;
-  } | null>(null);
 
   // ========================================================================
   // TOAST MANAGEMENT
@@ -307,7 +294,6 @@ const UV_Cart: React.FC = () => {
     mutationFn: (menuItemId: string) => removeCartItem(menuItemId, authToken!),
     onSuccess: (data) => {
       queryClient.setQueryData(['cart'], data);
-      setPendingRemoval(null);
     },
     onError: () => {
       showToast('Failed to remove item', 'error');
@@ -353,37 +339,9 @@ const UV_Cart: React.FC = () => {
   };
 
   const handleRemoveItem = (item: CartItem) => {
-    // Optimistic removal
-    queryClient.setQueryData(['cart'], (old: CartData | undefined) => {
-      if (!old) return old;
-      return {
-        ...old,
-        items: old.items.filter(i => i.menu_item_id !== item.menu_item_id),
-      };
-    });
-
-    // Set timeout for server-side removal
-    const timeoutId = setTimeout(() => {
+    if (window.confirm('Remove this item from your cart?')) {
       removeItemMutation.mutate(item.menu_item_id);
-    }, 5000);
-
-    setPendingRemoval({ item, timeoutId });
-
-    showToast('Item removed from cart', 'info', {
-      label: 'Undo',
-      onClick: () => {
-        clearTimeout(timeoutId);
-        setPendingRemoval(null);
-        queryClient.setQueryData(['cart'], (old: CartData | undefined) => {
-          if (!old) return old;
-          return {
-            ...old,
-            items: [...old.items, item],
-          };
-        });
-        showToast('Item restored', 'success');
-      },
-    });
+    }
   };
 
   const handleApplyCoupon = () => {

@@ -171,7 +171,7 @@ const UV_MapView: React.FC = () => {
   // ========================================================================
   // LOCAL STATE
   // ========================================================================
-  const [mapCenter, setMapCenter] = useState<{ latitude: number; longitude: number }>({
+  const [mapCenter] = useState<{ latitude: number; longitude: number }>({
     latitude: parseFloat(searchParams.get('lat') || '') || userLocation.latitude || 45.5231,
     longitude: parseFloat(searchParams.get('lng') || '') || userLocation.longitude || -122.6765
   });
@@ -183,7 +183,6 @@ const UV_MapView: React.FC = () => {
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
   const [showSearchThisArea, setShowSearchThisArea] = useState(false);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
-  const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
 
   const [activeFilters, setActiveFilters] = useState<ActiveFilters>({
     cuisine_types: searchParams.get('cuisine_types')?.split(',').filter(Boolean) || [],
@@ -597,9 +596,6 @@ const UV_MapView: React.FC = () => {
                       key={restaurant.restaurant_id}
                       position={[restaurant.latitude, restaurant.longitude]}
                       icon={icon}
-                      eventHandlers={{
-                        click: () => setSelectedMarkerId(restaurant.restaurant_id)
-                      }}
                     >
                       <Popup
                         className="custom-popup"

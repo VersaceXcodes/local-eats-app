@@ -133,7 +133,7 @@ const formatEstimatedTime = (timestamp: string | null): string => {
   });
 };
 
-const estimateRemainingTime = (currentStatus: string, estimatedTime: string | null): string => {
+const estimateRemainingTime = (estimatedTime: string | null): string => {
   if (!estimatedTime) return '';
   const now = new Date();
   const estimated = new Date(estimatedTime);
@@ -410,7 +410,6 @@ const UV_OrderTracking: React.FC = () => {
             {isActive && orderData && (
               <p className="text-sm text-orange-600 font-medium mt-1">
                 {estimateRemainingTime(
-                  currentStatus, 
                   orderData.order.order_type === 'delivery' 
                     ? orderData.order.estimated_delivery_time 
                     : orderData.order.estimated_pickup_time
@@ -454,7 +453,6 @@ const UV_OrderTracking: React.FC = () => {
             {isActive && orderData && (
               <p className="text-sm text-orange-600 font-medium mt-1">
                 {estimateRemainingTime(
-                  currentStatus, 
                   orderData.order.order_type === 'delivery' 
                     ? orderData.order.estimated_delivery_time 
                     : orderData.order.estimated_pickup_time

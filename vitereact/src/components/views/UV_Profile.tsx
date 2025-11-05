@@ -248,8 +248,7 @@ const UV_Profile: React.FC = () => {
   // ========================================================================
   const {
     data: userStatistics,
-    isLoading: statsLoading,
-    error: statsError
+    isLoading: statsLoading
   } = useQuery<UserStatistics>({
     queryKey: ['userStatistics'],
     queryFn: async () => {
@@ -268,8 +267,7 @@ const UV_Profile: React.FC = () => {
   // ========================================================================
   const {
     data: badgesData,
-    isLoading: badgesLoading,
-    error: badgesError
+    isLoading: badgesLoading
   } = useQuery<BadgesResponse>({
     queryKey: ['userBadges'],
     queryFn: async () => {
@@ -383,7 +381,6 @@ const UV_Profile: React.FC = () => {
       refetchReviews();
       // Update statistics
       queryClient.invalidateQueries({ queryKey: ['userStatistics'] });
-      setDeleteReviewId(null);
       alert('Review deleted successfully');
     },
     onError: (error: any) => {

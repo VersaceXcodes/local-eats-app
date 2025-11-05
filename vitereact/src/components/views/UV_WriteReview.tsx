@@ -320,7 +320,7 @@ const UV_WriteReview: React.FC = () => {
 
       if (selectedFiles.length > 0) {
         const photoUrls = selectedFiles.map(
-          (file, index) => `https://cdn.example.com/reviews/${createdReview.review_id}/photo_${index}.jpg`
+          (_file, index) => `https://cdn.example.com/reviews/${createdReview.review_id}/photo_${index}.jpg`
         );
 
         await uploadPhotosMutation.mutateAsync({

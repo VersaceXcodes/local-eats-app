@@ -24,7 +24,7 @@ const UV_Login: React.FC = () => {
   // ============================================================================
   
   const navigate = useNavigate();
-  
+  const location = useLocation();
 
   // Extract redirect URL from query params or location state
   const searchParams = new URLSearchParams(location.search);
@@ -148,7 +148,7 @@ const UV_Login: React.FC = () => {
       const { user, auth_token } = response.data;
 
       // Manually update Zustand store with authenticated user data
-      useAppStore.setState((state) => ({
+      useAppStore.setState(() => ({
         authentication_state: {
           current_user: {
             user_id: user.user_id,
