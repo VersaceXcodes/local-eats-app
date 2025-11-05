@@ -5,9 +5,7 @@ import {
   Facebook, 
   Instagram, 
   Twitter,
-  Mail,
-  Phone,
-  MapPin
+  Mail
 } from 'lucide-react';
 
 const GV_Footer: React.FC = () => {

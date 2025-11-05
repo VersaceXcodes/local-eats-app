@@ -163,7 +163,7 @@ const UV_Profile: React.FC = () => {
   // ========================================================================
   // ZUSTAND STATE - INDIVIDUAL SELECTORS (CRITICAL!)
   // ========================================================================
-  const currentUser = useAppStore(state => state.authentication_state.current_user);
+  const _currentUser = useAppStore(state => state.authentication_state.current_user);
   const authToken = useAppStore(state => state.authentication_state.auth_token);
   const isAuthenticated = useAppStore(state => state.authentication_state.authentication_status.is_authenticated);
   const isAuthLoading = useAppStore(state => state.authentication_state.authentication_status.is_loading);
@@ -186,14 +186,14 @@ const UV_Profile: React.FC = () => {
     email: '',
     phone_number: ''
   });
-  const [profilePictureUploadLoading, setProfilePictureUploadLoading] = useState(false);
+  const [profilePictureUploadLoading] = useState(false);
   const [reviewsPagination, setReviewsPagination] = useState({
     limit: 20,
     offset: 0,
     hasMore: false
   });
-  const [showBadgeModal, setShowBadgeModal] = useState<BadgeWithProgress | null>(null);
-  const [deleteReviewId, setDeleteReviewId] = useState<string | null>(null);
+  const [_showBadgeModal, _setShowBadgeModal] = useState<BadgeWithProgress | null>(null);
+  const [_deleteReviewId, setDeleteReviewId] = useState<string | null>(null);
 
   // ========================================================================
   // AUTHENTICATION REDIRECT

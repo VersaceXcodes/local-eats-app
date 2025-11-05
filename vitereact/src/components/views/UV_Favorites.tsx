@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { Heart, Search, X, Filter, Check, MapPin, Star, DollarSign, ChevronDown, Loader2, AlertCircle } from 'lucide-react';
+import { Heart, Search, X, Filter, Check, MapPin, Star, DollarSign, AlertCircle } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES

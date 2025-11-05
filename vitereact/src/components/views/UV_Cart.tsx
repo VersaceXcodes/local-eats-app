@@ -291,7 +291,7 @@ const UV_Cart: React.FC = () => {
 
       return { previousCart };
     },
-    onError: (err, variables, context) => {
+    onError: (_err, _variables, context) => {
       if (context?.previousCart) {
         queryClient.setQueryData(['cart'], context.previousCart);
       }
@@ -342,7 +342,7 @@ const UV_Cart: React.FC = () => {
   });
 
   // Clear cart mutation
-  const clearCartMutation = useMutation({
+  const _clearCartMutation = useMutation({
     mutationFn: () => clearCartAPI(authToken!),
     onSuccess: () => {
       queryClient.setQueryData(['cart'], {

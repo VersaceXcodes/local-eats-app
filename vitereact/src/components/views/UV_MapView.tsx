@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -7,7 +7,7 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import { Icon, divIcon, LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useAppStore } from '@/store/main';
-import { Heart, MapPin, Star, DollarSign, Navigation, Filter, List, X, Search, MapPinIcon } from 'lucide-react';
+import { Heart, MapPin, Star, Navigation, Filter, List, X, Search, MapPinIcon } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -278,7 +278,7 @@ const UV_MapView: React.FC = () => {
     refetch();
   }, [refetch]);
 
-  const handleRecenterToUser = useCallback(() => {
+  const _handleRecenterToUser = useCallback(() => {
     if (userLocation.latitude && userLocation.longitude) {
       setMapCenter({
         latitude: userLocation.latitude,
@@ -591,9 +591,9 @@ const UV_MapView: React.FC = () => {
               >
                 {visibleRestaurants.map((restaurant) => {
                   const isFavorite = favoriteIds.includes(restaurant.restaurant_id);
-                  const hasDiscount = false; // Would check discounts in real implementation
+                  const hasDiscount = false;
                   
-                  let icon = defaultIcon;
+                  let icon: L.Icon | L.DivIcon = defaultIcon;
                   if (isFavorite) {
                     icon = favoriteIcon;
                   } else if (hasDiscount) {
@@ -612,7 +612,6 @@ const UV_MapView: React.FC = () => {
                       }}
                     >
                       <Popup
-                        onClose={() => setSelectedMarkerId(null)}
                         className="custom-popup"
                       >
                         <div className="w-64">

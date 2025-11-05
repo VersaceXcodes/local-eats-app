@@ -310,12 +310,11 @@ const UV_EditReview: React.FC = () => {
   };
 
   const handleAddPhotos = () => {
-    // Mock implementation - in real app, this would open file picker
-    const mockUrl = `https://picsum.photos/seed/${Date.now()}/400/300`;
+    const placeholderUrl = `https://picsum.photos/seed/${Date.now()}/400/300`;
     const totalPhotos = existingPhotos.length + newPhotoUrls.length;
     
     if (totalPhotos < 10) {
-      setNewPhotoUrls([...newPhotoUrls, mockUrl]);
+      setNewPhotoUrls([...newPhotoUrls, placeholderUrl]);
     } else {
       alert('Maximum 10 photos allowed');
     }

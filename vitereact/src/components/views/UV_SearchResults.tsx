@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -139,7 +139,7 @@ const RestaurantCardSkeleton: React.FC = () => (
 
 const UV_SearchResults: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const _navigate = useNavigate();
 
   // ========================================================================
   // GLOBAL STATE (Individual Selectors)

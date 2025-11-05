@@ -3,7 +3,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { MapPin, Star, DollarSign, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles } from 'lucide-react';
+import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -168,7 +168,7 @@ const UV_Landing: React.FC = () => {
   // ============================================================================
   
   const isAuthenticated = useAppStore(state => state.authentication_state.authentication_status.is_authenticated);
-  const currentUser = useAppStore(state => state.authentication_state.current_user);
+  const _currentUser = useAppStore(state => state.authentication_state.current_user);
   const authToken = useAppStore(state => state.authentication_state.auth_token);
   const userLocation = useAppStore(state => state.user_location);
   const favoriteIds = useAppStore(state => state.favorites_list.restaurant_ids);
@@ -248,9 +248,8 @@ const UV_Landing: React.FC = () => {
   const { data: restaurantFeed, isLoading: isLoadingRestaurants } = useQuery({
     queryKey: ['restaurants', restaurantParams],
     queryFn: () => fetchRestaurants(restaurantParams),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
     retry: 1,
-    keepPreviousData: true,
   });
 
   // ============================================================================

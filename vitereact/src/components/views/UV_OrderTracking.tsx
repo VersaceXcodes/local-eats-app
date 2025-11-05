@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
 import { 
-  Restaurant, 
   ChefHat, 
   ShoppingBag, 
   Car, 
@@ -15,7 +14,7 @@ import {
   X,
   AlertCircle,
   Clock,
-  MapPin
+  Utensils
 } from 'lucide-react';
 
 // ============================================================================
@@ -202,7 +201,7 @@ const getStatusIcon = (iconName: string, isActive: boolean, isCompleted: boolean
 
   switch (iconName) {
     case 'restaurant':
-      return <Restaurant className={className} />;
+      return <Utensils className={className} />;
     case 'chef':
       return <ChefHat className={className} />;
     case 'bag':
@@ -222,7 +221,7 @@ const getStatusIcon = (iconName: string, isActive: boolean, isCompleted: boolean
 
 const UV_OrderTracking: React.FC = () => {
   const { order_id } = useParams<{ order_id: string }>();
-  const navigate = useNavigate();
+  const _navigate = useNavigate();
   const queryClient = useQueryClient();
 
   // CRITICAL: Individual selectors, no object destructuring
@@ -295,7 +294,7 @@ const UV_OrderTracking: React.FC = () => {
   // DERIVED STATE
   // ============================================================================
 
-  const currentStatus = orderData?.order.order_status || 'order_received';
+  const _currentStatus = orderData?.order.order_status || 'order_received';
   const statusHistory = useMemo(
     () => orderData ? buildStatusHistory(orderData.order) : [],
     [orderData]
@@ -365,7 +364,7 @@ const UV_OrderTracking: React.FC = () => {
   const renderStatusNode = (node: StatusNode, index: number) => {
     const statusIndex = statusHistory.findIndex(s => s.status === currentStatus);
     const nodeIndex = index;
-    const isCompleted = nodeIndex < statusIndex || (nodeIndex === statusIndex && node.timestamp);
+    const isCompleted = nodeIndex < statusIndex || (nodeIndex === statusIndex && !!node.timestamp);
     const isActive = nodeIndex === statusIndex && currentStatus !== 'cancelled';
     const isFuture = nodeIndex > statusIndex;
 
@@ -558,7 +557,7 @@ const UV_OrderTracking: React.FC = () => {
                 />
               ) : (
                 <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
-                  <Restaurant className="w-6 h-6 text-gray-400" />
+                  <Utensils className="w-6 h-6 text-gray-400" />
                 </div>
               )}
               <div>
@@ -665,7 +664,7 @@ const UV_OrderTracking: React.FC = () => {
               {/* Items Summary */}
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                  <Restaurant className="w-4 h-4 text-purple-600" />
+                  <Utensils className="w-4 h-4 text-purple-600" />
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold text-gray-900 mb-2">Items ({items.length})</p>

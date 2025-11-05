@@ -7,7 +7,7 @@ import {
   ChevronLeft, 
   MapPin, 
   Phone, 
-  Clock, 
+  
   CheckCircle, 
   XCircle, 
   Package, 
@@ -358,7 +358,7 @@ const UV_OrderDetail: React.FC = () => {
     });
   };
 
-  const formatTime = (dateString: string | null) => {
+  const _formatTime = (dateString: string | null) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleTimeString('en-US', { 

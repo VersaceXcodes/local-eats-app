@@ -32,7 +32,7 @@ const calculatePasswordStrength = (password: string): PasswordStrength => {
   const hasLetter = /[a-zA-Z]/.test(password);
   const hasNumber = /\d/.test(password);
   const hasUpperCase = /[A-Z]/.test(password);
-  const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*()_+=[\]{};':"\\|,.<>/?-]/.test(password);
   const length = password.length;
 
   // Level 0 (Weak): < 8 chars OR missing letter OR missing number
@@ -232,7 +232,7 @@ const UV_ResetPassword: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
+      const _response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/auth/password-reset/complete`,
         {
           reset_token: resetToken,
@@ -421,14 +421,6 @@ const UV_ResetPassword: React.FC = () => {
                       <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm text-red-700">{generalError}</p>
-                        {tokenValid === false && (
-                          <Link
-                            to="/password-reset"
-                            className="text-sm text-red-700 underline hover:text-red-800 mt-1 inline-block"
-                          >
-                            Request new reset link
-                          </Link>
-                        )}
                       </div>
                     </div>
                   )}

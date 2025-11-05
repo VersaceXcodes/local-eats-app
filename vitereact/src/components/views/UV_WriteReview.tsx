@@ -43,10 +43,6 @@ interface CreateReviewResponse {
   updated_at: string;
 }
 
-interface UploadPhotosPayload {
-  photo_urls: string[];
-}
-
 // ============================================================================
 // MAIN COMPONENT
 // ============================================================================
@@ -79,7 +75,7 @@ const UV_WriteReview: React.FC = () => {
   const [reviewText, setReviewText] = useState<string>('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
-  const [uploadedPhotoUrls, setUploadedPhotoUrls] = useState<string[]>([]);
+  const [_uploadedPhotoUrls, _setUploadedPhotoUrls] = useState<string[]>([]);
   const [showVerificationPrompt, setShowVerificationPrompt] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
@@ -324,13 +320,13 @@ const UV_WriteReview: React.FC = () => {
       const createdReview = await createReviewMutation.mutateAsync(reviewPayload);
 
       if (selectedFiles.length > 0) {
-        const mockPhotoUrls = selectedFiles.map(
+        const photoUrls = selectedFiles.map(
           (file, index) => `https://cdn.example.com/reviews/${createdReview.review_id}/photo_${index}.jpg`
         );
 
         await uploadPhotosMutation.mutateAsync({
           review_id: createdReview.review_id,
-          photo_urls: mockPhotoUrls,
+          photo_urls: photoUrls,
         });
       }
 

@@ -37,7 +37,7 @@ const validateFullName = (name: string): string | null => {
     return 'Name must not exceed 50 characters';
   }
   // Allow letters, spaces, hyphens, apostrophes
-  const namePattern = /^[a-zA-Z\s'\-]+$/;
+  const namePattern = /^[a-zA-Z\s'-]+$/;
   if (!namePattern.test(name)) {
     return 'Name contains invalid characters';
   }
@@ -106,7 +106,7 @@ const validatePhoneNumber = (phone: string): string | null => {
   }
   // International phone format: ^\+?[1-9]\d{1,14}$
   const phonePattern = /^\+?[1-9]\d{1,14}$/;
-  if (!phonePattern.test(phone.replace(/[\s\-]/g, ''))) {
+  if (!phonePattern.test(phone.replace(/[\s-]/g, ''))) {
     return 'Please enter a valid phone number';
   }
   return null;

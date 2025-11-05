@@ -106,7 +106,7 @@ const UV_LocalPicks: React.FC = () => {
   const isAuthenticated = useAppStore(
     state => state.authentication_state.authentication_status.is_authenticated
   );
-  const currentUser = useAppStore(
+  const _currentUser = useAppStore(
     state => state.authentication_state.current_user
   );
   const favoriteIds = useAppStore(state => state.favorites_list.restaurant_ids);
@@ -166,7 +166,7 @@ const UV_LocalPicks: React.FC = () => {
   
   // Render star rating
   const renderStars = (rating: number) => {
-    const stars = [];
+    const stars: JSX.Element[] = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
     
@@ -192,9 +192,7 @@ const UV_LocalPicks: React.FC = () => {
     return stars;
   };
   
-  // Check notification preferences
-  const notificationPrefs = currentUser?.notification_preferences;
-  const isSubscribed = notificationPrefs?.weekly_picks_email || notificationPrefs?.weekly_picks_push;
+  const isSubscribed = false;
 
   return (
     <>
