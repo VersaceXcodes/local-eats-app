@@ -289,7 +289,7 @@ export const useAppStore = create<AppState>()(
       // ========================================================================
 
       login_user: async (email: string, password: string) => {
-        set(() ({
+        set((state) ({
           authentication_state: {
             ...state.authentication_state,
             authentication_status: {
@@ -309,7 +309,7 @@ export const useAppStore = create<AppState>()(
 
           const { user, auth_token } = response.data;
 
-          set(() ({
+          set((_state) ({
             authentication_state: {
               current_user: {
                 user_id: user.user_id,
@@ -331,7 +331,7 @@ export const useAppStore = create<AppState>()(
         } catch (error: any) {
           const errorMessage = error.response?.data?.message || error.message || 'Login failed';
 
-          set(() ({
+          set((_state) ({
             authentication_state: {
               current_user: null,
               auth_token: null,
@@ -347,7 +347,7 @@ export const useAppStore = create<AppState>()(
       },
 
       logout_user: () => {
-        set(() ({
+        set((_state) ({
           authentication_state: {
             current_user: null,
             auth_token: null,
@@ -385,7 +385,7 @@ export const useAppStore = create<AppState>()(
       },
 
       register_user: async (email: string, password: string, full_name: string, phone_number?: string) => {
-        set(() ({
+        set((state) ({
           authentication_state: {
             ...state.authentication_state,
             authentication_status: {
@@ -410,7 +410,7 @@ export const useAppStore = create<AppState>()(
 
           const { user, auth_token } = response.data;
 
-          set(() ({
+          set((_state) ({
             authentication_state: {
               current_user: {
                 user_id: user.user_id,
@@ -432,7 +432,7 @@ export const useAppStore = create<AppState>()(
         } catch (error: any) {
           const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
 
-          set(() ({
+          set((_state) ({
             authentication_state: {
               current_user: null,
               auth_token: null,
@@ -452,7 +452,7 @@ export const useAppStore = create<AppState>()(
         const token = authentication_state.auth_token;
 
         if (!token) {
-          set(() ({
+          set((state) ({
             authentication_state: {
               ...state.authentication_state,
               authentication_status: {
@@ -476,7 +476,7 @@ export const useAppStore = create<AppState>()(
 
           const user = response.data;
 
-          set(() ({
+          set((_state) ({
             authentication_state: {
               current_user: {
                 user_id: user.user_id,
@@ -497,7 +497,7 @@ export const useAppStore = create<AppState>()(
           }));
         } catch (error) {
           // Token is invalid, clear auth state
-          set(() ({
+          set((_state) ({
             authentication_state: {
               current_user: null,
               auth_token: null,
@@ -512,7 +512,7 @@ export const useAppStore = create<AppState>()(
       },
 
       clear_auth_error: () => {
-        set(() ({
+        set((state) ({
           authentication_state: {
             ...state.authentication_state,
             error_message: null,
@@ -521,7 +521,7 @@ export const useAppStore = create<AppState>()(
       },
 
       update_user_profile: (userData: Partial<User>) => {
-        set(() ({
+        set((state) ({
           authentication_state: {
             ...state.authentication_state,
             current_user: state.authentication_state.current_user
@@ -580,7 +580,7 @@ export const useAppStore = create<AppState>()(
           cart_state.applied_discount
         );
 
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             restaurant_id,
@@ -600,7 +600,7 @@ export const useAppStore = create<AppState>()(
 
         // If cart is empty, reset restaurant
         if (new_items.length === 0) {
-          set(() ({
+          set((_state) ({
             cart_state: {
               restaurant_id: null,
               restaurant_name: null,
@@ -624,7 +624,7 @@ export const useAppStore = create<AppState>()(
             cart_state.applied_discount
           );
 
-          set(() ({
+          set((state) ({
             cart_state: {
               ...state.cart_state,
               items: new_items,
@@ -657,7 +657,7 @@ export const useAppStore = create<AppState>()(
           cart_state.applied_discount
         );
 
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             items: new_items,
@@ -670,7 +670,7 @@ export const useAppStore = create<AppState>()(
       },
 
       clear_cart: () => {
-        set(() ({
+        set((_state) ({
           cart_state: {
             restaurant_id: null,
             restaurant_name: null,
@@ -697,7 +697,7 @@ export const useAppStore = create<AppState>()(
           discount
         );
 
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             applied_discount: discount,
@@ -718,7 +718,7 @@ export const useAppStore = create<AppState>()(
           null
         );
 
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             applied_discount: null,
@@ -741,7 +741,7 @@ export const useAppStore = create<AppState>()(
           cart_state.applied_discount
         );
 
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             order_type,
@@ -754,7 +754,7 @@ export const useAppStore = create<AppState>()(
       },
 
       set_delivery_address: (address: DeliveryAddress) => {
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             delivery_address: address,
@@ -772,7 +772,7 @@ export const useAppStore = create<AppState>()(
           cart_state.applied_discount
         );
 
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             tip: tip_amount,
@@ -791,7 +791,7 @@ export const useAppStore = create<AppState>()(
           cart_state.applied_discount
         );
 
-        set(() ({
+        set((state) ({
           cart_state: {
             ...state.cart_state,
             subtotal: totals.subtotal,
@@ -806,7 +806,7 @@ export const useAppStore = create<AppState>()(
       // ========================================================================
 
       set_user_location: (latitude: number, longitude: number, city?: string, state?: string) => {
-        set(() => ({
+        set((state) => ({
           user_location: {
             latitude,
             longitude,
@@ -819,7 +819,7 @@ export const useAppStore = create<AppState>()(
       },
 
       clear_user_location: () => {
-        set(() ({
+        set((state) ({
           user_location: {
             latitude: null,
             longitude: null,
@@ -832,7 +832,7 @@ export const useAppStore = create<AppState>()(
       },
 
       grant_location_permission: () => {
-        set(() ({
+        set((state) ({
           user_location: {
             ...state.user_location,
             permission_granted: true,
@@ -842,7 +842,7 @@ export const useAppStore = create<AppState>()(
       },
 
       deny_location_permission: () => {
-        set(() ({
+        set((state) ({
           user_location: {
             latitude: null,
             longitude: null,
@@ -859,7 +859,7 @@ export const useAppStore = create<AppState>()(
       // ========================================================================
 
       update_filters: (filters: Partial<ActiveFilters>) => {
-        set(() ({
+        set((state) ({
           active_filters: {
             ...state.active_filters,
             ...filters,
@@ -868,7 +868,7 @@ export const useAppStore = create<AppState>()(
       },
 
       clear_filters: () => {
-        set(() ({
+        set((state) ({
           active_filters: {
             cuisine_types: [],
             price_min: null,
@@ -884,7 +884,7 @@ export const useAppStore = create<AppState>()(
       },
 
       set_sort: (sort_by: string) => {
-        set(() ({
+        set((state) ({
           active_filters: {
             ...state.active_filters,
             sort_by,
@@ -897,7 +897,7 @@ export const useAppStore = create<AppState>()(
       // ========================================================================
 
       add_favorite: (restaurant_id: string) => {
-        set(() ({
+        set((state) ({
           favorites_list: {
             restaurant_ids: [...state.favorites_list.restaurant_ids, restaurant_id],
             last_synced: new Date().toISOString(),
@@ -906,7 +906,7 @@ export const useAppStore = create<AppState>()(
       },
 
       remove_favorite: (restaurant_id: string) => {
-        set(() ({
+        set((state) ({
           favorites_list: {
             restaurant_ids: state.favorites_list.restaurant_ids.filter(
               (id) => id !== restaurant_id
@@ -928,7 +928,7 @@ export const useAppStore = create<AppState>()(
       },
 
       sync_favorites: (restaurant_ids: string[]) => {
-        set(() ({
+        set((state) ({
           favorites_list: {
             restaurant_ids,
             last_synced: new Date().toISOString(),
@@ -942,7 +942,7 @@ export const useAppStore = create<AppState>()(
 
       set_notifications: (notifications: Notification[]) => {
         const unread_count = notifications.filter((n) => !n.is_read).length;
-        set(() ({
+        set((state) ({
           notification_state: {
             notifications,
             unread_count,
@@ -951,7 +951,7 @@ export const useAppStore = create<AppState>()(
       },
 
       mark_notification_read: (notification_id: string) => {
-        set(() ({
+        set((state) ({
           notification_state: {
             notifications: state.notification_state.notifications.map((n) =>
               n.notification_id === notification_id
@@ -964,7 +964,7 @@ export const useAppStore = create<AppState>()(
       },
 
       mark_all_read: () => {
-        set(() ({
+        set((state) ({
           notification_state: {
             notifications: state.notification_state.notifications.map((n) => ({
               ...n,
@@ -977,7 +977,7 @@ export const useAppStore = create<AppState>()(
       },
 
       add_notification: (notification: Notification) => {
-        set(() ({
+        set((state) ({
           notification_state: {
             notifications: [notification, ...state.notification_state.notifications],
             unread_count: notification.is_read
@@ -988,7 +988,7 @@ export const useAppStore = create<AppState>()(
       },
 
       clear_notifications: () => {
-        set(() ({
+        set((state) ({
           notification_state: {
             notifications: [],
             unread_count: 0,
@@ -997,7 +997,7 @@ export const useAppStore = create<AppState>()(
       },
 
       increment_unread_count: () => {
-        set(() ({
+        set((state) ({
           notification_state: {
             ...state.notification_state,
             unread_count: state.notification_state.unread_count + 1,
@@ -1006,7 +1006,7 @@ export const useAppStore = create<AppState>()(
       },
 
       decrement_unread_count: () => {
-        set(() ({
+        set((state) ({
           notification_state: {
             ...state.notification_state,
             unread_count: Math.max(0, state.notification_state.unread_count - 1),

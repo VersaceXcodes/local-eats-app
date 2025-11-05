@@ -106,7 +106,7 @@ const UV_LocalPicks: React.FC = () => {
   const isAuthenticated = useAppStore(
     state => state.authentication_state.authentication_status.is_authenticated
   );
-  const _currentUser = useAppStore(
+  const __currentUser = useAppStore(
     state => state.authentication_state.current_user
   );
   const favoriteIds = useAppStore(state => state.favorites_list.restaurant_ids);

@@ -168,7 +168,7 @@ const UV_Landing: React.FC = () => {
   // ============================================================================
   
   const isAuthenticated = useAppStore(state => state.authentication_state.authentication_status.is_authenticated);
-  const _currentUser = useAppStore(state => state.authentication_state.current_user);
+  const __currentUser = useAppStore(state => state.authentication_state.current_user);
   const authToken = useAppStore(state => state.authentication_state.auth_token);
   const userLocation = useAppStore(state => state.user_location);
   const favoriteIds = useAppStore(state => state.favorites_list.restaurant_ids);
