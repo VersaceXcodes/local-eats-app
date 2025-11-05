@@ -1,11 +1,11 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as fs from 'fs';
 import { Pool } from 'pg';
 import { fileURLToPath } from 'url';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import morgan from 'morgan';
 import crypto from 'crypto';
 import {
@@ -29,9 +29,38 @@ import {
 
 dotenv.config();
 
+interface UserPayload {
+  user_id: string;
+  email: string;
+  full_name: string;
+  profile_picture_url?: string;
+  is_verified: boolean;
+  member_since: string;
+  created_at: string;
+}
+
+interface AuthRequest extends Request {
+  user?: UserPayload;
+}
+
+interface DecodedJWT extends JwtPayload {
+  user_id: string;
+}
+
 // ESM workaround for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+function parseQueryString(value: any): string {
+  if (typeof value === 'string') return value;
+  if (Array.isArray(value)) return value[0]?.toString() || '';
+  return value?.toString() || '';
+}
+
+function parseQueryNumber(value: any, defaultValue: number): number {
+  const parsed = parseInt(parseQueryString(value), 10);
+  return isNaN(parsed) ? defaultValue : parsed;
+}
 
 // Error response utility
 interface ErrorResponse {
@@ -98,7 +127,7 @@ const pool = new Pool(
 );
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json({ limit: "5mb" }));
@@ -115,7 +144,7 @@ const carts = new Map();
  * Auth middleware for protected routes
  * Extracts user_id from JWT token and attaches to req.user
  */
-const authenticateToken = async (req, res, next) => {
+const authenticateToken = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -124,7 +153,7 @@ const authenticateToken = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET) as DecodedJWT;
     const result = await pool.query('SELECT user_id, email, full_name, profile_picture_url, is_verified, member_since, created_at FROM users WHERE user_id = $1', [decoded.user_id]);
     
     if (result.rows.length === 0) {
@@ -202,7 +231,7 @@ async function processPayment(payment_method_id, amount, order_details) {
  * Creates user record and user_statistics record
  * Returns user object and JWT token for immediate login
  */
-app.post('/api/auth/signup', async (req, res) => {
+app.post('/api/auth/signup', async (req: Request, res: Response) => {
   try {
     const validationResult = createUserInputSchema.safeParse(req.body);
     if (!validationResult.success) {
@@ -278,7 +307,7 @@ app.post('/api/auth/signup', async (req, res) => {
  * Authenticates user and returns JWT token
  * NO PASSWORD HASHING - direct comparison for development
  */
-app.post('/api/auth/login', async (req, res) => {
+app.post('/api/auth/login', async (req: Request, res: Response) => {
   try {
     const { email, password, remember_me } = req.body;
 
@@ -322,7 +351,7 @@ app.post('/api/auth/login', async (req, res) => {
  * POST /api/auth/logout
  * Logs out user (client-side token disposal for JWT)
  */
-app.post('/api/auth/logout', authenticateToken, (req, res) => {
+app.post('/api/auth/logout', authenticateToken, (req: AuthRequest, res: Response) => {
   res.json({ message: 'Successfully logged out' });
 });
 
@@ -331,7 +360,7 @@ app.post('/api/auth/logout', authenticateToken, (req, res) => {
  * Creates password reset token and sends email
  * Always returns success (security: don't reveal email existence)
  */
-app.post('/api/auth/password-reset/request', async (req, res) => {
+app.post('/api/auth/password-reset/request', async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
 
@@ -377,7 +406,7 @@ app.post('/api/auth/password-reset/request', async (req, res) => {
  * Validates reset token and updates password
  * NO PASSWORD HASHING - stores password directly
  */
-app.post('/api/auth/password-reset/complete', async (req, res) => {
+app.post('/api/auth/password-reset/complete', async (req: Request, res: Response) => {
   try {
     const { reset_token, new_password } = req.body;
 
@@ -450,7 +479,7 @@ app.post('/api/auth/password-reset/complete', async (req, res) => {
  * Returns current authenticated user profile
  * Excludes password_hash for security
  */
-app.get('/api/users/me', authenticateToken, async (req, res) => {
+app.get('/api/users/me', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const result = await pool.query(
       'SELECT user_id, email, full_name, phone_number, profile_picture_url, is_verified, member_since, notification_preferences, location_permission_granted, profile_public, reviews_public, last_login, created_at, updated_at FROM users WHERE user_id = $1',
@@ -476,7 +505,7 @@ app.get('/api/users/me', authenticateToken, async (req, res) => {
  * Updates current user profile
  * Validates email uniqueness if changed
  */
-app.patch('/api/users/me', authenticateToken, async (req, res) => {
+app.patch('/api/users/me', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const validationResult = updateUserInputSchema.safeParse({ ...req.body, user_id: req.user.user_id });
     if (!validationResult.success) {
@@ -561,7 +590,7 @@ app.patch('/api/users/me', authenticateToken, async (req, res) => {
  * GET /api/users/me/statistics
  * Returns user activity statistics for profile display
  */
-app.get('/api/users/me/statistics', authenticateToken, async (req, res) => {
+app.get('/api/users/me/statistics', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const result = await pool.query(
       'SELECT stat_id, user_id, total_reviews_written, total_restaurants_visited, total_favorites_saved, total_orders_placed, total_badges_earned, total_discounts_redeemed, unique_cuisines_tried, updated_at FROM user_statistics WHERE user_id = $1',
@@ -586,10 +615,10 @@ app.get('/api/users/me/statistics', authenticateToken, async (req, res) => {
  * GET /api/users/me/reviews
  * Returns all reviews written by current user with restaurant info and photos
  */
-app.get('/api/users/me/reviews', authenticateToken, async (req, res) => {
+app.get('/api/users/me/reviews', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const limit = parseInt(req.query.limit) || 20;
-    const offset = parseInt(req.query.offset) || 0;
+    const limit = parseQueryNumber(req.query.limit, 20) || 20;
+    const offset = parseQueryNumber(req.query.offset, 0) || 0;
 
     const reviewsResult = await pool.query(
       `SELECT r.*, rest.restaurant_name, rest.primary_hero_image_url
@@ -660,12 +689,26 @@ app.get('/api/users/me/reviews', authenticateToken, async (req, res) => {
  * Supports: query search, cuisine filter, price range, distance, rating, dietary, open_now, discounts
  * Includes distance calculation using Haversine formula if lat/long provided
  */
-app.get('/api/restaurants', async (req, res) => {
+app.get('/api/restaurants', async (req: Request, res: Response) => {
   try {
-    const { query, cuisine_types, price_min, price_max, distance_max, rating_min, dietary_preferences, open_now, has_discount, is_featured, sort_by = 'recommended', latitude, longitude, limit = 20, offset = 0 } = req.query;
+    const query = parseQueryString(req.query.query);
+    const cuisine_types = parseQueryString(req.query.cuisine_types);
+    const price_min = parseQueryString(req.query.price_min);
+    const price_max = parseQueryString(req.query.price_max);
+    const distance_max = parseQueryString(req.query.distance_max);
+    const rating_min = parseQueryString(req.query.rating_min);
+    const dietary_preferences = parseQueryString(req.query.dietary_preferences);
+    const open_now = parseQueryString(req.query.open_now);
+    const has_discount = parseQueryString(req.query.has_discount);
+    const is_featured = parseQueryString(req.query.is_featured);
+    const sort_by = parseQueryString(req.query.sort_by) || 'recommended';
+    const latitude = parseQueryString(req.query.latitude);
+    const longitude = parseQueryString(req.query.longitude);
+    const limit = parseQueryNumber(req.query.limit, 20);
+    const offset = parseQueryNumber(req.query.offset, 0);
 
     let whereConditions = ['r.is_active = true'];
-    let queryParams = [];
+    let queryParams: any[] = [];
     let paramCounter = 1;
 
     // Text search on restaurant name or cuisine
@@ -761,7 +804,7 @@ app.get('/api/restaurants', async (req, res) => {
       ${orderByClause}
       LIMIT $${paramCounter} OFFSET $${paramCounter + 1}
     `;
-    queryParams.push(parseInt(limit), parseInt(offset));
+    queryParams.push(limit, offset);
 
     const result = await pool.query(mainQuery, queryParams);
 
@@ -776,7 +819,7 @@ app.get('/api/restaurants', async (req, res) => {
     const countResult = await pool.query(countQuery, queryParams.slice(0, -2));
     const total_count = parseInt(countResult.rows[0].count);
 
-    res.json({ restaurants, total_count, page: Math.floor(offset / limit) + 1, limit: parseInt(limit) });
+    res.json({ restaurants, total_count, page: Math.floor(offset / limit) + 1, limit: limit });
   } catch (error) {
     console.error('Search restaurants error:', error);
     res.status(500).json(createErrorResponse('Internal server error', error, 'INTERNAL_ERROR'));
@@ -787,7 +830,7 @@ app.get('/api/restaurants', async (req, res) => {
  * GET /api/restaurants/:restaurant_id
  * Returns detailed restaurant information
  */
-app.get('/api/restaurants/:restaurant_id', async (req, res) => {
+app.get('/api/restaurants/:restaurant_id', async (req: Request, res: Response) => {
   try {
     const { restaurant_id } = req.params;
 
@@ -814,7 +857,7 @@ app.get('/api/restaurants/:restaurant_id', async (req, res) => {
  * GET /api/restaurants/:restaurant_id/hours
  * Returns weekly operating hours (7 records)
  */
-app.get('/api/restaurants/:restaurant_id/hours', async (req, res) => {
+app.get('/api/restaurants/:restaurant_id/hours', async (req: Request, res: Response) => {
   try {
     const { restaurant_id } = req.params;
 
@@ -834,7 +877,7 @@ app.get('/api/restaurants/:restaurant_id/hours', async (req, res) => {
  * GET /api/restaurants/:restaurant_id/photos
  * Returns photo gallery for restaurant
  */
-app.get('/api/restaurants/:restaurant_id/photos', async (req, res) => {
+app.get('/api/restaurants/:restaurant_id/photos', async (req: Request, res: Response) => {
   try {
     const { restaurant_id } = req.params;
 
@@ -854,7 +897,7 @@ app.get('/api/restaurants/:restaurant_id/photos', async (req, res) => {
  * GET /api/restaurants/:restaurant_id/menu
  * Returns complete menu with categories and items
  */
-app.get('/api/restaurants/:restaurant_id/menu', async (req, res) => {
+app.get('/api/restaurants/:restaurant_id/menu', async (req: Request, res: Response) => {
   try {
     const { restaurant_id } = req.params;
 
@@ -898,7 +941,7 @@ app.get('/api/restaurants/:restaurant_id/menu', async (req, res) => {
  * GET /api/restaurants/:restaurant_id/menu/items/:menu_item_id
  * Returns detailed menu item with sizes and addons for customization
  */
-app.get('/api/restaurants/:restaurant_id/menu/items/:menu_item_id', async (req, res) => {
+app.get('/api/restaurants/:restaurant_id/menu/items/:menu_item_id', async (req: Request, res: Response) => {
   try {
     const { restaurant_id, menu_item_id } = req.params;
 
@@ -943,7 +986,7 @@ app.get('/api/restaurants/:restaurant_id/menu/items/:menu_item_id', async (req, 
  * GET /api/restaurants/:restaurant_id/discounts
  * Returns active discounts for restaurant
  */
-app.get('/api/restaurants/:restaurant_id/discounts', async (req, res) => {
+app.get('/api/restaurants/:restaurant_id/discounts', async (req: Request, res: Response) => {
   try {
     const { restaurant_id } = req.params;
     const now = new Date().toISOString();
@@ -973,13 +1016,19 @@ app.get('/api/restaurants/:restaurant_id/discounts', async (req, res) => {
  * GET /api/restaurants/:restaurant_id/reviews
  * Returns reviews for restaurant with filtering and sorting
  */
-app.get('/api/restaurants/:restaurant_id/reviews', async (req, res) => {
+app.get('/api/restaurants/:restaurant_id/reviews', async (req: Request, res: Response) => {
   try {
     const { restaurant_id } = req.params;
-    const { min_rating, max_rating, is_verified_visit, sort_by = 'created_at', sort_order = 'desc', limit = 20, offset = 0 } = req.query;
+    const min_rating = parseQueryString(req.query.min_rating);
+    const max_rating = parseQueryString(req.query.max_rating);
+    const is_verified_visit = parseQueryString(req.query.is_verified_visit);
+    const sort_by = parseQueryString(req.query.sort_by) || 'created_at';
+    const sort_order = parseQueryString(req.query.sort_order) || 'desc';
+    const limit = parseQueryNumber(req.query.limit, 20);
+    const offset = parseQueryNumber(req.query.offset, 0);
 
     let whereConditions = ['r.restaurant_id = $1'];
-    let queryParams = [restaurant_id];
+    let queryParams: any[] = [restaurant_id];
     let paramCounter = 2;
 
     if (min_rating) {
@@ -1009,7 +1058,7 @@ app.get('/api/restaurants/:restaurant_id/reviews', async (req, res) => {
       ${orderByClause}
       LIMIT $${paramCounter} OFFSET $${paramCounter + 1}
     `;
-    queryParams.push(parseInt(limit), parseInt(offset));
+    queryParams.push(limit, offset);
 
     const reviewsResult = await pool.query(reviewsQuery, queryParams);
 
@@ -1019,7 +1068,7 @@ app.get('/api/restaurants/:restaurant_id/reviews', async (req, res) => {
     if (authHeader) {
       try {
         const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET) as DecodedJWT;
         current_user_id = decoded.user_id;
       } catch {}
     }
@@ -1111,7 +1160,7 @@ app.get('/api/restaurants/:restaurant_id/reviews', async (req, res) => {
  * GET /api/discounts/:discount_id
  * Returns specific discount details
  */
-app.get('/api/discounts/:discount_id', async (req, res) => {
+app.get('/api/discounts/:discount_id', async (req: Request, res: Response) => {
   try {
     const { discount_id } = req.params;
 
@@ -1139,7 +1188,7 @@ app.get('/api/discounts/:discount_id', async (req, res) => {
  * POST /api/discounts/:discount_id/redeem
  * Records discount redemption
  */
-app.post('/api/discounts/:discount_id/redeem', authenticateToken, async (req, res) => {
+app.post('/api/discounts/:discount_id/redeem', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { discount_id } = req.params;
     const { redemption_method } = req.body;
@@ -1182,7 +1231,7 @@ app.post('/api/discounts/:discount_id/redeem', authenticateToken, async (req, re
  * GET /api/discounts/:discount_id/qr-code
  * Generates QR code data for discount
  */
-app.get('/api/discounts/:discount_id/qr-code', authenticateToken, async (req, res) => {
+app.get('/api/discounts/:discount_id/qr-code', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { discount_id } = req.params;
 
@@ -1230,12 +1279,16 @@ app.get('/api/discounts/:discount_id/qr-code', authenticateToken, async (req, re
  * GET /api/favorites
  * Returns user's favorite restaurants with filtering and sorting
  */
-app.get('/api/favorites', authenticateToken, async (req, res) => {
+app.get('/api/favorites', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const { cuisine_types, price_min, price_max, open_now, sort_by = 'recently_added' } = req.query;
+    const cuisine_types = parseQueryString(req.query.cuisine_types);
+    const price_min = parseQueryString(req.query.price_min);
+    const price_max = parseQueryString(req.query.price_max);
+    const open_now = parseQueryString(req.query.open_now);
+    const sort_by = parseQueryString(req.query.sort_by) || 'recently_added';
 
     let whereConditions = ['f.user_id = $1', 'r.is_active = true'];
-    let queryParams = [req.user.user_id];
+    let queryParams: any[] = [req.user.user_id];
     let paramCounter = 2;
 
     if (cuisine_types) {
@@ -1340,7 +1393,7 @@ app.get('/api/favorites', authenticateToken, async (req, res) => {
  * POST /api/favorites
  * Adds restaurant to favorites
  */
-app.post('/api/favorites', authenticateToken, async (req, res) => {
+app.post('/api/favorites', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { restaurant_id } = req.body;
 
@@ -1395,7 +1448,7 @@ app.post('/api/favorites', authenticateToken, async (req, res) => {
  * DELETE /api/favorites/:restaurant_id
  * Removes restaurant from favorites
  */
-app.delete('/api/favorites/:restaurant_id', authenticateToken, async (req, res) => {
+app.delete('/api/favorites/:restaurant_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { restaurant_id } = req.params;
 
@@ -1435,7 +1488,7 @@ app.delete('/api/favorites/:restaurant_id', authenticateToken, async (req, res) 
  * DELETE /api/favorites (batch)
  * Removes multiple restaurants from favorites
  */
-app.delete('/api/favorites', authenticateToken, async (req, res) => {
+app.delete('/api/favorites', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { restaurant_ids } = req.body;
 
@@ -1519,7 +1572,7 @@ function calculateCartTotals(cart, restaurant) {
  * GET /api/cart
  * Returns current shopping cart for authenticated user
  */
-app.get('/api/cart', authenticateToken, async (req, res) => {
+app.get('/api/cart', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const cart = carts.get(req.user.user_id) || {
       restaurant_id: null,
@@ -1558,7 +1611,7 @@ app.get('/api/cart', authenticateToken, async (req, res) => {
  * Adds item to cart with customizations
  * Clears cart if switching restaurants
  */
-app.post('/api/cart/items', authenticateToken, async (req, res) => {
+app.post('/api/cart/items', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { menu_item_id, selected_size, selected_addons = [], selected_modifications = [], special_instructions, quantity } = req.body;
 
@@ -1671,7 +1724,7 @@ app.post('/api/cart/items', authenticateToken, async (req, res) => {
  * PATCH /api/cart/items/:menu_item_id
  * Updates cart item quantity or customizations
  */
-app.patch('/api/cart/items/:menu_item_id', authenticateToken, async (req, res) => {
+app.patch('/api/cart/items/:menu_item_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { menu_item_id } = req.params;
     const updates = req.body;
@@ -1743,7 +1796,7 @@ app.patch('/api/cart/items/:menu_item_id', authenticateToken, async (req, res) =
  * DELETE /api/cart/items/:menu_item_id
  * Removes item from cart
  */
-app.delete('/api/cart/items/:menu_item_id', authenticateToken, async (req, res) => {
+app.delete('/api/cart/items/:menu_item_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { menu_item_id } = req.params;
 
@@ -1783,7 +1836,7 @@ app.delete('/api/cart/items/:menu_item_id', authenticateToken, async (req, res) 
  * DELETE /api/cart
  * Clears entire cart
  */
-app.delete('/api/cart', authenticateToken, async (req, res) => {
+app.delete('/api/cart', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     carts.delete(req.user.user_id);
     res.json({ message: 'Cart cleared successfully' });
@@ -1797,7 +1850,7 @@ app.delete('/api/cart', authenticateToken, async (req, res) => {
  * POST /api/cart/discount
  * Applies discount code to cart
  */
-app.post('/api/cart/discount', authenticateToken, async (req, res) => {
+app.post('/api/cart/discount', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { coupon_code } = req.body;
 
@@ -1870,7 +1923,7 @@ app.post('/api/cart/discount', authenticateToken, async (req, res) => {
  * DELETE /api/cart/discount
  * Removes applied discount from cart
  */
-app.delete('/api/cart/discount', authenticateToken, async (req, res) => {
+app.delete('/api/cart/discount', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const cart = carts.get(req.user.user_id);
     if (cart) {
@@ -1912,7 +1965,7 @@ app.delete('/api/cart/discount', authenticateToken, async (req, res) => {
  * Processes payment, creates order and order_items records
  * Clears cart on success
  */
-app.post('/api/orders', authenticateToken, async (req, res) => {
+app.post('/api/orders', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { restaurant_id, order_type, delivery_street_address, delivery_apartment_suite, delivery_city, delivery_state, delivery_zip_code, special_instructions, discount_id, payment_method_id, tip = 0 } = req.body;
 
@@ -2109,12 +2162,18 @@ app.post('/api/orders', authenticateToken, async (req, res) => {
  * GET /api/orders
  * Returns user's order history with filtering
  */
-app.get('/api/orders', authenticateToken, async (req, res) => {
+app.get('/api/orders', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const { order_type, order_status, restaurant_id, start_date, end_date, limit = 20, offset = 0 } = req.query;
+    const order_type = parseQueryString(req.query.order_type);
+    const order_status = parseQueryString(req.query.order_status);
+    const restaurant_id = parseQueryString(req.query.restaurant_id);
+    const start_date = parseQueryString(req.query.start_date);
+    const end_date = parseQueryString(req.query.end_date);
+    const limit = parseQueryNumber(req.query.limit, 20);
+    const offset = parseQueryNumber(req.query.offset, 0);
 
     let whereConditions = ['o.user_id = $1'];
-    let queryParams = [req.user.user_id];
+    let queryParams: any[] = [req.user.user_id];
     let paramCounter = 2;
 
     if (order_type) {
@@ -2155,7 +2214,7 @@ app.get('/api/orders', authenticateToken, async (req, res) => {
       ORDER BY o.created_at DESC
       LIMIT $${paramCounter} OFFSET $${paramCounter + 1}
     `;
-    queryParams.push(parseInt(limit), parseInt(offset));
+    queryParams.push(limit, offset);
 
     const ordersResult = await pool.query(ordersQuery, queryParams);
 
@@ -2235,7 +2294,7 @@ app.get('/api/orders', authenticateToken, async (req, res) => {
  * GET /api/orders/:order_id
  * Returns specific order details
  */
-app.get('/api/orders/:order_id', authenticateToken, async (req, res) => {
+app.get('/api/orders/:order_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { order_id } = req.params;
 
@@ -2319,7 +2378,7 @@ app.get('/api/orders/:order_id', authenticateToken, async (req, res) => {
  * PATCH /api/orders/:order_id
  * Updates order (status, tip, special instructions)
  */
-app.patch('/api/orders/:order_id', authenticateToken, async (req, res) => {
+app.patch('/api/orders/:order_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { order_id } = req.params;
     const updates = req.body;
@@ -2449,7 +2508,7 @@ app.patch('/api/orders/:order_id', authenticateToken, async (req, res) => {
  * DELETE /api/orders/:order_id
  * Cancels an order
  */
-app.delete('/api/orders/:order_id', authenticateToken, async (req, res) => {
+app.delete('/api/orders/:order_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { order_id } = req.params;
     const { cancellation_reason } = req.body;
@@ -2495,7 +2554,7 @@ app.delete('/api/orders/:order_id', authenticateToken, async (req, res) => {
  * POST /api/orders/:order_id/reorder
  * Adds items from previous order to cart
  */
-app.post('/api/orders/:order_id/reorder', authenticateToken, async (req, res) => {
+app.post('/api/orders/:order_id/reorder', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { order_id } = req.params;
 
@@ -2572,7 +2631,7 @@ app.post('/api/orders/:order_id/reorder', authenticateToken, async (req, res) =>
  * POST /api/reviews
  * Creates new review for restaurant
  */
-app.post('/api/reviews', authenticateToken, async (req, res) => {
+app.post('/api/reviews', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const validationResult = createReviewInputSchema.safeParse({ ...req.body, user_id: req.user.user_id });
     if (!validationResult.success) {
@@ -2630,7 +2689,7 @@ app.post('/api/reviews', authenticateToken, async (req, res) => {
  * GET /api/reviews/:review_id
  * Returns specific review with user and photos
  */
-app.get('/api/reviews/:review_id', async (req, res) => {
+app.get('/api/reviews/:review_id', async (req: Request, res: Response) => {
   try {
     const { review_id } = req.params;
 
@@ -2658,7 +2717,7 @@ app.get('/api/reviews/:review_id', async (req, res) => {
     if (authHeader) {
       try {
         const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET) as DecodedJWT;
         const helpfulResult = await pool.query(
           'SELECT helpful_mark_id FROM review_helpful_marks WHERE review_id = $1 AND user_id = $2',
           [review_id, decoded.user_id]
@@ -2701,7 +2760,7 @@ app.get('/api/reviews/:review_id', async (req, res) => {
  * PATCH /api/reviews/:review_id
  * Updates review (within 30 days)
  */
-app.patch('/api/reviews/:review_id', authenticateToken, async (req, res) => {
+app.patch('/api/reviews/:review_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { review_id } = req.params;
     const updates = req.body;
@@ -2801,7 +2860,7 @@ app.patch('/api/reviews/:review_id', authenticateToken, async (req, res) => {
  * DELETE /api/reviews/:review_id
  * Deletes a review
  */
-app.delete('/api/reviews/:review_id', authenticateToken, async (req, res) => {
+app.delete('/api/reviews/:review_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { review_id } = req.params;
 
@@ -2863,7 +2922,7 @@ app.delete('/api/reviews/:review_id', authenticateToken, async (req, res) => {
  * POST /api/reviews/:review_id/photos
  * Uploads photos for review
  */
-app.post('/api/reviews/:review_id/photos', authenticateToken, async (req, res) => {
+app.post('/api/reviews/:review_id/photos', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { review_id } = req.params;
     const { photo_urls } = req.body;
@@ -2909,7 +2968,7 @@ app.post('/api/reviews/:review_id/photos', authenticateToken, async (req, res) =
  * POST /api/reviews/:review_id/helpful
  * Marks review as helpful
  */
-app.post('/api/reviews/:review_id/helpful', authenticateToken, async (req, res) => {
+app.post('/api/reviews/:review_id/helpful', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { review_id } = req.params;
 
@@ -2957,7 +3016,7 @@ app.post('/api/reviews/:review_id/helpful', authenticateToken, async (req, res) 
  * DELETE /api/reviews/:review_id/helpful
  * Removes helpful mark from review
  */
-app.delete('/api/reviews/:review_id/helpful', authenticateToken, async (req, res) => {
+app.delete('/api/reviews/:review_id/helpful', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { review_id } = req.params;
 
@@ -2997,7 +3056,7 @@ app.delete('/api/reviews/:review_id/helpful', authenticateToken, async (req, res
  * POST /api/reviews/:review_id/report
  * Reports review for moderation
  */
-app.post('/api/reviews/:review_id/report', authenticateToken, async (req, res) => {
+app.post('/api/reviews/:review_id/report', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { review_id } = req.params;
     const { reason, additional_details } = req.body;
@@ -3038,7 +3097,7 @@ app.post('/api/reviews/:review_id/report', authenticateToken, async (req, res) =
  * GET /api/badges
  * Returns all available badges
  */
-app.get('/api/badges', async (req, res) => {
+app.get('/api/badges', async (req: Request, res: Response) => {
   try {
     const result = await pool.query(
       'SELECT badge_id, badge_name, badge_description, badge_icon_url, criteria_type, criteria_value, created_at FROM badges ORDER BY criteria_value ASC'
@@ -3055,7 +3114,7 @@ app.get('/api/badges', async (req, res) => {
  * GET /api/users/me/badges
  * Returns user's earned and locked badges with progress
  */
-app.get('/api/users/me/badges', authenticateToken, async (req, res) => {
+app.get('/api/users/me/badges', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     // Get all badges
     const allBadgesResult = await pool.query(
@@ -3134,7 +3193,7 @@ app.get('/api/users/me/badges', authenticateToken, async (req, res) => {
  * PATCH /api/users/me/badges/:badge_id/showcase
  * Updates badge showcase settings
  */
-app.patch('/api/users/me/badges/:badge_id/showcase', authenticateToken, async (req, res) => {
+app.patch('/api/users/me/badges/:badge_id/showcase', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { badge_id } = req.params;
     const { is_showcased, showcase_order } = req.body;
@@ -3164,7 +3223,7 @@ app.patch('/api/users/me/badges/:badge_id/showcase', authenticateToken, async (r
  * POST /api/verifications
  * Verifies restaurant visit
  */
-app.post('/api/verifications', authenticateToken, async (req, res) => {
+app.post('/api/verifications', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { restaurant_id, verification_method, order_id } = req.body;
 
@@ -3211,7 +3270,7 @@ app.post('/api/verifications', authenticateToken, async (req, res) => {
  * GET /api/addresses
  * Returns user's saved addresses
  */
-app.get('/api/addresses', authenticateToken, async (req, res) => {
+app.get('/api/addresses', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const result = await pool.query(
       'SELECT address_id, user_id, address_label, street_address, apartment_suite, city, state, zip_code, is_default, created_at, updated_at FROM saved_addresses WHERE user_id = $1 ORDER BY is_default DESC, created_at DESC',
@@ -3229,7 +3288,7 @@ app.get('/api/addresses', authenticateToken, async (req, res) => {
  * POST /api/addresses
  * Creates new saved address
  */
-app.post('/api/addresses', authenticateToken, async (req, res) => {
+app.post('/api/addresses', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const validationResult = createSavedAddressInputSchema.safeParse({ ...req.body, user_id: req.user.user_id });
     if (!validationResult.success) {
@@ -3277,7 +3336,7 @@ app.post('/api/addresses', authenticateToken, async (req, res) => {
  * PATCH /api/addresses/:address_id
  * Updates saved address
  */
-app.patch('/api/addresses/:address_id', authenticateToken, async (req, res) => {
+app.patch('/api/addresses/:address_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { address_id } = req.params;
     const updates = req.body;
@@ -3379,7 +3438,7 @@ app.patch('/api/addresses/:address_id', authenticateToken, async (req, res) => {
  * DELETE /api/addresses/:address_id
  * Deletes saved address
  */
-app.delete('/api/addresses/:address_id', authenticateToken, async (req, res) => {
+app.delete('/api/addresses/:address_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { address_id } = req.params;
 
@@ -3399,7 +3458,7 @@ app.delete('/api/addresses/:address_id', authenticateToken, async (req, res) => 
  * GET /api/payment-methods
  * Returns user's saved payment methods (display data only)
  */
-app.get('/api/payment-methods', authenticateToken, async (req, res) => {
+app.get('/api/payment-methods', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const result = await pool.query(
       'SELECT payment_method_id, user_id, payment_label, card_type, last_four_digits, expiration_month, expiration_year, billing_zip_code, is_default, created_at, updated_at FROM saved_payment_methods WHERE user_id = $1 ORDER BY is_default DESC, created_at DESC',
@@ -3417,7 +3476,7 @@ app.get('/api/payment-methods', authenticateToken, async (req, res) => {
  * POST /api/payment-methods
  * Saves new payment method (display data only)
  */
-app.post('/api/payment-methods', authenticateToken, async (req, res) => {
+app.post('/api/payment-methods', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const validationResult = createSavedPaymentMethodInputSchema.safeParse({ ...req.body, user_id: req.user.user_id });
     if (!validationResult.success) {
@@ -3464,7 +3523,7 @@ app.post('/api/payment-methods', authenticateToken, async (req, res) => {
  * DELETE /api/payment-methods/:payment_method_id
  * Deletes saved payment method
  */
-app.delete('/api/payment-methods/:payment_method_id', authenticateToken, async (req, res) => {
+app.delete('/api/payment-methods/:payment_method_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { payment_method_id } = req.params;
 
@@ -3488,12 +3547,15 @@ app.delete('/api/payment-methods/:payment_method_id', authenticateToken, async (
  * GET /api/notifications
  * Returns user notifications with filtering
  */
-app.get('/api/notifications', authenticateToken, async (req, res) => {
+app.get('/api/notifications', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const { notification_type, is_read, limit = 50, offset = 0 } = req.query;
+    const notification_type = parseQueryString(req.query.notification_type);
+    const is_read = parseQueryString(req.query.is_read);
+    const limit = parseQueryNumber(req.query.limit, 50);
+    const offset = parseQueryNumber(req.query.offset, 0);
 
     let whereConditions = ['user_id = $1'];
-    let queryParams = [req.user.user_id];
+    let queryParams: any[] = [req.user.user_id];
     let paramCounter = 2;
 
     if (notification_type) {
@@ -3508,7 +3570,7 @@ app.get('/api/notifications', authenticateToken, async (req, res) => {
       paramCounter++;
     }
 
-    queryParams.push(parseInt(limit), parseInt(offset));
+    queryParams.push(limit, offset);
 
     const result = await pool.query(
       `SELECT notification_id, user_id, notification_type, message, action_url, is_read, created_at, read_at
@@ -3538,7 +3600,7 @@ app.get('/api/notifications', authenticateToken, async (req, res) => {
  * PATCH /api/notifications/:notification_id/read
  * Marks notification as read
  */
-app.patch('/api/notifications/:notification_id/read', authenticateToken, async (req, res) => {
+app.patch('/api/notifications/:notification_id/read', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { notification_id } = req.params;
     const now = new Date().toISOString();
@@ -3559,7 +3621,7 @@ app.patch('/api/notifications/:notification_id/read', authenticateToken, async (
  * PATCH /api/notifications/read-all
  * Marks all notifications as read
  */
-app.patch('/api/notifications/read-all', authenticateToken, async (req, res) => {
+app.patch('/api/notifications/read-all', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const now = new Date().toISOString();
 
@@ -3579,7 +3641,7 @@ app.patch('/api/notifications/read-all', authenticateToken, async (req, res) => 
  * DELETE /api/notifications/:notification_id
  * Deletes single notification
  */
-app.delete('/api/notifications/:notification_id', authenticateToken, async (req, res) => {
+app.delete('/api/notifications/:notification_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { notification_id } = req.params;
 
@@ -3599,7 +3661,7 @@ app.delete('/api/notifications/:notification_id', authenticateToken, async (req,
  * DELETE /api/notifications
  * Clears all notifications
  */
-app.delete('/api/notifications', authenticateToken, async (req, res) => {
+app.delete('/api/notifications', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     await pool.query(
       'DELETE FROM notifications WHERE user_id = $1',
@@ -3622,9 +3684,9 @@ app.delete('/api/notifications', authenticateToken, async (req, res) => {
  * Returns personalized restaurant recommendations
  * Based on order history, favorites, and user preferences
  */
-app.get('/api/recommendations', authenticateToken, async (req, res) => {
+app.get('/api/recommendations', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseQueryNumber(req.query.limit, 20) || 10;
 
     // Get user's order history to find preferred cuisines
     const orderHistoryResult = await pool.query(
@@ -3708,7 +3770,7 @@ app.get('/api/recommendations', authenticateToken, async (req, res) => {
  * POST /api/recommendations/dismiss
  * Dismisses recommendation for 30 days
  */
-app.post('/api/recommendations/dismiss', authenticateToken, async (req, res) => {
+app.post('/api/recommendations/dismiss', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const { restaurant_id } = req.body;
 
@@ -3736,9 +3798,9 @@ app.post('/api/recommendations/dismiss', authenticateToken, async (req, res) => 
  * GET /api/weekly-picks
  * Returns weekly local picks
  */
-app.get('/api/weekly-picks', async (req, res) => {
+app.get('/api/weekly-picks', async (req: Request, res: Response) => {
   try {
-    const week_of = req.query.week_of || new Date().toISOString().split('T')[0];
+    const week_of = parseQueryString(req.query.week_of) || new Date().toISOString().split('T')[0];
 
     const picksResult = await pool.query(
       `SELECT p.pick_id, p.restaurant_id, p.week_start_date, p.week_end_date, p.featured_description, p.display_order, p.selection_criteria, p.created_at, r.*
@@ -3813,9 +3875,10 @@ app.get('/api/weekly-picks', async (req, res) => {
  * GET /api/search/suggestions
  * Returns autocomplete suggestions for search
  */
-app.get('/api/search/suggestions', async (req, res) => {
+app.get('/api/search/suggestions', async (req: Request, res: Response) => {
   try {
-    const { query, limit = 10 } = req.query;
+    const query = parseQueryString(req.query.query);
+    const limit = parseQueryNumber(req.query.limit, 10);
 
     if (!query || query.length < 2) {
       return res.json({ suggestions: [] });
@@ -3858,7 +3921,7 @@ app.get('/api/search/suggestions', async (req, res) => {
       }
     });
 
-    res.json({ suggestions: suggestions.slice(0, parseInt(limit)) });
+    res.json({ suggestions: suggestions.slice(0, limit) });
   } catch (error) {
     console.error('Get search suggestions error:', error);
     res.status(500).json(createErrorResponse('Internal server error', error, 'INTERNAL_ERROR'));
@@ -3869,9 +3932,9 @@ app.get('/api/search/suggestions', async (req, res) => {
  * GET /api/search/recent
  * Returns user's recent searches
  */
-app.get('/api/search/recent', authenticateToken, async (req, res) => {
+app.get('/api/search/recent', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const limit = parseInt(req.query.limit) || 10;
+    const limit = parseQueryNumber(req.query.limit, 20) || 10;
 
     const result = await pool.query(
       'SELECT search_id, user_id, search_query, search_type, created_at FROM search_history WHERE user_id = $1 ORDER BY created_at DESC LIMIT $2',
@@ -3889,7 +3952,7 @@ app.get('/api/search/recent', authenticateToken, async (req, res) => {
  * DELETE /api/search/recent
  * Clears search history
  */
-app.delete('/api/search/recent', authenticateToken, async (req, res) => {
+app.delete('/api/search/recent', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     await pool.query(
       'DELETE FROM search_history WHERE user_id = $1',

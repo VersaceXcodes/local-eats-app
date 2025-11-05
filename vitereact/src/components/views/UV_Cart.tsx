@@ -209,10 +209,6 @@ const UV_Cart: React.FC = () => {
   const [couponInput, setCouponInput] = useState('');
   const [orderInstructions, setOrderInstructions] = useState('');
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [pendingRemoval, setPendingRemoval] = useState<{
-    item: CartItem;
-    timeoutId: NodeJS.Timeout;
-  } | null>(null);
 
   // ========================================================================
   // TOAST MANAGEMENT
@@ -338,25 +334,6 @@ const UV_Cart: React.FC = () => {
     },
     onError: () => {
       showToast('Failed to remove discount', 'error');
-    },
-  });
-
-  // Clear cart mutation
-  const _clearCartMutation = useMutation({
-    mutationFn: () => clearCartAPI(authToken!),
-    onSuccess: () => {
-      queryClient.setQueryData(['cart'], {
-        restaurant_id: null,
-        restaurant_name: null,
-        items: [],
-        applied_discount: null,
-        subtotal: 0,
-        delivery_fee: 0,
-        tax: 0,
-        tip: 0,
-        grand_total: 0,
-      });
-      showToast('Cart cleared', 'info');
     },
   });
 

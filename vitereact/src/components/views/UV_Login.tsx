@@ -24,7 +24,7 @@ const UV_Login: React.FC = () => {
   // ============================================================================
   
   const navigate = useNavigate();
-  const location = useLocation();
+  
 
   // Extract redirect URL from query params or location state
   const searchParams = new URLSearchParams(location.search);

@@ -75,7 +75,6 @@ const UV_WriteReview: React.FC = () => {
   const [reviewText, setReviewText] = useState<string>('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
-  const [_uploadedPhotoUrls, _setUploadedPhotoUrls] = useState<string[]>([]);
   const [showVerificationPrompt, setShowVerificationPrompt] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);

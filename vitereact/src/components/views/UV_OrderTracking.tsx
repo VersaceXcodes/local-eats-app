@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
@@ -221,7 +221,6 @@ const getStatusIcon = (iconName: string, isActive: boolean, isCompleted: boolean
 
 const UV_OrderTracking: React.FC = () => {
   const { order_id } = useParams<{ order_id: string }>();
-  const _navigate = useNavigate();
   const queryClient = useQueryClient();
 
   // CRITICAL: Individual selectors, no object destructuring
@@ -294,7 +293,6 @@ const UV_OrderTracking: React.FC = () => {
   // DERIVED STATE
   // ============================================================================
 
-  const _currentStatus = orderData?.order.order_status || 'order_received';
   const statusHistory = useMemo(
     () => orderData ? buildStatusHistory(orderData.order) : [],
     [orderData]

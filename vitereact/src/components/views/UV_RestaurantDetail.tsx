@@ -282,13 +282,11 @@ const UV_RestaurantDetail: React.FC = () => {
   
   // CRITICAL: Individual Zustand selectors (NO object destructuring)
   const isAuthenticated = useAppStore(state => state.authentication_state.authentication_status.is_authenticated);
-  const _currentUser = useAppStore(state => state.authentication_state.current_user);
   const userLatitude = useAppStore(state => state.user_location.latitude);
   const userLongitude = useAppStore(state => state.user_location.longitude);
   const locationPermissionGranted = useAppStore(state => state.user_location.permission_granted);
   const favoriteRestaurantIds = useAppStore(state => state.favorites_list.restaurant_ids);
   const toggleFavorite = useAppStore(state => state.toggle_favorite);
-  const _cartRestaurantId = useAppStore(state => state.cart_state.restaurant_id);
   
   // Local state
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
@@ -332,7 +330,7 @@ const UV_RestaurantDetail: React.FC = () => {
   });
   
   // Fetch restaurant hours
-  const { data: hoursData, isLoading: _isLoadingHours } = useQuery<{ hours: RestaurantHours[] }>({
+  const { data: hoursData } = useQuery<{ hours: RestaurantHours[] }>({
     queryKey: ['restaurant-hours', restaurant_id],
     queryFn: async () => {
       const response = await axios.get(`${API_BASE_URL}/api/restaurants/${restaurant_id}/hours`);
@@ -343,7 +341,7 @@ const UV_RestaurantDetail: React.FC = () => {
   });
   
   // Fetch restaurant photos
-  const { data: photosData, isLoading: _isLoadingPhotos } = useQuery<{ photos: RestaurantPhoto[] }>({
+  const { data: photosData } = useQuery<{ photos: RestaurantPhoto[] }>({
     queryKey: ['restaurant-photos', restaurant_id],
     queryFn: async () => {
       const response = await axios.get(`${API_BASE_URL}/api/restaurants/${restaurant_id}/photos`);
@@ -365,7 +363,7 @@ const UV_RestaurantDetail: React.FC = () => {
   });
   
   // Fetch active discounts
-  const { data: discountsData, isLoading: _isLoadingDiscounts } = useQuery<{ discounts: Discount[] }>({
+  const { data: discountsData } = useQuery<{ discounts: Discount[] }>({
     queryKey: ['restaurant-discounts', restaurant_id],
     queryFn: async () => {
       const response = await axios.get(`${API_BASE_URL}/api/restaurants/${restaurant_id}/discounts`);
@@ -376,7 +374,7 @@ const UV_RestaurantDetail: React.FC = () => {
   });
   
   // Fetch reviews
-  const { data: reviewsData, isLoading: isLoadingReviews, refetch: _refetchReviews } = useQuery<ReviewsData>({
+  const { data: reviewsData, isLoading: isLoadingReviews } = useQuery<ReviewsData>({
     queryKey: ['restaurant-reviews', restaurant_id, reviewSortOption, reviewRatingFilter, reviewsPaginationOffset],
     queryFn: async () => {
       const params: any = {

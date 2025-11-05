@@ -181,7 +181,6 @@ const UV_MapView: React.FC = () => {
   );
 
   const [mapBounds, setMapBounds] = useState<MapBounds | null>(null);
-  const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
   const [showSearchThisArea, setShowSearchThisArea] = useState(false);
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
 
@@ -277,16 +276,6 @@ const UV_MapView: React.FC = () => {
     setShowSearchThisArea(false);
     refetch();
   }, [refetch]);
-
-  const _handleRecenterToUser = useCallback(() => {
-    if (userLocation.latitude && userLocation.longitude) {
-      setMapCenter({
-        latitude: userLocation.latitude,
-        longitude: userLocation.longitude
-      });
-      setMapZoom(13);
-    }
-  }, [userLocation]);
 
   const handleApplyFilters = useCallback(() => {
     // Update URL params

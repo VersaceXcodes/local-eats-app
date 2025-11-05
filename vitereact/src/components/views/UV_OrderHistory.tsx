@@ -67,7 +67,6 @@ const UV_OrderHistory: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // CRITICAL: Individual selectors only - no object destructuring
-  const _currentUser = useAppStore(state => state.authentication_state.current_user);
   const authToken = useAppStore(state => state.authentication_state.auth_token);
   const isAuthenticated = useAppStore(state => state.authentication_state.authentication_status.is_authenticated);
   const cartRestaurantId = useAppStore(state => state.cart_state.restaurant_id);

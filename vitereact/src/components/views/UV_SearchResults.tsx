@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
@@ -11,7 +11,7 @@ import {
   Star,
   MapPin,
   Heart,
-  Loader2,
+
   AlertCircle,
   Home,
   ChevronRight,
@@ -139,7 +139,6 @@ const RestaurantCardSkeleton: React.FC = () => (
 
 const UV_SearchResults: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const _navigate = useNavigate();
 
   // ========================================================================
   // GLOBAL STATE (Individual Selectors)

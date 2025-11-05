@@ -1016,15 +1016,15 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'local-eats-storage',
-      partialize: () ({
+      partialize: (state) => ({
         authentication_state: {
           current_user: state.authentication_state.current_user,
           auth_token: state.authentication_state.auth_token,
           authentication_status: {
             is_authenticated: state.authentication_state.authentication_status.is_authenticated,
-            is_loading: false, // Never persist loading state
+            is_loading: false,
           },
-          error_message: null, // Never persist errors
+          error_message: null,
         },
         cart_state: state.cart_state,
         user_location: state.user_location,

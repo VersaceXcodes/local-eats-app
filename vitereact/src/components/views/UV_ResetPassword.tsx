@@ -232,7 +232,7 @@ const UV_ResetPassword: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const _response = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/auth/password-reset/complete`,
         {
           reset_token: resetToken,
