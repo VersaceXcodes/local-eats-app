@@ -228,18 +228,7 @@ const UV_SignUp: React.FC = () => {
       return false;
     }
 
-    // Check no validation errors
-    if (
-      validationErrors.full_name ||
-      validationErrors.email ||
-      validationErrors.password ||
-      validationErrors.confirm_password ||
-      validationErrors.phone_number
-    ) {
-      return false;
-    }
-
-    // Validate fields programmatically
+    // Validate fields programmatically (don't rely on validation errors state which may not be set yet)
     if (validateFullName(fullName)) return false;
     if (validateEmailFormat(email)) return false;
     if (validatePassword(password)) return false;
