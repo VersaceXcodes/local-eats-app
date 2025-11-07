@@ -238,8 +238,10 @@ const UV_SignUp: React.FC = () => {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
 
     // Clear previous errors
     clearAuthError();
@@ -287,6 +289,18 @@ const UV_SignUp: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      const target = e.target as HTMLElement;
+      if (target.tagName !== 'TEXTAREA' && target.tagName !== 'BUTTON') {
+        e.preventDefault();
+        if (isFormValid() && !isSubmitting && !isAuthLoading) {
+          handleSubmit();
+        }
+      }
+    }
+  };
+
   // ============================================================================
   // RENDER
   // ============================================================================
@@ -320,7 +334,7 @@ const UV_SignUp: React.FC = () => {
           )}
 
           {/* Sign Up Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} className="space-y-5">
             {/* Full Name */}
             <div>
               <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -593,6 +607,8 @@ const UV_SignUp: React.FC = () => {
             <button
               type="submit"
               disabled={!isFormValid() || isSubmitting || isAuthLoading}
+              aria-label="Create Account"
+              tabIndex={0}
               className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-orange-700 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-orange-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
             >
               {isSubmitting || isAuthLoading ? (
