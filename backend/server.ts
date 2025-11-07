@@ -270,7 +270,7 @@ app.post('/api/auth/signup', async (req: Request, res: Response) => {
         `INSERT INTO users (user_id, email, password_hash, full_name, phone_number, profile_picture_url, is_verified, member_since, notification_preferences, location_permission_granted, profile_public, reviews_public, last_login, created_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
          RETURNING user_id, email, full_name, phone_number, profile_picture_url, is_verified, member_since, notification_preferences, location_permission_granted, profile_public, reviews_public, last_login, created_at, updated_at`,
-        [user_id, email.toLowerCase(), password, full_name, phone_number, profile_picture_url, false, now, JSON.stringify(default_notification_prefs), false, true, true, now, now, now]
+        [user_id, email.toLowerCase(), password, full_name, phone_number || null, profile_picture_url || null, false, now, JSON.stringify(default_notification_prefs), false, true, true, now, now, now]
       );
 
       // Create user_statistics record

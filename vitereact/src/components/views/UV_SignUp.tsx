@@ -290,9 +290,9 @@ const UV_SignUp: React.FC = () => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter') {
       const target = e.target as HTMLElement;
-      if (target.tagName !== 'TEXTAREA' && target.tagName !== 'BUTTON') {
+      if (target.tagName !== 'TEXTAREA') {
         e.preventDefault();
         if (isFormValid() && !isSubmitting && !isAuthLoading) {
           handleSubmit();
