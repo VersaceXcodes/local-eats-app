@@ -723,7 +723,7 @@ const UV_RestaurantDetail: React.FC = () => {
                         ))}
                       </div>
                       <span className="font-semibold text-gray-900 ml-1">
-                        {restaurant.average_rating.toFixed(1)}
+                        {Number(restaurant.average_rating).toFixed(1)}
                       </span>
                       <span className="text-gray-600">({restaurant.total_review_count} reviews)</span>
                     </button>
@@ -1051,7 +1051,7 @@ const UV_RestaurantDetail: React.FC = () => {
                     {/* Overall rating */}
                     <div className="text-center">
                       <div className="text-5xl font-bold text-gray-900 mb-2">
-                        {reviewsData.average_rating.toFixed(1)}
+                        {Number(reviewsData.average_rating).toFixed(1)}
                       </div>
                       <div className="flex items-center justify-center gap-1 mb-2">
                         {Array.from({ length: 5 }).map((_, i) => (

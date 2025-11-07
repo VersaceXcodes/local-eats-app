@@ -335,7 +335,7 @@ const UV_LocalPicks: React.FC = () => {
                               <div className="flex items-center gap-1">
                                 {renderStars(restaurant.average_rating)}
                                 <span className="ml-2 text-sm font-semibold text-gray-700">
-                                  {restaurant.average_rating.toFixed(1)}
+                                  {Number(restaurant.average_rating).toFixed(1)}
                                 </span>
                                 <span className="text-sm text-gray-500">
                                   ({restaurant.total_review_count})

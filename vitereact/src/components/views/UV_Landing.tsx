@@ -548,7 +548,7 @@ const UV_Landing: React.FC = () => {
                         <div className="flex items-center justify-between text-sm">
                           <div className="flex items-center gap-1">
                             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                            <span className="font-semibold">{pick.restaurant.average_rating.toFixed(1)}</span>
+                            <span className="font-semibold">{Number(pick.restaurant.average_rating).toFixed(1)}</span>
                             <span className="text-gray-500">({pick.restaurant.total_review_count})</span>
                           </div>
                           <div className="flex items-center gap-2">
@@ -654,7 +654,7 @@ const UV_Landing: React.FC = () => {
                           <div className="flex items-center justify-between text-sm">
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                              <span className="font-semibold">{rec.restaurant.average_rating.toFixed(1)}</span>
+                              <span className="font-semibold">{Number(rec.restaurant.average_rating).toFixed(1)}</span>
                               <span className="text-gray-500">({rec.restaurant.total_review_count})</span>
                             </div>
                             <span className="text-gray-700">
@@ -921,7 +921,7 @@ const UV_Landing: React.FC = () => {
                           <div className="flex items-center justify-between text-sm">
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                              <span className="font-semibold">{restaurant.average_rating.toFixed(1)}</span>
+                              <span className="font-semibold">{Number(restaurant.average_rating).toFixed(1)}</span>
                               <span className="text-gray-500">({restaurant.total_review_count})</span>
                             </div>
                             <div className="flex items-center gap-2">

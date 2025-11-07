@@ -721,7 +721,7 @@ const UV_SearchResults: React.FC = () => {
                               })}
                             </div>
                             <span className="text-sm font-semibold text-gray-900">
-                              {restaurant.average_rating.toFixed(1)}
+                              {Number(restaurant.average_rating).toFixed(1)}
                             </span>
                             <span className="text-sm text-gray-500">
                               ({restaurant.total_review_count})

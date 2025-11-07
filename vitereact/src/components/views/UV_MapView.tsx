@@ -616,7 +616,7 @@ const UV_MapView: React.FC = () => {
                               <div className="flex items-center gap-1">
                                 <Star className="w-4 h-4 text-yellow-500 fill-current" />
                                 <span className="text-sm font-medium text-gray-900">
-                                  {restaurant.average_rating.toFixed(1)}
+                                  {Number(restaurant.average_rating).toFixed(1)}
                                 </span>
                               </div>
                               <span className="text-sm text-gray-600">
