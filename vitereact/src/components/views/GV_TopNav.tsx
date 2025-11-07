@@ -217,16 +217,20 @@ const GV_TopNav: React.FC = () => {
   const logoutMutation = useMutation({
     mutationFn: async () => {
       if (authToken) {
-        await axios.post(
-          `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/auth/logout`,
-          {},
-          {
-            headers: { Authorization: `Bearer ${authToken}` },
-          }
-        );
+        try {
+          await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/auth/logout`,
+            {},
+            {
+              headers: { Authorization: `Bearer ${authToken}` },
+            }
+          );
+        } catch (error) {
+          console.warn('Logout API call failed, but proceeding with client-side logout:', error);
+        }
       }
     },
-    onSuccess: () => {
+    onSettled: () => {
       logoutUser();
       navigate('/');
     },
