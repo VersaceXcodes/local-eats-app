@@ -349,7 +349,15 @@ app.post('/api/auth/login', async (req: Request, res: Response) => {
  * Logs out user (client-side token disposal for JWT)
  */
 app.post('/api/auth/logout', authenticateToken, (req: AuthRequest, res: Response) => {
-  res.json({ message: 'Successfully logged out' });
+  try {
+    res.json({ 
+      success: true,
+      message: 'Successfully logged out' 
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    res.status(500).json(createErrorResponse('Logout failed', error, 'LOGOUT_ERROR'));
+  }
 });
 
 /*

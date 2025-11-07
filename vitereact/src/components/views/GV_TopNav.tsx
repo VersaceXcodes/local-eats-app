@@ -229,9 +229,13 @@ const GV_TopNav: React.FC = () => {
           console.warn('Logout API call failed, but proceeding with client-side logout:', error);
         }
       }
-    },
-    onSettled: () => {
       logoutUser();
+    },
+    onSuccess: () => {
+      navigate('/');
+    },
+    onError: (error) => {
+      console.error('Logout mutation error:', error);
       navigate('/');
     },
   });
@@ -279,9 +283,15 @@ const GV_TopNav: React.FC = () => {
     setDropdownOpenState(null);
   };
 
-  const handleLogout = () => {
-    logoutMutation.mutate();
+  const handleLogout = async () => {
     setDropdownOpenState(null);
+    try {
+      logoutMutation.mutate();
+    } catch (error) {
+      console.error('Error during logout:', error);
+      logoutUser();
+      navigate('/');
+    }
   };
 
   const toggleDropdown = (dropdown: DropdownState) => {

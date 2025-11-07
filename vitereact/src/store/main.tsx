@@ -347,41 +347,48 @@ export const useAppStore = create<AppState>()(
       },
 
       logout_user: () => {
-        set((state) => ({
-          authentication_state: {
-            current_user: null,
-            auth_token: null,
-            authentication_status: {
-              is_authenticated: false,
-              is_loading: false,
+        try {
+          set((state) => ({
+            authentication_state: {
+              current_user: null,
+              auth_token: null,
+              authentication_status: {
+                is_authenticated: false,
+                is_loading: false,
+              },
+              error_message: null,
             },
-            error_message: null,
-          },
-          // Also clear user-specific data on logout
-          cart_state: {
-            ...state.cart_state,
-            items: [],
-            restaurant_id: null,
-            restaurant_name: null,
-            order_type: null,
-            delivery_address: null,
-            applied_discount: null,
-            subtotal: 0,
-            delivery_fee: 0,
-            tax: 0,
-            tip: 0,
-            grand_total: 0,
-            last_updated: null,
-          },
-          favorites_list: {
-            restaurant_ids: [],
-            last_synced: null,
-          },
-          notification_state: {
-            unread_count: 0,
-            notifications: [],
-          },
-        }));
+            cart_state: {
+              restaurant_id: null,
+              restaurant_name: null,
+              items: [],
+              order_type: null,
+              delivery_address: null,
+              applied_discount: null,
+              subtotal: 0,
+              delivery_fee: 0,
+              tax: 0,
+              tip: 0,
+              grand_total: 0,
+              last_updated: null,
+            },
+            favorites_list: {
+              restaurant_ids: [],
+              last_synced: null,
+            },
+            notification_state: {
+              unread_count: 0,
+              notifications: [],
+            },
+          }));
+          try {
+            localStorage.removeItem('local-eats-storage');
+          } catch (e) {
+            console.warn('Failed to clear localStorage:', e);
+          }
+        } catch (error) {
+          console.error('Error during logout_user:', error);
+        }
       },
 
       register_user: async (email: string, password: string, full_name: string, phone_number?: string) => {
