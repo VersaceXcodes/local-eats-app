@@ -760,7 +760,7 @@ app.get('/api/restaurants', async (req: Request, res: Response) => {
     if (latitude && longitude) {
       const userLat = parseFloat(latitude);
       const userLon = parseFloat(longitude);
-      selectFields = `r.*, (3959 * acos(cos(radians(${userLat})) * cos(radians(r.latitude)) * cos(radians(r.longitude) - radians(${userLon})) + sin(radians(${userLat})) * sin(radians(r.latitude)))) AS distance`;
+      selectFields = `r.*, (3959 * acos(cos(radians(${userLat})) * cos(radians(r.latitude)) * cos(radians(r.longitude) - radians(${userLon})) + sin(radians(${userLat})) * sin(radians(r.latitude)))) AS distance_miles`;
       
       if (distance_max) {
         whereConditions.push(`(3959 * acos(cos(radians(${userLat})) * cos(radians(r.latitude)) * cos(radians(r.longitude) - radians(${userLon})) + sin(radians(${userLat})) * sin(radians(r.latitude)))) <= ${parseFloat(distance_max)}`);
@@ -770,7 +770,7 @@ app.get('/api/restaurants', async (req: Request, res: Response) => {
     // Sorting
     switch (sort_by) {
       case 'distance':
-        orderByClause = latitude && longitude ? 'ORDER BY distance ASC' : 'ORDER BY r.restaurant_name ASC';
+        orderByClause = latitude && longitude ? 'ORDER BY distance_miles ASC' : 'ORDER BY r.restaurant_name ASC';
         break;
       case 'rating':
         orderByClause = 'ORDER BY r.average_rating DESC';
@@ -3678,6 +3678,8 @@ app.delete('/api/notifications', authenticateToken, async (req: AuthRequest, res
 app.get('/api/recommendations', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     const limit = parseQueryNumber(req.query.limit, 20) || 10;
+    const latitude = parseQueryString(req.query.latitude);
+    const longitude = parseQueryString(req.query.longitude);
 
     // Get user's order history to find preferred cuisines
     const orderHistoryResult = await pool.query(
@@ -3709,9 +3711,16 @@ app.get('/api/recommendations', authenticateToken, async (req: AuthRequest, res:
     );
     const dismissedIds = dismissedResult.rows.map(r => r.restaurant_id);
 
-    // Build recommendations query
+    // Build recommendations query with optional distance calculation
+    let selectFields = 'r.*, 0 as relevance_score';
+    if (latitude && longitude) {
+      const userLat = parseFloat(latitude);
+      const userLon = parseFloat(longitude);
+      selectFields += `, (3959 * acos(cos(radians(${userLat})) * cos(radians(r.latitude)) * cos(radians(r.longitude) - radians(${userLon})) + sin(radians(${userLat})) * sin(radians(r.latitude)))) AS distance_miles`;
+    }
+
     let recommendationsQuery = `
-      SELECT r.*, 0 as relevance_score
+      SELECT ${selectFields}
       FROM restaurants r
       WHERE r.is_active = true
     `;
@@ -3792,9 +3801,19 @@ app.post('/api/recommendations/dismiss', authenticateToken, async (req: AuthRequ
 app.get('/api/weekly-picks', async (req: Request, res: Response) => {
   try {
     const week_of = parseQueryString(req.query.week_of) || new Date().toISOString().split('T')[0];
+    const latitude = parseQueryString(req.query.latitude);
+    const longitude = parseQueryString(req.query.longitude);
+
+    let selectFields = 'p.pick_id, p.restaurant_id, p.week_start_date, p.week_end_date, p.featured_description, p.display_order, p.selection_criteria, p.created_at, r.*';
+    
+    if (latitude && longitude) {
+      const userLat = parseFloat(latitude);
+      const userLon = parseFloat(longitude);
+      selectFields += `, (3959 * acos(cos(radians(${userLat})) * cos(radians(r.latitude)) * cos(radians(r.longitude) - radians(${userLon})) + sin(radians(${userLat})) * sin(radians(r.latitude)))) AS distance_miles`;
+    }
 
     const picksResult = await pool.query(
-      `SELECT p.pick_id, p.restaurant_id, p.week_start_date, p.week_end_date, p.featured_description, p.display_order, p.selection_criteria, p.created_at, r.*
+      `SELECT ${selectFields}
        FROM weekly_local_picks p
        JOIN restaurants r ON p.restaurant_id = r.restaurant_id
        WHERE p.week_start_date <= $1 AND p.week_end_date >= $1
@@ -3840,7 +3859,8 @@ app.get('/api/weekly-picks', async (req: Request, res: Response) => {
         featured_description: row.featured_description,
         is_active: row.is_active,
         created_at: row.created_at,
-        updated_at: row.updated_at
+        updated_at: row.updated_at,
+        distance_miles: row.distance_miles !== undefined ? parseFloat(row.distance_miles) : null
       }
     }));
 

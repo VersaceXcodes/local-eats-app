@@ -67,19 +67,20 @@ interface RecommendationsResponse {
 // API FUNCTIONS
 // ============================================================================
 
-const fetchWeeklyPicks = async (): Promise<WeeklyPicksResponse> => {
+const fetchWeeklyPicks = async (params?: { latitude?: number; longitude?: number }): Promise<WeeklyPicksResponse> => {
   const { data } = await axios.get(
-    `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/weekly-picks`
+    `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/weekly-picks`,
+    { params }
   );
   return data;
 };
 
-const fetchRecommendations = async (token: string): Promise<RecommendationsResponse> => {
+const fetchRecommendations = async (token: string, params?: { limit?: number; latitude?: number; longitude?: number }): Promise<RecommendationsResponse> => {
   const { data } = await axios.get(
     `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/recommendations`,
     {
       headers: { Authorization: `Bearer ${token}` },
-      params: { limit: 10 }
+      params: { limit: 10, ...params }
     }
   );
   return data;
@@ -212,16 +213,22 @@ const UV_Landing: React.FC = () => {
 
   // Featured Picks Query
   const { data: weeklyPicks, isLoading: isLoadingFeatured } = useQuery({
-    queryKey: ['weeklyPicks'],
-    queryFn: fetchWeeklyPicks,
+    queryKey: ['weeklyPicks', userLocation.latitude, userLocation.longitude],
+    queryFn: () => fetchWeeklyPicks({
+      latitude: userLocation.permission_granted ? userLocation.latitude || undefined : undefined,
+      longitude: userLocation.permission_granted ? userLocation.longitude || undefined : undefined
+    }),
     staleTime: 30 * 60 * 1000, // 30 minutes
     retry: 1,
   });
 
   // Recommendations Query (only if authenticated)
   const { data: recommendations, isLoading: isLoadingRecommendations, refetch: refetchRecommendations } = useQuery({
-    queryKey: ['recommendations'],
-    queryFn: () => fetchRecommendations(authToken!),
+    queryKey: ['recommendations', userLocation.latitude, userLocation.longitude],
+    queryFn: () => fetchRecommendations(authToken!, {
+      latitude: userLocation.permission_granted ? userLocation.latitude || undefined : undefined,
+      longitude: userLocation.permission_granted ? userLocation.longitude || undefined : undefined
+    }),
     enabled: isAuthenticated && !!authToken,
     staleTime: 15 * 60 * 1000, // 15 minutes
     retry: 1,
