@@ -3803,16 +3803,12 @@ app.get('/api/weekly-picks', async (req: Request, res: Response) => {
     );
 
     const picks = picksResult.rows.map(row => ({
-      pick: {
-        pick_id: row.pick_id,
-        restaurant_id: row.restaurant_id,
-        week_start_date: row.week_start_date,
-        week_end_date: row.week_end_date,
-        featured_description: row.featured_description,
-        display_order: row.display_order,
-        selection_criteria: row.selection_criteria,
-        created_at: row.created_at
-      },
+      pick_id: row.pick_id,
+      restaurant_id: row.restaurant_id,
+      week_start_date: row.week_start_date,
+      week_end_date: row.week_end_date,
+      featured_description: row.featured_description,
+      display_order: row.display_order,
       restaurant: {
         restaurant_id: row.restaurant_id,
         restaurant_name: row.restaurant_name,
@@ -3848,8 +3844,8 @@ app.get('/api/weekly-picks', async (req: Request, res: Response) => {
       }
     }));
 
-    const week_start_date = picks.length > 0 ? picks[0].pick.week_start_date : week_of;
-    const week_end_date = picks.length > 0 ? picks[0].pick.week_end_date : week_of;
+    const week_start_date = picks.length > 0 ? picks[0].week_start_date : week_of;
+    const week_end_date = picks.length > 0 ? picks[0].week_end_date : week_of;
 
     res.json({ picks, week_start_date, week_end_date });
   } catch (error) {
