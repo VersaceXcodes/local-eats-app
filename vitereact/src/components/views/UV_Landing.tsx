@@ -485,7 +485,7 @@ const UV_Landing: React.FC = () => {
                 <div>
                   <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center gap-2">
                     <Flame className="w-8 h-8 text-orange-600" />
-                    Weekly Local Picks
+                    Weekly Picks
                   </h2>
                   <p className="text-gray-600 mt-2">
                     Week of {new Date(weeklyPicks.week_start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {new Date(weeklyPicks.week_end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -545,7 +545,7 @@ const UV_Landing: React.FC = () => {
                             </span>
                           ))}
                         </div>
-                        <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center justify-between text-sm mb-4">
                           <div className="flex items-center gap-1">
                             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                             <span className="font-semibold">{Number(pick.restaurant.average_rating).toFixed(1)}</span>
@@ -563,6 +563,15 @@ const UV_Landing: React.FC = () => {
                             )}
                           </div>
                         </div>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(`/restaurant/${pick.restaurant.restaurant_id}`);
+                          }}
+                          className="w-full py-2.5 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors"
+                        >
+                          View Menu
+                        </button>
                       </div>
                     </Link>
                   ))}
@@ -918,7 +927,7 @@ const UV_Landing: React.FC = () => {
                               </span>
                             ))}
                           </div>
-                          <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center justify-between text-sm mb-4">
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                               <span className="font-semibold">{Number(restaurant.average_rating).toFixed(1)}</span>
@@ -936,6 +945,15 @@ const UV_Landing: React.FC = () => {
                               )}
                             </div>
                           </div>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigate(`/restaurant/${restaurant.restaurant_id}`);
+                            }}
+                            className="w-full py-2.5 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors"
+                          >
+                            View Menu
+                          </button>
                         </div>
                       </Link>
 
