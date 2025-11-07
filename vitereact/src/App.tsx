@@ -186,11 +186,60 @@ const App: React.FC = () => {
     (state) => state.authentication_state.authentication_status.is_loading
   );
   const initializeAuth = useAppStore((state) => state.initialize_auth);
+  const setUserLocation = useAppStore((state) => state.set_user_location);
+  const currentUser = useAppStore((state) => state.authentication_state.current_user);
+  const userLocation = useAppStore((state) => state.user_location);
 
   // Initialize authentication on mount
   useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
+
+  // Request browser geolocation when user is authenticated with location permission
+  useEffect(() => {
+    if (!currentUser) return;
+
+    const requestGeolocation = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/users/me`,
+          {
+            headers: {
+              Authorization: `Bearer ${useAppStore.getState().authentication_state.auth_token}`,
+            },
+          }
+        );
+        const userData = await response.json();
+
+        if (userData.location_permission_granted && !userLocation.permission_granted) {
+          if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                setUserLocation(
+                  position.coords.latitude,
+                  position.coords.longitude
+                );
+              },
+              (error) => {
+                console.log('Geolocation error:', error.message);
+                setUserLocation(45.5152, -122.6784, 'Portland', 'OR');
+              },
+              {
+                timeout: 5000,
+                maximumAge: 300000
+              }
+            );
+          } else {
+            setUserLocation(45.5152, -122.6784, 'Portland', 'OR');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to check location permission:', error);
+      }
+    };
+
+    requestGeolocation();
+  }, [currentUser, setUserLocation, userLocation.permission_granted]);
 
   // Show loading spinner during auth initialization
   if (isLoading) {
