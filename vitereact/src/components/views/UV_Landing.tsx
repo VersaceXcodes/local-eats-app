@@ -3,7 +3,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles } from 'lucide-react';
+import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles, Truck, ShoppingBag } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -545,24 +545,57 @@ const UV_Landing: React.FC = () => {
                             </span>
                           ))}
                         </div>
+
+                        {/* Delivery/Pickup Badges */}
+                        <div className="flex gap-2 mb-3">
+                          {pick.restaurant.accepts_delivery && (
+                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                              <Truck className="w-3 h-3" />
+                              Delivery
+                            </span>
+                          )}
+                          {pick.restaurant.accepts_pickup && (
+                            <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                              <ShoppingBag className="w-3 h-3" />
+                              Pickup
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Open/Closed Status */}
+                        <div className="mb-3">
+                          {pick.restaurant.is_currently_open ? (
+                            <span className="inline-flex items-center gap-1 text-sm text-green-600 font-medium">
+                              <Clock className="w-4 h-4" />
+                              Open Now
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-sm text-gray-500">
+                              <Clock className="w-4 h-4" />
+                              Closed
+                            </span>
+                          )}
+                        </div>
+
                         <div className="flex items-center justify-between text-sm mb-4">
                           <div className="flex items-center gap-1">
                             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                             <span className="font-semibold">{Number(pick.restaurant.average_rating).toFixed(1)}</span>
                             <span className="text-gray-500">({pick.restaurant.total_review_count})</span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-gray-700">
-                              {'$'.repeat(pick.restaurant.price_range)}
-                            </span>
-                            {userLocation.permission_granted && pick.restaurant.distance_miles && (
-                              <div className="flex items-center gap-1 text-gray-600">
-                                <MapPin className="w-4 h-4" />
-                                <span>{pick.restaurant.distance_miles.toFixed(1)} mi</span>
-                              </div>
-                            )}
-                          </div>
+                          <span className="text-gray-700">
+                            {'$'.repeat(pick.restaurant.price_range)}
+                          </span>
                         </div>
+
+                        {/* Distance Display */}
+                        {pick.restaurant.distance_miles !== null && pick.restaurant.distance_miles !== undefined && (
+                          <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+                            <MapPin className="w-4 h-4" />
+                            <span>{pick.restaurant.distance_miles.toFixed(1)} mi away</span>
+                          </div>
+                        )}
+                        
                         <button
                           onClick={(e) => {
                             e.preventDefault();
@@ -660,7 +693,39 @@ const UV_Landing: React.FC = () => {
                               </span>
                             ))}
                           </div>
-                          <div className="flex items-center justify-between text-sm">
+
+                          {/* Delivery/Pickup Badges */}
+                          <div className="flex gap-2 mb-2">
+                            {rec.restaurant.accepts_delivery && (
+                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                <Truck className="w-3 h-3" />
+                                Delivery
+                              </span>
+                            )}
+                            {rec.restaurant.accepts_pickup && (
+                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                                <ShoppingBag className="w-3 h-3" />
+                                Pickup
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Open/Closed Status */}
+                          <div className="mb-2">
+                            {rec.restaurant.is_currently_open ? (
+                              <span className="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+                                <Clock className="w-3 h-3" />
+                                Open Now
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-xs text-gray-500">
+                                <Clock className="w-3 h-3" />
+                                Closed
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="flex items-center justify-between text-sm mb-2">
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                               <span className="font-semibold">{Number(rec.restaurant.average_rating).toFixed(1)}</span>
@@ -670,6 +735,14 @@ const UV_Landing: React.FC = () => {
                               {'$'.repeat(rec.restaurant.price_range)}
                             </span>
                           </div>
+
+                          {/* Distance Display */}
+                          {rec.restaurant.distance_miles !== null && rec.restaurant.distance_miles !== undefined && (
+                            <div className="flex items-center gap-1 text-xs text-gray-600">
+                              <MapPin className="w-3 h-3" />
+                              <span>{rec.restaurant.distance_miles.toFixed(1)} mi away</span>
+                            </div>
+                          )}
                         </div>
                       </Link>
                     </div>
@@ -927,6 +1000,38 @@ const UV_Landing: React.FC = () => {
                               </span>
                             ))}
                           </div>
+                          
+                          {/* Delivery/Pickup Badges */}
+                          <div className="flex gap-2 mb-3">
+                            {restaurant.accepts_delivery && (
+                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                <Truck className="w-3 h-3" />
+                                Delivery
+                              </span>
+                            )}
+                            {restaurant.accepts_pickup && (
+                              <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                                <ShoppingBag className="w-3 h-3" />
+                                Pickup
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Open/Closed Status */}
+                          <div className="mb-3">
+                            {restaurant.is_currently_open ? (
+                              <span className="inline-flex items-center gap-1 text-sm text-green-600 font-medium">
+                                <Clock className="w-4 h-4" />
+                                Open Now
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-sm text-gray-500">
+                                <Clock className="w-4 h-4" />
+                                Closed
+                              </span>
+                            )}
+                          </div>
+
                           <div className="flex items-center justify-between text-sm mb-4">
                             <div className="flex items-center gap-1">
                               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -937,14 +1042,17 @@ const UV_Landing: React.FC = () => {
                               <span className="text-gray-700">
                                 {'$'.repeat(restaurant.price_range)}
                               </span>
-                              {userLocation.permission_granted && restaurant.distance_miles && (
-                                <div className="flex items-center gap-1 text-gray-600">
-                                  <MapPin className="w-4 h-4" />
-                                  <span>{restaurant.distance_miles.toFixed(1)} mi</span>
-                                </div>
-                              )}
                             </div>
                           </div>
+
+                          {/* Distance Display */}
+                          {restaurant.distance_miles !== null && restaurant.distance_miles !== undefined && (
+                            <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+                              <MapPin className="w-4 h-4" />
+                              <span>{restaurant.distance_miles.toFixed(1)} mi away</span>
+                            </div>
+                          )}
+                          
                           <button
                             onClick={(e) => {
                               e.preventDefault();
