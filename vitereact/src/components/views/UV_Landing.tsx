@@ -599,7 +599,7 @@ const UV_Landing: React.FC = () => {
                         {pick.restaurant.distance_miles !== null && pick.restaurant.distance_miles !== undefined && (
                           <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
                             <MapPin className="w-4 h-4" />
-                            <span>{pick.restaurant.distance_miles.toFixed(1)} mi away</span>
+                            <span>{Number(pick.restaurant.distance_miles).toFixed(1)} mi away</span>
                           </div>
                         )}
                         
@@ -747,7 +747,7 @@ const UV_Landing: React.FC = () => {
                           {rec.restaurant.distance_miles !== null && rec.restaurant.distance_miles !== undefined && (
                             <div className="flex items-center gap-1 text-xs text-gray-600">
                               <MapPin className="w-3 h-3" />
-                              <span>{rec.restaurant.distance_miles.toFixed(1)} mi away</span>
+                              <span>{Number(rec.restaurant.distance_miles).toFixed(1)} mi away</span>
                             </div>
                           )}
                         </div>
@@ -1056,7 +1056,7 @@ const UV_Landing: React.FC = () => {
                           {restaurant.distance_miles !== null && restaurant.distance_miles !== undefined && (
                             <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
                               <MapPin className="w-4 h-4" />
-                              <span>{restaurant.distance_miles.toFixed(1)} mi away</span>
+                              <span>{Number(restaurant.distance_miles).toFixed(1)} mi away</span>
                             </div>
                           )}
                           

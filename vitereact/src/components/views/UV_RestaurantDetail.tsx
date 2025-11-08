@@ -809,8 +809,8 @@ const UV_RestaurantDetail: React.FC = () => {
                         <div>
                           <h3 className="text-2xl font-bold text-orange-700">
                             {discount.discount_type === 'percentage'
-                              ? `${discount.discount_value}% OFF`
-                              : `$${discount.discount_value} OFF`}
+                              ? `${Number(discount.discount_value)}% OFF`
+                              : `$${Number(discount.discount_value).toFixed(2)} OFF`}
                           </h3>
                           <p className="text-sm text-gray-700 mt-1">{discount.description}</p>
                         </div>
@@ -999,7 +999,7 @@ const UV_RestaurantDetail: React.FC = () => {
                                   </div>
                                   
                                   <span className="font-bold text-gray-900 flex-shrink-0">
-                                    ${item.base_price.toFixed(2)}
+                                    ${parseFloat(String(item.base_price)).toFixed(2)}
                                   </span>
                                 </div>
                                 
