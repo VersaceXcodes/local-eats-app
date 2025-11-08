@@ -19,7 +19,10 @@ import {
   ChevronDown,
   ChevronUp,
   Copy,
-  Check
+  Check,
+  Plus,
+  Minus,
+  ShoppingCart
 } from 'lucide-react';
 
 // ============================================================================
@@ -287,6 +290,9 @@ const UV_RestaurantDetail: React.FC = () => {
   const locationPermissionGranted = useAppStore(state => state.user_location.permission_granted);
   const favoriteRestaurantIds = useAppStore(state => state.favorites_list.restaurant_ids);
   const toggleFavorite = useAppStore(state => state.toggle_favorite);
+  const addToCart = useAppStore(state => state.add_to_cart);
+  const cartItems = useAppStore(state => state.cart_state.items);
+  const cartRestaurantId = useAppStore(state => state.cart_state.restaurant_id);
   
   // Local state
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
@@ -304,6 +310,7 @@ const UV_RestaurantDetail: React.FC = () => {
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
   const [expandedDiscountTerms, setExpandedDiscountTerms] = useState<Set<string>>(new Set());
+  const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
   
   // Refs for scrolling
   const menuSectionRef = useRef<HTMLDivElement>(null);
@@ -564,6 +571,57 @@ const UV_RestaurantDetail: React.FC = () => {
       return;
     }
     navigate(`/restaurant/${restaurant_id}/review`);
+  };
+  
+  const handleAddToCart = (item: MenuItem) => {
+    if (!restaurant || !restaurant_id) return;
+    
+    // Check if cart has items from a different restaurant
+    if (cartRestaurantId && cartRestaurantId !== restaurant_id) {
+      const confirmed = window.confirm(
+        `Your cart contains items from ${cartItems.length > 0 ? 'another restaurant' : ''}. Adding items from ${restaurant.restaurant_name} will clear your current cart. Continue?`
+      );
+      
+      if (!confirmed) return;
+    }
+    
+    const quantity = itemQuantities[item.menu_item_id] || 1;
+    
+    // Add item to cart
+    addToCart(
+      {
+        menu_item_id: item.menu_item_id,
+        item_name: item.item_name,
+        base_price: parseFloat(String(item.base_price)),
+        customizations: {
+          size: null,
+          add_ons: [],
+          modifications: [],
+          special_instructions: null,
+        },
+        quantity: quantity,
+      },
+      restaurant_id,
+      restaurant.restaurant_name
+    );
+    
+    // Reset quantity for this item
+    setItemQuantities(prev => ({ ...prev, [item.menu_item_id]: 1 }));
+    
+    // Show feedback
+    alert(`Added ${quantity} x ${item.item_name} to cart`);
+  };
+  
+  const handleQuantityChange = (itemId: string, delta: number) => {
+    setItemQuantities(prev => {
+      const currentQty = prev[itemId] || 1;
+      const newQty = Math.max(1, Math.min(99, currentQty + delta));
+      return { ...prev, [itemId]: newQty };
+    });
+  };
+  
+  const getItemQuantity = (itemId: string): number => {
+    return itemQuantities[itemId] || 1;
   };
   
   // ============================================================================
@@ -944,7 +1002,7 @@ const UV_RestaurantDetail: React.FC = () => {
                         
                         <div className="space-y-6">
                           {cat.items.map(item => (
-                            <div key={item.menu_item_id} className="flex gap-4">
+                            <div key={item.menu_item_id} className="flex gap-4 pb-6 border-b border-gray-100 last:border-0">
                               {/* Item photo */}
                               {item.item_photo_url && (
                                 <img
@@ -956,7 +1014,7 @@ const UV_RestaurantDetail: React.FC = () => {
                               
                               {/* Item details */}
                               <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-4">
+                                <div className="flex items-start justify-between gap-4 mb-3">
                                   <div className="flex-1">
                                     <div className="flex items-center gap-2 flex-wrap">
                                       <h4 className="font-semibold text-gray-900">{item.item_name}</h4>
@@ -1005,9 +1063,50 @@ const UV_RestaurantDetail: React.FC = () => {
                                 
                                 {/* Allergen info */}
                                 {item.allergen_info.length > 0 && (
-                                  <p className="text-xs text-gray-500 mt-2">
+                                  <p className="text-xs text-gray-500 mb-3">
                                     Contains: {item.allergen_info.join(', ')}
                                   </p>
+                                )}
+                                
+                                {/* Add to Cart Controls */}
+                                {item.is_available && (
+                                  <div className="flex items-center gap-3">
+                                    {/* Quantity selector */}
+                                    <div className="flex items-center border border-gray-300 rounded-lg">
+                                      <button
+                                        onClick={() => handleQuantityChange(item.menu_item_id, -1)}
+                                        className="p-2 hover:bg-gray-100 transition-colors"
+                                        aria-label="Decrease quantity"
+                                      >
+                                        <Minus className="w-4 h-4 text-gray-600" />
+                                      </button>
+                                      <span className="px-4 py-2 min-w-[3rem] text-center font-medium text-gray-900">
+                                        {getItemQuantity(item.menu_item_id)}
+                                      </span>
+                                      <button
+                                        onClick={() => handleQuantityChange(item.menu_item_id, 1)}
+                                        className="p-2 hover:bg-gray-100 transition-colors"
+                                        aria-label="Increase quantity"
+                                      >
+                                        <Plus className="w-4 h-4 text-gray-600" />
+                                      </button>
+                                    </div>
+                                    
+                                    {/* Add to Cart button */}
+                                    <button
+                                      onClick={() => handleAddToCart(item)}
+                                      className="flex-1 flex items-center justify-center gap-2 bg-orange-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-orange-700 transition-colors"
+                                    >
+                                      <ShoppingCart className="w-4 h-4" />
+                                      Add to Cart
+                                    </button>
+                                  </div>
+                                )}
+                                
+                                {!item.is_available && (
+                                  <div className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium text-center">
+                                    Currently Unavailable
+                                  </div>
                                 )}
                               </div>
                             </div>
@@ -1421,7 +1520,7 @@ const UV_RestaurantDetail: React.FC = () => {
             {/* Action Buttons */}
             <div className="space-y-3">
               <button
-                onClick={() => navigate('/cart')}
+                onClick={() => menuSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
                 disabled={!openStatus?.isOpen}
                 className={`w-full px-6 py-4 rounded-lg font-medium text-lg transition-all ${
                   openStatus?.isOpen
@@ -1429,15 +1528,18 @@ const UV_RestaurantDetail: React.FC = () => {
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                {openStatus?.isOpen ? 'Order Now' : 'Closed'}
+                {openStatus?.isOpen ? 'Start Order' : 'Closed'}
               </button>
               
-              <button
-                onClick={() => menuSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
-                className="w-full bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors"
-              >
-                View Menu
-              </button>
+              {cartItems.length > 0 && cartRestaurantId === restaurant_id && (
+                <button
+                  onClick={() => navigate('/cart')}
+                  className="w-full flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                  View Cart ({cartItems.length})
+                </button>
+              )}
             </div>
           </div>
         </div>
