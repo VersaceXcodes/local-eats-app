@@ -2281,7 +2281,7 @@ app.get('/api/orders', authenticateToken, async (req: AuthRequest, res: Response
     }
 
     const countResult = await pool.query(
-      `SELECT COUNT(*) FROM orders WHERE ${whereConditions.join(' AND ')}`,
+      `SELECT COUNT(*) FROM orders o WHERE ${whereConditions.join(' AND ')}`,
       queryParams.slice(0, -2)
     );
 
