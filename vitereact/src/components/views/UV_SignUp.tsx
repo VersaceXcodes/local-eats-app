@@ -608,7 +608,7 @@ const UV_SignUp: React.FC = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={!isFormValid() || isSubmitting || isAuthLoading}
+              disabled={isSubmitting || isAuthLoading}
               id="create-account-button"
               data-testid="signup-submit-button"
               aria-label="Create Account"
