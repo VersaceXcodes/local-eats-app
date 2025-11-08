@@ -116,7 +116,7 @@ describe('Auth E2E Flow (real API)', () => {
       () => {
         const submitButtonText = submitButton.textContent?.toLowerCase() || '';
         expect(
-          submitButtonText.includes('logging in')
+          submitButtonText.includes('signing')
         ).toBe(true);
       },
       { timeout: 5000 }
