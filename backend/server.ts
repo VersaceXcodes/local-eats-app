@@ -25,7 +25,7 @@ import {
   createVerificationInputSchema,
   createSearchHistoryInputSchema,
   updateNotificationInputSchema
-} from './schema.ts';
+} from './schema.js';
 
 dotenv.config();
 
@@ -1691,8 +1691,9 @@ app.post('/api/cart/items', authenticateToken, async (req: AuthRequest, res: Res
 
     item_total *= quantity;
 
-    // Add item to cart
+    // Add item to cart with unique cart_item_id
     cart.items.push({
+      cart_item_id: crypto.randomUUID(),
       menu_item_id,
       item_name: menu_item.item_name,
       base_price: parseFloat(menu_item.base_price),
@@ -1723,12 +1724,12 @@ app.post('/api/cart/items', authenticateToken, async (req: AuthRequest, res: Res
 });
 
 /*
- * PATCH /api/cart/items/:menu_item_id
+ * PATCH /api/cart/items/:cart_item_id
  * Updates cart item quantity or customizations
  */
-app.patch('/api/cart/items/:menu_item_id', authenticateToken, async (req: AuthRequest, res: Response) => {
+app.patch('/api/cart/items/:cart_item_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const { menu_item_id } = req.params;
+    const { cart_item_id } = req.params;
     const updates = req.body;
 
     const cart = carts.get(req.user.user_id);
@@ -1736,7 +1737,7 @@ app.patch('/api/cart/items/:menu_item_id', authenticateToken, async (req: AuthRe
       return res.status(404).json(createErrorResponse('Cart is empty', null, 'CART_EMPTY'));
     }
 
-    const itemIndex = cart.items.findIndex(item => item.menu_item_id === menu_item_id);
+    const itemIndex = cart.items.findIndex(item => item.cart_item_id === cart_item_id);
     if (itemIndex === -1) {
       return res.status(404).json(createErrorResponse('Item not in cart', null, 'ITEM_NOT_IN_CART'));
     }
@@ -1795,19 +1796,19 @@ app.patch('/api/cart/items/:menu_item_id', authenticateToken, async (req: AuthRe
 });
 
 /*
- * DELETE /api/cart/items/:menu_item_id
+ * DELETE /api/cart/items/:cart_item_id
  * Removes item from cart
  */
-app.delete('/api/cart/items/:menu_item_id', authenticateToken, async (req: AuthRequest, res: Response) => {
+app.delete('/api/cart/items/:cart_item_id', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
-    const { menu_item_id } = req.params;
+    const { cart_item_id } = req.params;
 
     const cart = carts.get(req.user.user_id);
     if (!cart) {
       return res.json({ message: 'Item removed from cart' });
     }
 
-    cart.items = cart.items.filter(item => item.menu_item_id !== menu_item_id);
+    cart.items = cart.items.filter(item => item.cart_item_id !== cart_item_id);
     carts.set(req.user.user_id, cart);
 
     let restaurant = null;

@@ -1,4 +1,4 @@
-import { app, pool } from './server.ts';
+import { app, pool } from './server.js';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 
