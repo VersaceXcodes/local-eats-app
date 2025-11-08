@@ -97,7 +97,8 @@ const UV_Login: React.FC = () => {
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+    const newValue = e.target.value;
+    setPassword(newValue);
     // Clear errors when user types
     if (validationErrors.password) {
       setValidationErrors((prev) => ({ ...prev, password: null }));
@@ -231,6 +232,7 @@ const UV_Login: React.FC = () => {
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
                 placeholder="you@example.com"
+                data-testid="login-email-input"
                 className={`w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 ${
                   validationErrors.email
                     ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-100'
@@ -270,6 +272,7 @@ const UV_Login: React.FC = () => {
                   onChange={handlePasswordChange}
                   onBlur={handlePasswordBlur}
                   placeholder="Enter your password"
+                  data-testid="login-password-input"
                   className={`w-full px-4 py-3 pr-12 rounded-lg border-2 transition-all duration-200 ${
                     validationErrors.password
                       ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-100'
@@ -321,6 +324,8 @@ const UV_Login: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
+              data-testid="login-submit-button"
+              aria-label="Log In"
               className="w-full px-6 py-3 bg-blue-600 text-white font-medium rounded-lg shadow-lg hover:bg-blue-700 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (

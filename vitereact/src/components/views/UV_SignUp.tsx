@@ -354,6 +354,7 @@ const UV_SignUp: React.FC = () => {
                 }}
                 onBlur={handleFullNameBlur}
                 placeholder="John Smith"
+                data-testid="signup-fullname-input"
                 className={`block w-full px-4 py-3 rounded-lg border-2 transition-all ${
                   validationErrors.full_name
                     ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
@@ -388,6 +389,7 @@ const UV_SignUp: React.FC = () => {
                 }}
                 onBlur={handleEmailBlur}
                 placeholder="john@example.com"
+                data-testid="signup-email-input"
                 className={`block w-full px-4 py-3 rounded-lg border-2 transition-all ${
                   validationErrors.email
                     ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
@@ -607,6 +609,8 @@ const UV_SignUp: React.FC = () => {
             <button
               type="submit"
               disabled={!isFormValid() || isSubmitting || isAuthLoading}
+              id="create-account-button"
+              data-testid="create-account-button"
               aria-label="Create Account"
               className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-orange-700 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-orange-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
             >
