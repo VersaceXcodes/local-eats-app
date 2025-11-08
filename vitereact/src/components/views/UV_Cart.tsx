@@ -130,6 +130,17 @@ const removeCouponCode = async (authToken: string): Promise<CartData> => {
   return response.data;
 };
 
+const clearCart = async (authToken: string): Promise<void> => {
+  await axios.delete(
+    `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/cart`,
+    {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+      },
+    }
+  );
+};
+
 
 
 // ============================================================================
@@ -333,6 +344,28 @@ const UV_Cart: React.FC = () => {
     },
   });
 
+  // Clear cart mutation
+  const clearCartMutation = useMutation({
+    mutationFn: () => clearCart(authToken!),
+    onSuccess: () => {
+      queryClient.setQueryData(['cart'], {
+        restaurant_id: null,
+        restaurant_name: null,
+        items: [],
+        applied_discount: null,
+        subtotal: 0,
+        delivery_fee: 0,
+        tax: 0,
+        tip: 0,
+        grand_total: 0,
+      });
+      showToast('Cart cleared successfully', 'success');
+    },
+    onError: () => {
+      showToast('Failed to clear cart', 'error');
+    },
+  });
+
   // ========================================================================
   // EVENT HANDLERS
   // ========================================================================
@@ -360,6 +393,12 @@ const UV_Cart: React.FC = () => {
 
   const handleRemoveCoupon = () => {
     removeCouponMutation.mutate();
+  };
+
+  const handleClearCart = () => {
+    if (window.confirm('Are you sure you want to clear your entire cart?')) {
+      clearCartMutation.mutate();
+    }
   };
 
   const handleProceedToCheckout = () => {
@@ -708,6 +747,24 @@ const UV_Cart: React.FC = () => {
                   className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 outline-none transition-all resize-none"
                 />
                 <p className="text-sm text-gray-500 mt-2 text-right">{orderInstructions.length}/200</p>
+              </div>
+
+              {/* Clear Cart Button */}
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+                <button
+                  onClick={handleClearCart}
+                  disabled={clearCartMutation.isPending}
+                  className="w-full px-6 py-3 bg-red-50 text-red-600 border-2 border-red-200 rounded-lg font-semibold hover:bg-red-100 hover:border-red-300 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  {clearCartMutation.isPending ? (
+                    <div className="w-5 h-5 border-2 border-red-600 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <Trash2 className="size-5" />
+                      Clear Cart
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 

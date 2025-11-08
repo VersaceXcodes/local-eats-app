@@ -1584,6 +1584,13 @@ app.get('/api/cart', authenticateToken, async (req: AuthRequest, res: Response) 
       tip: 0
     };
 
+    cart.items = cart.items.map(item => {
+      if (!item.cart_item_id) {
+        item.cart_item_id = crypto.randomUUID();
+      }
+      return item;
+    });
+
     let restaurant = null;
     if (cart.restaurant_id) {
       const restaurantResult = await pool.query(

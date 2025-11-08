@@ -1251,6 +1251,12 @@ app.get('/api/cart', authenticateToken, async (req, res) => {
             applied_discount: null,
             tip: 0
         };
+        cart.items = cart.items.map(item => {
+            if (!item.cart_item_id) {
+                item.cart_item_id = crypto.randomUUID();
+            }
+            return item;
+        });
         let restaurant = null;
         if (cart.restaurant_id) {
             const restaurantResult = await pool.query('SELECT restaurant_id, restaurant_name, delivery_fee FROM restaurants WHERE restaurant_id = $1', [cart.restaurant_id]);
