@@ -1554,10 +1554,10 @@ function calculateCartTotals(cart, restaurant) {
     discount_amount = Math.min(discount_amount, subtotal);
   }
 
-  const delivery_fee = restaurant?.delivery_fee || 0;
+  const delivery_fee = parseFloat(restaurant?.delivery_fee || 0);
   const tax_rate = 0.085; // 8.5% mock tax rate
   const tax = (subtotal - discount_amount + delivery_fee) * tax_rate;
-  const tip = cart.tip || 0;
+  const tip = parseFloat(cart.tip || 0);
   const grand_total = subtotal - discount_amount + delivery_fee + tax + tip;
 
   return {
