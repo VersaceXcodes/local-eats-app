@@ -241,7 +241,7 @@ app.post('/api/auth/signup', async (req: Request, res: Response) => {
     const { email, password, full_name, phone_number, profile_picture_url } = validationResult.data;
 
     // Check if email already exists
-    const existingUser = await pool.query('SELECT user_id FROM users WHERE email = $1', [email]);
+    const existingUser = await pool.query('SELECT user_id FROM users WHERE email = $1', [email.toLowerCase()]);
     if (existingUser.rows.length > 0) {
       return res.status(400).json(createErrorResponse('Email already registered', null, 'EMAIL_EXISTS'));
     }
