@@ -272,11 +272,12 @@ const UV_SignUp: React.FC = () => {
 
     try {
       // Call global store register action
+      const phone = phoneNumber.trim();
       await registerUser(
         email.trim(),
         password,
         fullName.trim(),
-        phoneNumber.trim() || undefined
+        phone ? phone : undefined
       );
 
       // Success - store handles redirect via isAuthenticated state change

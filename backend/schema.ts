@@ -43,7 +43,11 @@ export const createUserInputSchema = z.object({
   password: z.string().min(8).max(255),
   full_name: z.string().min(1).max(255),
   phone_number: z.preprocess(
-    (val) => typeof val === 'string' ? val.replace(/[\s-]/g, '') : val,
+    (val) => {
+      if (val === null || val === undefined || val === '') return undefined;
+      if (typeof val === 'string') return val.replace(/[\s-]/g, '');
+      return val;
+    },
     z.string().regex(/^\+?[1-9]\d{1,14}$/).optional()
   ).optional(),
   profile_picture_url: z.string().url().nullable().optional(),

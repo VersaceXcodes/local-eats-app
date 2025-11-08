@@ -404,14 +404,19 @@ export const useAppStore = create<AppState>()(
         }));
 
         try {
+          const payload: any = {
+            email,
+            password,
+            full_name,
+          };
+          
+          if (phone_number && phone_number.trim()) {
+            payload.phone_number = phone_number.trim();
+          }
+
           const response = await axios.post(
             `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/auth/signup`,
-            {
-              email,
-              password,
-              full_name,
-              phone_number: phone_number || null,
-            },
+            payload,
             { headers: { 'Content-Type': 'application/json' } }
           );
 
