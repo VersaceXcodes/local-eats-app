@@ -27,6 +27,7 @@ interface AuthenticationState {
 }
 
 interface CartItem {
+  cart_item_id?: string;
   menu_item_id: string;
   item_name: string;
   base_price: number;
@@ -635,6 +636,9 @@ export const useAppStore = create<AppState>()(
                 },
               }
             );
+            
+            // Sync cart from backend to get cart_item_id values
+            await get().sync_cart_from_backend();
           } catch (error) {
             console.error('Failed to sync cart with backend:', error);
           }
@@ -869,6 +873,7 @@ export const useAppStore = create<AppState>()(
           
           // Convert backend cart format to frontend format
           const items: CartItem[] = backendCart.items.map((item: any) => ({
+            cart_item_id: item.cart_item_id,
             menu_item_id: item.menu_item_id,
             item_name: item.item_name,
             base_price: item.base_price,

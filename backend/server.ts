@@ -2596,6 +2596,7 @@ app.post('/api/orders/:order_id/reorder', authenticateToken, async (req: AuthReq
 
     for (const orderItem of itemsResult.rows) {
       cart.items.push({
+        cart_item_id: crypto.randomUUID(),
         menu_item_id: orderItem.menu_item_id,
         item_name: orderItem.item_name,
         base_price: parseFloat(orderItem.base_price),
