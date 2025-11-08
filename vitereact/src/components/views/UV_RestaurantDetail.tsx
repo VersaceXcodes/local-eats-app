@@ -573,7 +573,7 @@ const UV_RestaurantDetail: React.FC = () => {
     navigate(`/restaurant/${restaurant_id}/review`);
   };
   
-  const handleAddToCart = (item: MenuItem) => {
+  const handleAddToCart = async (item: MenuItem) => {
     if (!restaurant || !restaurant_id) return;
     
     // Check if cart has items from a different restaurant
@@ -588,7 +588,7 @@ const UV_RestaurantDetail: React.FC = () => {
     const quantity = itemQuantities[item.menu_item_id] || 1;
     
     // Add item to cart
-    addToCart(
+    await addToCart(
       {
         menu_item_id: item.menu_item_id,
         item_name: item.item_name,

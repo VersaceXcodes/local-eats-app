@@ -133,7 +133,7 @@ interface AppState {
   update_user_profile: (userData: Partial<User>) => void;
 
   // Cart Actions
-  add_to_cart: (item: Omit<CartItem, 'item_total'>, restaurant_id: string, restaurant_name: string) => void;
+  add_to_cart: (item: Omit<CartItem, 'item_total'>, restaurant_id: string, restaurant_name: string) => Promise<void>;
   remove_from_cart: (menu_item_id: string) => void;
   update_cart_item: (menu_item_id: string, updates: Partial<CartItem>) => void;
   clear_cart: () => void;
@@ -143,6 +143,7 @@ interface AppState {
   set_delivery_address: (address: DeliveryAddress) => void;
   update_tip: (tip_amount: number) => void;
   recalculate_totals: () => void;
+  sync_cart_from_backend: () => Promise<void>;
 
   // Location Actions
   set_user_location: (latitude: number, longitude: number, city?: string, state?: string) => void;
@@ -328,6 +329,9 @@ export const useAppStore = create<AppState>()(
               error_message: null,
             },
           }));
+
+          // Sync cart from backend after successful login
+          await get().sync_cart_from_backend();
         } catch (error: any) {
           const errorMessage = error.response?.data?.message || error.message || 'Login failed';
 
@@ -441,6 +445,9 @@ export const useAppStore = create<AppState>()(
               error_message: null,
             },
           }));
+
+          // Sync cart from backend after successful registration
+          await get().sync_cart_from_backend();
         } catch (error: any) {
           const errorMessage = error.response?.data?.message || error.message || 'Registration failed';
 
@@ -507,6 +514,9 @@ export const useAppStore = create<AppState>()(
               error_message: null,
             },
           }));
+
+          // Sync cart from backend after successful authentication
+          await get().sync_cart_from_backend();
         } catch {
           // Token is invalid, clear auth state
           set(() => ({
@@ -547,8 +557,8 @@ export const useAppStore = create<AppState>()(
       // CART ACTIONS
       // ========================================================================
 
-      add_to_cart: (item: Omit<CartItem, 'item_total'>, restaurant_id: string, restaurant_name: string) => {
-        const { cart_state } = get();
+      add_to_cart: async (item: Omit<CartItem, 'item_total'>, restaurant_id: string, restaurant_name: string) => {
+        const { cart_state, authentication_state } = get();
 
         // Calculate item total
         const item_with_total: CartItem = {
@@ -604,6 +614,31 @@ export const useAppStore = create<AppState>()(
             last_updated: new Date().toISOString(),
           },
         }));
+
+        // Sync with backend if authenticated
+        if (authentication_state.authentication_status.is_authenticated && authentication_state.auth_token) {
+          try {
+            await axios.post(
+              `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/cart/items`,
+              {
+                menu_item_id: item.menu_item_id,
+                selected_size: item.customizations.size,
+                selected_addons: item.customizations.add_ons,
+                selected_modifications: item.customizations.modifications,
+                special_instructions: item.customizations.special_instructions,
+                quantity: item.quantity,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${authentication_state.auth_token}`,
+                  'Content-Type': 'application/json',
+                },
+              }
+            );
+          } catch (error) {
+            console.error('Failed to sync cart with backend:', error);
+          }
+        }
       },
 
       remove_from_cart: (menu_item_id: string) => {
@@ -811,6 +846,61 @@ export const useAppStore = create<AppState>()(
             grand_total: totals.grand_total,
           },
         }));
+      },
+
+      sync_cart_from_backend: async () => {
+        const { authentication_state } = get();
+        
+        if (!authentication_state.authentication_status.is_authenticated || !authentication_state.auth_token) {
+          return;
+        }
+
+        try {
+          const response = await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/cart`,
+            {
+              headers: {
+                Authorization: `Bearer ${authentication_state.auth_token}`,
+              },
+            }
+          );
+
+          const backendCart = response.data;
+          
+          // Convert backend cart format to frontend format
+          const items: CartItem[] = backendCart.items.map((item: any) => ({
+            menu_item_id: item.menu_item_id,
+            item_name: item.item_name,
+            base_price: item.base_price,
+            customizations: {
+              size: item.selected_size || null,
+              add_ons: item.selected_addons || [],
+              modifications: item.selected_modifications || [],
+              special_instructions: item.special_instructions || null,
+            },
+            quantity: item.quantity,
+            item_total: item.item_total_price,
+          }));
+
+          set(() => ({
+            cart_state: {
+              restaurant_id: backendCart.restaurant_id,
+              restaurant_name: backendCart.restaurant_name,
+              items: items,
+              order_type: null,
+              delivery_address: null,
+              applied_discount: backendCart.applied_discount,
+              subtotal: backendCart.subtotal,
+              delivery_fee: backendCart.delivery_fee,
+              tax: backendCart.tax,
+              tip: backendCart.tip,
+              grand_total: backendCart.grand_total,
+              last_updated: new Date().toISOString(),
+            },
+          }));
+        } catch (error) {
+          console.error('Failed to sync cart from backend:', error);
+        }
       },
 
       // ========================================================================
