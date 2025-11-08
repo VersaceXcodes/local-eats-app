@@ -348,7 +348,7 @@ export const useAppStore = create<AppState>()(
 
       logout_user: () => {
         try {
-          set((state) => ({
+          set(() => ({
             authentication_state: {
               current_user: null,
               auth_token: null,

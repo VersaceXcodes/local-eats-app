@@ -11,7 +11,6 @@ import {
   User,
   Loader2,
   AlertCircle,
-  Check,
   Save
 } from 'lucide-react';
 
@@ -76,7 +75,6 @@ const UV_Settings: React.FC = () => {
   const authToken = useAppStore(state => state.authentication_state.auth_token);
   const isAuthenticated = useAppStore(state => state.authentication_state.authentication_status.is_authenticated);
   const isAuthLoading = useAppStore(state => state.authentication_state.authentication_status.is_loading);
-  const updateUserProfile = useAppStore(state => state.update_user_profile);
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
