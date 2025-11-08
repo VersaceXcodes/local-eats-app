@@ -312,25 +312,36 @@ const UV_SignUp: React.FC = () => {
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl border border-gray-100 p-8 sm:p-10">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 mb-4">
-              <span className="text-3xl">🍴</span>
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-red-500 mb-4 shadow-lg transform transition-transform hover:scale-110 hover:rotate-12 duration-300">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 leading-tight">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent leading-tight">
               Join Local Eats
             </h2>
             <p className="mt-2 text-sm text-gray-600">
-              Discover hidden gems and earn rewards
+              Discover hidden gems and earn rewards • Free forever
             </p>
           </div>
 
           {/* General Error Message */}
           {authError && (
-            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+            <div className="mb-6 bg-red-50 border-l-4 border-red-500 rounded-lg p-4 flex items-start gap-3 animate-shake">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm text-red-800 font-medium">Registration Failed</p>
+                <p className="text-sm text-red-800 font-semibold">Registration Failed</p>
                 <p className="text-sm text-red-700 mt-1">{authError}</p>
               </div>
+              <button 
+                onClick={clearAuthError}
+                className="text-red-400 hover:text-red-600 transition-colors"
+                aria-label="Dismiss error"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
           )}
 
@@ -613,8 +624,9 @@ const UV_SignUp: React.FC = () => {
               id="create-account-button"
               data-testid="signup-submit-button"
               aria-label="Create Account"
-              className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-orange-700 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-orange-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold py-3.5 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-orange-700 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-orange-300 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden group"
             >
+              <span className="absolute inset-0 bg-gradient-to-r from-orange-400 to-red-400 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
               {isSubmitting || isAuthLoading ? (
                 <span className="flex items-center justify-center gap-2">
                   <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
@@ -632,35 +644,49 @@ const UV_SignUp: React.FC = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Creating account...
+                  Creating your account...
                 </span>
               ) : (
-                'Create Account'
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                  Create Free Account
+                </span>
               )}
             </button>
           </form>
 
           {/* Login Link */}
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center p-4 bg-gray-50 rounded-lg border border-gray-100">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
               <Link
                 to="/login"
-                className="text-orange-600 hover:text-orange-700 font-semibold underline transition-colors"
+                className="text-orange-600 hover:text-orange-700 font-bold underline decoration-2 underline-offset-2 transition-all duration-200 hover:underline-offset-4"
               >
-                Log in
+                Log in here
               </Link>
             </p>
           </div>
 
-          {/* Support Link */}
+          {/* Footer Links */}
+          <div className="mt-6 flex justify-center gap-6 text-xs text-gray-500">
+            <Link to="/terms" className="hover:text-gray-700 transition-colors hover:underline">Terms</Link>
+            <span className="text-gray-300">•</span>
+            <Link to="/privacy" className="hover:text-gray-700 transition-colors hover:underline">Privacy</Link>
+            <span className="text-gray-300">•</span>
+            <a href="mailto:support@localeats.com" className="hover:text-gray-700 transition-colors hover:underline">Support</a>
+          </div>
+          
+          {/* Trust Badge */}
           <div className="mt-4 text-center">
-            <a
-              href="mailto:support@localeats.com"
-              className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
-            >
-              Need help? Contact Support
-            </a>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-50 text-green-700 rounded-full text-xs font-medium">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              Secure & encrypted
+            </div>
           </div>
         </div>
       </div>

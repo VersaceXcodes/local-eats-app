@@ -53,10 +53,21 @@ const queryClient = new QueryClient({
 // ============================================================================
 
 const LoadingSpinner: React.FC = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <div className="flex flex-col items-center gap-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
-      <p className="text-gray-600 text-sm">Loading...</p>
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-red-50">
+    <div className="flex flex-col items-center gap-6">
+      <div className="relative">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200"></div>
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-600 border-t-transparent absolute top-0 left-0"></div>
+      </div>
+      <div className="text-center space-y-2">
+        <div className="flex items-center gap-2 text-orange-600">
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          <p className="text-lg font-semibold animate-pulse">Loading Local Eats</p>
+        </div>
+        <p className="text-gray-500 text-sm">Preparing your experience...</p>
+      </div>
     </div>
   </div>
 );

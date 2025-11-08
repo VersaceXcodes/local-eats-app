@@ -140,16 +140,16 @@ const dismissRecommendation = async (restaurant_id: string, token: string) => {
 
 const RestaurantCardSkeleton: React.FC = () => (
   <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-pulse">
-    <div className="w-full h-48 bg-gray-200"></div>
+    <div className="w-full h-48 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
     <div className="p-6 space-y-3">
-      <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+      <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-3/4 animate-shimmer"></div>
       <div className="flex gap-2">
-        <div className="h-6 bg-gray-200 rounded w-20"></div>
-        <div className="h-6 bg-gray-200 rounded w-20"></div>
+        <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-20 animate-shimmer"></div>
+        <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-20 animate-shimmer"></div>
       </div>
       <div className="flex items-center gap-4">
-        <div className="h-5 bg-gray-200 rounded w-24"></div>
-        <div className="h-5 bg-gray-200 rounded w-16"></div>
+        <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-24 animate-shimmer"></div>
+        <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-16 animate-shimmer"></div>
       </div>
     </div>
   </div>
@@ -459,27 +459,42 @@ const UV_Landing: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
         {/* Hero Section - Unauthenticated users only */}
         {!isAuthenticated && !heroDismissed && (
-          <section className="relative bg-gradient-to-r from-orange-600 to-red-600 text-white py-16 px-4 sm:px-6 lg:px-8">
+          <section className="relative bg-gradient-to-r from-orange-600 via-red-500 to-red-600 text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
             <button
               onClick={handleDismissHero}
-              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
+              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-all duration-200 hover:rotate-90 z-10"
               aria-label="Dismiss hero section"
             >
               <X className="w-5 h-5" />
             </button>
-            <div className="max-w-7xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-                Discover Hidden Gem Restaurants
+            <div className="max-w-7xl mx-auto text-center relative z-10">
+              <div className="inline-block mb-6 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold animate-bounce">
+                🎉 New users get 20% off first order
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg animate-fade-in">
+                Discover Hidden Gem<br />Restaurants
               </h1>
-              <p className="text-xl md:text-2xl mb-8 text-orange-100">
-                Support local eateries and enjoy exclusive deals
+              <p className="text-xl md:text-2xl mb-10 text-orange-50 max-w-3xl mx-auto leading-relaxed">
+                Support local eateries, earn rewards, and enjoy exclusive deals
               </p>
-              <Link
-                to="/signup"
-                className="inline-flex items-center px-8 py-4 bg-white text-orange-600 rounded-lg font-semibold text-lg hover:bg-orange-50 transition-all duration-200 shadow-lg hover:shadow-xl"
-              >
-                Get Started
-              </Link>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link
+                  to="/signup"
+                  className="inline-flex items-center px-8 py-4 bg-white text-orange-600 rounded-xl font-bold text-lg hover:bg-orange-50 transition-all duration-200 shadow-2xl hover:shadow-3xl transform hover:scale-105 active:scale-95 group"
+                >
+                  <span>Get Started Free</span>
+                  <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </Link>
+                <Link
+                  to="/search"
+                  className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl font-semibold text-lg hover:bg-white/10 transition-all duration-200 backdrop-blur-sm"
+                >
+                  Browse Restaurants
+                </Link>
+              </div>
             </div>
           </section>
         )}
@@ -510,7 +525,7 @@ const UV_Landing: React.FC = () => {
                     <Link
                       key={pick.pick_id}
                       to={`/restaurant/${pick.restaurant.restaurant_id}`}
-                      className="group bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-200"
+                      className="group bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-105 hover:-translate-y-2 transition-all duration-300 relative"
                     >
                       <div className="relative">
                         <div className="absolute top-3 left-3 bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg z-10">
@@ -518,14 +533,14 @@ const UV_Landing: React.FC = () => {
                         </div>
                         <button
                           onClick={(e) => handleToggleFavorite(pick.restaurant.restaurant_id, e)}
-                          className="absolute top-3 right-3 p-2 bg-white/90 hover:bg-white rounded-full transition-colors z-10 shadow-lg"
+                          className="absolute top-3 right-3 p-2 bg-white/90 backdrop-blur-sm hover:bg-white rounded-full transition-all duration-200 z-10 shadow-lg hover:scale-110 active:scale-95"
                           aria-label={favoriteIds.includes(pick.restaurant.restaurant_id) ? 'Remove from favorites' : 'Add to favorites'}
                         >
                           <Heart
-                            className={`w-6 h-6 transition-colors ${
+                            className={`w-6 h-6 transition-all duration-200 ${
                               favoriteIds.includes(pick.restaurant.restaurant_id)
-                                ? 'fill-red-600 text-red-600'
-                                : 'text-gray-600'
+                                ? 'fill-red-600 text-red-600 scale-110'
+                                : 'text-gray-600 hover:text-red-500'
                             }`}
                           />
                         </button>
@@ -608,9 +623,12 @@ const UV_Landing: React.FC = () => {
                             e.preventDefault();
                             navigate(`/restaurant/${pick.restaurant.restaurant_id}`);
                           }}
-                          className="w-full py-2.5 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors"
+                          className="w-full py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg font-bold hover:from-orange-700 hover:to-red-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
                         >
-                          View Menu
+                          <span>View Menu</span>
+                          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                          </svg>
                         </button>
                       </div>
                     </Link>
