@@ -292,7 +292,7 @@ const UV_SignUp: React.FC = () => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
     if (e.key === 'Enter') {
       const target = e.target as HTMLElement;
-      if (target.tagName !== 'TEXTAREA') {
+      if (target.tagName !== 'TEXTAREA' && target.tagName !== 'BUTTON') {
         e.preventDefault();
         if (isFormValid() && !isSubmitting && !isAuthLoading) {
           handleSubmit();
@@ -608,7 +608,6 @@ const UV_SignUp: React.FC = () => {
               type="submit"
               disabled={!isFormValid() || isSubmitting || isAuthLoading}
               aria-label="Create Account"
-              tabIndex={0}
               className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:from-orange-700 hover:to-red-700 focus:outline-none focus:ring-4 focus:ring-orange-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
             >
               {isSubmitting || isAuthLoading ? (
