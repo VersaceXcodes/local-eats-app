@@ -237,10 +237,12 @@ const UV_Cart: React.FC = () => {
       tip: Number(data.tip || 0),
       grand_total: Number(data.grand_total || 0),
       items: data.items.map(item => ({
-        ...item,
+        cart_item_id: item.cart_item_id,
+        menu_item_id: item.menu_item_id,
+        item_name: item.item_name,
         base_price: Number(item.base_price || 0),
+        selected_size: item.selected_size,
         size_price_adjustment: Number(item.size_price_adjustment || 0),
-        item_total_price: Number(item.item_total_price || 0),
         selected_addons: item.selected_addons.map(addon => ({
           ...addon,
           price: Number(addon.price || 0),
@@ -249,6 +251,9 @@ const UV_Cart: React.FC = () => {
           ...mod,
           price: Number(mod.price || 0),
         })),
+        special_instructions: item.special_instructions,
+        quantity: item.quantity,
+        item_total_price: Number(item.item_total_price || 0),
       })),
     }),
   });
