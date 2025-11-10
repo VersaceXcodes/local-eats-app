@@ -15,10 +15,10 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/backend/node_modules/zod/
     at moduleResolve (node:internal/modules/esm/resolve:980:10)
     at defaultResolve (node:internal/modules/esm/resolve:1206:11)
     at nextResolve (node:internal/modules/esm/hooks:864:28)
-    at resolveBase (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762809912942:2:3744)
-    at resolveDirectory (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762809912942:2:4243)
-    at resolveTsPaths (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762809912942:2:4984)
-    at resolve (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762809912942:2:5361)
+    at resolveBase (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762810056167:2:3744)
+    at resolveDirectory (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762810056167:2:4243)
+    at resolveTsPaths (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762810056167:2:4984)
+    at resolve (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762810056167:2:5361)
     at nextResolve (node:internal/modules/esm/hooks:864:28) {
   url: 'file:///app/backend/node_modules/zod/v3/external.js',
   code: 'ERR_MODULE_NOT_FOUND'
@@ -28,14 +28,7 @@ Node.js v18.20.8
 
 
 ## Backend Console Output (stdout):
-
-up to date, audited 478 packages in 2s
-
-60 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-
+No stdout output
 
 ## Working Directory: /app/vitereact
 
