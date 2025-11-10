@@ -5,10 +5,6 @@ The backend server failed to start due to a critical error. You need to fix this
 ## Error Type: Backend unhealthy or critical errors present
 
 ## Backend Error Output (stderr):
-npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
-npm warn deprecated supertest@6.3.4: Please upgrade to supertest v7.1.3+, see release notes at https://github.com/forwardemail/supertest/releases/tag/v7.1.3 - maintenance is supported by Forward Email @ https://forwardemail.net
-npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
-npm warn deprecated superagent@8.1.2: Please upgrade to superagent v10.2.2+, see release notes at https://github.com/forwardemail/superagent/releases/tag/v10.2.2 - maintenance is supported by Forward Email @ https://forwardemail.net
 
 node:internal/process/esm_loader:40
       internalBinding('errors').triggerUncaughtException(
@@ -19,10 +15,10 @@ Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/app/backend/node_modules/zod/
     at moduleResolve (node:internal/modules/esm/resolve:980:10)
     at defaultResolve (node:internal/modules/esm/resolve:1206:11)
     at nextResolve (node:internal/modules/esm/hooks:864:28)
-    at resolveBase (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805405019:2:3744)
-    at resolveDirectory (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805405019:2:4243)
-    at resolveTsPaths (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805405019:2:4984)
-    at resolve (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805405019:2:5361)
+    at resolveBase (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805501126:2:3744)
+    at resolveDirectory (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805501126:2:4243)
+    at resolveTsPaths (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805501126:2:4984)
+    at resolve (file:///app/backend/node_modules/tsx/dist/esm/index.mjs?1762805501126:2:5361)
     at nextResolve (node:internal/modules/esm/hooks:864:28) {
   url: 'file:///app/backend/node_modules/zod/v3/external.js',
   code: 'ERR_MODULE_NOT_FOUND'
@@ -32,14 +28,7 @@ Node.js v18.20.8
 
 
 ## Backend Console Output (stdout):
-
-added 468 packages, changed 2 packages, and audited 478 packages in 4s
-
-60 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
-
+No stdout output
 
 ## Working Directory: /app/vitereact
 
