@@ -200,15 +200,35 @@ const UV_Login: React.FC = () => {
   
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
-          {/* Header Section */}
-          <div className="px-8 pt-8 pb-6 text-center bg-gradient-to-b from-blue-50/50 to-white">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 mb-4 shadow-lg">
-              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Background Image with Overlay */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-5"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&q=80')"
+          }}
+        ></div>
+        
+        <div className="max-w-md w-full bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transform transition-all duration-300 hover:shadow-2xl relative z-10">
+          {/* Header Section with Food Image */}
+          <div className="relative">
+            <div 
+              className="h-32 bg-cover bg-center"
+              style={{
+                backgroundImage: "url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80')"
+              }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-blue-600/80 to-indigo-600/90"></div>
             </div>
+            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-xl border-4 border-white">
+                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div className="px-8 pt-12 pb-6 text-center bg-gradient-to-b from-blue-50/50 to-white">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
             <p className="text-gray-600 leading-relaxed">Sign in to continue your culinary journey</p>
           </div>

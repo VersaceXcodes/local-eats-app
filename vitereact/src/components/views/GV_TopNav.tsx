@@ -426,11 +426,11 @@ const GV_TopNav: React.FC = () => {
             {/* ============================================================ */}
             
             <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                  <UtensilsCrossed className="w-5 h-5 text-white" />
+              <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-all duration-200 group">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                  <UtensilsCrossed className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xl font-bold text-gray-900">Local Eats</span>
+                <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Local Eats</span>
               </Link>
             </div>
 

@@ -140,16 +140,28 @@ const dismissRecommendation = async (restaurant_id: string, token: string) => {
 
 const RestaurantCardSkeleton: React.FC = () => (
   <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden animate-pulse">
-    <div className="w-full h-48 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer"></div>
+    <div className="w-full h-48 bg-gradient-to-br from-gray-200 via-gray-300 to-gray-200 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+    </div>
     <div className="p-6 space-y-3">
-      <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-3/4 animate-shimmer"></div>
+      <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-lg w-3/4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+      </div>
       <div className="flex gap-2">
-        <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-20 animate-shimmer"></div>
-        <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-20 animate-shimmer"></div>
+        <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-full w-20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+        </div>
+        <div className="h-6 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded-full w-20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+        </div>
       </div>
       <div className="flex items-center gap-4">
-        <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-24 animate-shimmer"></div>
-        <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-16 animate-shimmer"></div>
+        <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-24 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+        </div>
+        <div className="h-5 bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 rounded w-16 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -460,6 +472,15 @@ const UV_Landing: React.FC = () => {
         {/* Hero Section - Unauthenticated users only */}
         {!isAuthenticated && !heroDismissed && (
           <section className="relative bg-gradient-to-r from-orange-600 via-red-500 to-red-600 text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            {/* Background Image with Overlay */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center opacity-20"
+              style={{
+                backgroundImage: "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80')",
+                backgroundBlendMode: 'multiply'
+              }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/90 via-red-500/90 to-red-600/90"></div>
             <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
             <button
               onClick={handleDismissHero}
@@ -505,11 +526,13 @@ const UV_Landing: React.FC = () => {
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center gap-2">
-                    <Flame className="w-8 h-8 text-orange-600" />
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg shadow-md">
+                      <Flame className="w-7 h-7 text-white" />
+                    </div>
                     Weekly Picks
                   </h2>
-                  <p className="text-gray-600 mt-2">
+                  <p className="text-gray-600 mt-2 ml-14">
                     Week of {new Date(weeklyPicks.week_start_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - {new Date(weeklyPicks.week_end_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </p>
                 </div>
@@ -525,10 +548,11 @@ const UV_Landing: React.FC = () => {
                     <Link
                       key={pick.pick_id}
                       to={`/restaurant/${pick.restaurant.restaurant_id}`}
-                      className="group bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-105 hover:-translate-y-2 transition-all duration-300 relative"
+                      className="group bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-[1.03] hover:-translate-y-2 transition-all duration-300 relative"
                     >
                       <div className="relative">
-                        <div className="absolute top-3 left-3 bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg z-10">
+                        <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-600 to-red-600 text-white px-3 py-1.5 rounded-full text-sm font-bold shadow-lg z-10 flex items-center gap-1">
+                          <Flame className="w-4 h-4" />
                           Featured
                         </div>
                         <button
@@ -544,12 +568,12 @@ const UV_Landing: React.FC = () => {
                             }`}
                           />
                         </button>
-                        <img
-                          src={pick.restaurant.primary_hero_image_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'}
-                          alt={pick.restaurant.restaurant_name}
-                          className="w-full h-56 object-cover"
-                          loading="lazy"
-                        />
+                          <img
+                            src={pick.restaurant.primary_hero_image_url || `https://images.unsplash.com/photo-${['1517248135467-4c7edcad34c4', '1504674900247-0877df9cc836', '1414235077428-338989a2e8c0', '1555939594-58d7cb561ad1', '1546069901-ba9599a7e63c', '1565299624946-b28f40a0ae38'][Math.floor(Math.random() * 6)]}?w=800&q=80`}
+                            alt={pick.restaurant.restaurant_name}
+                            className="w-full h-56 object-cover"
+                            loading="lazy"
+                          />
                       </div>
                       <div className="p-6">
                         <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
@@ -644,8 +668,10 @@ const UV_Landing: React.FC = () => {
           <section className="py-8 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-indigo-50">
             <div className="max-w-7xl mx-auto">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-2">
-                  <Sparkles className="w-7 h-7 text-blue-600" />
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg shadow-md">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
                   Recommended for You
                 </h2>
                 <button
@@ -672,7 +698,7 @@ const UV_Landing: React.FC = () => {
                     <div key={rec.restaurant.restaurant_id} className="flex-none w-80">
                       <Link
                         to={`/restaurant/${rec.restaurant.restaurant_id}`}
-                        className="block bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-200"
+                        className="block bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-[1.03] transition-all duration-300"
                       >
                         <div className="relative">
                           <button
@@ -696,7 +722,7 @@ const UV_Landing: React.FC = () => {
                             />
                           </button>
                           <img
-                            src={rec.restaurant.primary_hero_image_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'}
+                            src={rec.restaurant.primary_hero_image_url || `https://images.unsplash.com/photo-${['1517248135467-4c7edcad34c4', '1504674900247-0877df9cc836', '1414235077428-338989a2e8c0', '1555939594-58d7cb561ad1', '1546069901-ba9599a7e63c', '1565299624946-b28f40a0ae38'][Math.floor(Math.random() * 6)]}?w=800&q=80`}
                             alt={rec.restaurant.restaurant_name}
                             className="w-full h-40 object-cover"
                             loading="lazy"
@@ -779,16 +805,16 @@ const UV_Landing: React.FC = () => {
         )}
 
         {/* Quick Filter Chips */}
-        <section className="py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-200 bg-white">
+        <section className="py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-200 bg-gradient-to-b from-white to-gray-50">
           <div className="max-w-7xl mx-auto">
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               <button
                 onClick={() => handleQuickFilter('near_me')}
                 disabled={!userLocation.permission_granted}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap shadow-sm hover:shadow-md ${
                   activeFilters.distance_max === 2
-                    ? 'bg-orange-600 border-orange-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-orange-600'
+                    ? 'bg-gradient-to-r from-orange-600 to-red-600 border-transparent text-white'
+                    : 'bg-white border-gray-300 text-gray-700 hover:border-orange-500'
                 } ${!userLocation.permission_granted ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <MapPin className="w-4 h-4" />
@@ -796,10 +822,10 @@ const UV_Landing: React.FC = () => {
               </button>
               <button
                 onClick={() => handleQuickFilter('open_now')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap shadow-sm hover:shadow-md ${
                   activeFilters.open_now
-                    ? 'bg-orange-600 border-orange-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-orange-600'
+                    ? 'bg-gradient-to-r from-green-600 to-emerald-600 border-transparent text-white'
+                    : 'bg-white border-gray-300 text-gray-700 hover:border-green-500'
                 }`}
               >
                 <Clock className="w-4 h-4" />
@@ -807,10 +833,10 @@ const UV_Landing: React.FC = () => {
               </button>
               <button
                 onClick={() => handleQuickFilter('highly_rated')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap shadow-sm hover:shadow-md ${
                   activeFilters.rating_min === 4
-                    ? 'bg-orange-600 border-orange-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-orange-600'
+                    ? 'bg-gradient-to-r from-yellow-500 to-amber-600 border-transparent text-white'
+                    : 'bg-white border-gray-300 text-gray-700 hover:border-yellow-500'
                 }`}
               >
                 <Star className="w-4 h-4" />
@@ -818,10 +844,10 @@ const UV_Landing: React.FC = () => {
               </button>
               <button
                 onClick={() => handleQuickFilter('best_deals')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full border-2 font-medium text-sm transition-all whitespace-nowrap shadow-sm hover:shadow-md ${
                   activeFilters.has_discount
-                    ? 'bg-orange-600 border-orange-600 text-white'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-orange-600'
+                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 border-transparent text-white'
+                    : 'bg-white border-gray-300 text-gray-700 hover:border-blue-500'
                 }`}
               >
                 <Tag className="w-4 h-4" />
@@ -986,11 +1012,11 @@ const UV_Landing: React.FC = () => {
                     <React.Fragment key={restaurant.restaurant_id}>
                       <Link
                         to={`/restaurant/${restaurant.restaurant_id}`}
-                        className="group bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-200"
+                        className="group bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:scale-[1.02] transition-all duration-300"
                       >
                         <div className="relative">
                           {restaurant.is_featured && (
-                            <div className="absolute top-3 left-3 bg-orange-600 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg z-10">
+                            <div className="absolute top-3 left-3 bg-gradient-to-r from-orange-600 to-red-600 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-lg z-10">
                               Featured
                             </div>
                           )}
@@ -1008,7 +1034,7 @@ const UV_Landing: React.FC = () => {
                             />
                           </button>
                           <img
-                            src={restaurant.primary_hero_image_url || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800'}
+                            src={restaurant.primary_hero_image_url || `https://images.unsplash.com/photo-${['1517248135467-4c7edcad34c4', '1504674900247-0877df9cc836', '1414235077428-338989a2e8c0', '1555939594-58d7cb561ad1', '1546069901-ba9599a7e63c', '1565299624946-b28f40a0ae38', '1493770348161-369560ae357d', '1540189549336-e6e99c3679fe', '1567620905732-2d1ec7ab7445', '1565958011703-44f9829ba187'][index % 10]}?w=800&q=80`}
                             alt={restaurant.restaurant_name}
                             className="w-full h-48 object-cover"
                             loading="lazy"
@@ -1164,16 +1190,19 @@ const UV_Landing: React.FC = () => {
                 )}
               </>
             ) : (
-              <div className="text-center py-16">
-                <div className="mb-6">
-                  <TrendingUp className="w-16 h-16 text-gray-400 mx-auto" />
+              <div className="text-center py-20">
+                <div className="mb-6 relative inline-block">
+                  <div className="absolute inset-0 bg-orange-200 rounded-full blur-2xl opacity-20 animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-orange-100 to-red-100 rounded-full p-6">
+                    <TrendingUp className="w-16 h-16 text-orange-500 mx-auto" />
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">No restaurants found</h3>
-                <p className="text-gray-600 mb-6">Try adjusting your filters or search criteria</p>
+                <h3 className="text-3xl font-bold text-gray-900 mb-3">No restaurants found</h3>
+                <p className="text-gray-600 mb-8 text-lg max-w-md mx-auto">Try adjusting your filters or search criteria to discover more delicious options</p>
                 {activeFilterCount > 0 && (
                   <button
                     onClick={handleClearFilters}
-                    className="px-6 py-3 bg-orange-600 text-white rounded-lg font-semibold hover:bg-orange-700 transition-colors"
+                    className="px-8 py-3.5 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg font-semibold hover:from-orange-700 hover:to-red-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
                   >
                     Clear All Filters
                   </button>
