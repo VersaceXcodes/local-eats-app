@@ -1753,7 +1753,17 @@ app.patch('/api/cart/items/:cart_item_id', authenticateToken, async (req: AuthRe
 
     // Update fields if provided
     if (updates.quantity !== undefined) {
-      item.quantity = updates.quantity;
+      if (updates.quantity <= 0) {
+        cart.items.splice(itemIndex, 1);
+        
+        if (cart.items.length === 0) {
+          cart.restaurant_id = null;
+          cart.restaurant_name = null;
+          cart.applied_discount = null;
+        }
+      } else {
+        item.quantity = updates.quantity;
+      }
     }
     if (updates.selected_size !== undefined) {
       item.selected_size = updates.selected_size;
@@ -1768,24 +1778,29 @@ app.patch('/api/cart/items/:cart_item_id', authenticateToken, async (req: AuthRe
       item.special_instructions = updates.special_instructions;
     }
 
-    // Recalculate item total
-    let item_total = item.base_price + (item.size_price_adjustment || 0);
-    for (const addon of item.selected_addons) {
-      item_total += addon.price;
+    // Recalculate item total if item still exists
+    if (updates.quantity === undefined || updates.quantity > 0) {
+      let item_total = item.base_price + (item.size_price_adjustment || 0);
+      for (const addon of item.selected_addons) {
+        item_total += addon.price;
+      }
+      for (const mod of item.selected_modifications) {
+        item_total += mod.price;
+      }
+      item_total *= item.quantity;
+      item.item_total_price = parseFloat(item_total.toFixed(2));
     }
-    for (const mod of item.selected_modifications) {
-      item_total += mod.price;
-    }
-    item_total *= item.quantity;
-    item.item_total_price = parseFloat(item_total.toFixed(2));
 
     carts.set(req.user.user_id, cart);
 
-    const restaurantResult = await pool.query(
-      'SELECT restaurant_id, restaurant_name, delivery_fee FROM restaurants WHERE restaurant_id = $1',
-      [cart.restaurant_id]
-    );
-    const restaurant = restaurantResult.rows[0];
+    let restaurant = null;
+    if (cart.restaurant_id) {
+      const restaurantResult = await pool.query(
+        'SELECT restaurant_id, restaurant_name, delivery_fee FROM restaurants WHERE restaurant_id = $1',
+        [cart.restaurant_id]
+      );
+      restaurant = restaurantResult.rows[0];
+    }
 
     const totals = calculateCartTotals(cart, restaurant);
 
@@ -1812,10 +1827,28 @@ app.delete('/api/cart/items/:cart_item_id', authenticateToken, async (req: AuthR
 
     const cart = carts.get(req.user.user_id);
     if (!cart) {
-      return res.json({ message: 'Item removed from cart' });
+      return res.json({
+        restaurant_id: null,
+        restaurant_name: null,
+        items: [],
+        applied_discount: null,
+        subtotal: 0,
+        discount_amount: 0,
+        delivery_fee: 0,
+        tax: 0,
+        tip: 0,
+        grand_total: 0
+      });
     }
 
     cart.items = cart.items.filter(item => item.cart_item_id !== cart_item_id);
+    
+    if (cart.items.length === 0) {
+      cart.restaurant_id = null;
+      cart.restaurant_name = null;
+      cart.applied_discount = null;
+    }
+    
     carts.set(req.user.user_id, cart);
 
     let restaurant = null;
@@ -1849,7 +1882,19 @@ app.delete('/api/cart/items/:cart_item_id', authenticateToken, async (req: AuthR
 app.delete('/api/cart', authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
     carts.delete(req.user.user_id);
-    res.json({ message: 'Cart cleared successfully' });
+    
+    res.json({
+      restaurant_id: null,
+      restaurant_name: null,
+      items: [],
+      applied_discount: null,
+      subtotal: 0,
+      discount_amount: 0,
+      delivery_fee: 0,
+      tax: 0,
+      tip: 0,
+      grand_total: 0
+    });
   } catch (error) {
     console.error('Clear cart error:', error);
     res.status(500).json(createErrorResponse('Internal server error', error, 'INTERNAL_ERROR'));

@@ -348,21 +348,12 @@ const UV_Cart: React.FC = () => {
   const clearCartMutation = useMutation({
     mutationFn: () => clearCart(authToken!),
     onSuccess: () => {
-      queryClient.setQueryData(['cart'], {
-        restaurant_id: null,
-        restaurant_name: null,
-        items: [],
-        applied_discount: null,
-        subtotal: 0,
-        delivery_fee: 0,
-        tax: 0,
-        tip: 0,
-        grand_total: 0,
-      });
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
       showToast('Cart cleared successfully', 'success');
     },
     onError: () => {
       showToast('Failed to clear cart', 'error');
+      refetchCart();
     },
   });
 
@@ -372,7 +363,12 @@ const UV_Cart: React.FC = () => {
 
   const handleQuantityChange = (cartItemId: string, currentQuantity: number, change: number) => {
     const newQuantity = currentQuantity + change;
-    if (newQuantity >= 1) {
+    if (newQuantity <= 0) {
+      const item = cartData?.items.find(i => i.cart_item_id === cartItemId);
+      if (item && window.confirm(`Remove ${item.item_name} from your cart?`)) {
+        removeItemMutation.mutate(cartItemId);
+      }
+    } else {
       updateQuantityMutation.mutate({ cartItemId, quantity: newQuantity });
     }
   };
