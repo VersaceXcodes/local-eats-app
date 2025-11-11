@@ -555,25 +555,63 @@ const UV_Favorites: React.FC = () => {
 
           {/* Empty State - No Favorites */}
           {!isLoading && !error && filteredAndSortedFavorites.length === 0 && !searchQuery && activeFilterCount === 0 && (
-            <div className="text-center py-16">
-              <Heart className="mx-auto h-16 w-16 text-gray-300 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">You haven't saved any favorites yet</h3>
-              <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                Browse restaurants and save your favorites for quick access
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Link
-                  to="/"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-orange-600 text-white rounded-lg font-medium hover:bg-orange-700 transition-colors"
-                >
-                  Explore Restaurants
-                </Link>
-                <Link
-                  to="/local-picks"
-                  className="inline-flex items-center justify-center px-6 py-3 border border-gray-300 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-                >
-                  Explore Local Picks
-                </Link>
+            <div className="bg-white rounded-2xl shadow-xl p-12 text-center relative overflow-hidden max-w-2xl mx-auto">
+              {/* Decorative background */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-red-100 to-pink-100 rounded-full blur-3xl opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-br from-orange-100 to-red-100 rounded-full blur-3xl opacity-50"></div>
+              
+              {/* Content */}
+              <div className="relative z-10">
+                {/* Heart illustration */}
+                <div className="relative inline-block mb-6">
+                  <div className="absolute inset-0 bg-red-200 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-red-100 to-pink-100 rounded-full p-8 mb-2">
+                    <Heart className="w-20 h-20 text-red-500 mx-auto" strokeWidth={1.5} />
+                  </div>
+                  {/* Floating food icons */}
+                  <div className="absolute -top-2 -right-2 text-3xl animate-bounce">❤️</div>
+                  <div className="absolute -bottom-2 -left-2 text-2xl animate-bounce animation-delay-2000">⭐</div>
+                </div>
+                
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">You haven't saved any favorites yet</h3>
+                <p className="text-gray-600 mb-8 max-w-md mx-auto leading-relaxed">
+                  Start building your collection of favorite local restaurants. When you find something you love, tap the heart to save it here!
+                </p>
+                
+                {/* Action buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center mb-8">
+                  <Link
+                    to="/"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl font-semibold hover:from-orange-700 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    <span>Explore Restaurants</span>
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </Link>
+                  <Link
+                    to="/local-picks"
+                    className="inline-flex items-center justify-center px-8 py-4 border-2 border-orange-200 bg-white text-orange-600 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-200"
+                  >
+                    Explore Local Picks
+                  </Link>
+                </div>
+
+                {/* Info cards */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-6 border-t border-gray-100">
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">🔖</div>
+                    <div className="text-xs text-gray-600">Quick Access</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">🎯</div>
+                    <div className="text-xs text-gray-600">Track Favorites</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl mb-1">💝</div>
+                    <div className="text-xs text-gray-600">Easy Ordering</div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

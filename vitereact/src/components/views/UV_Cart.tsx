@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { ShoppingCart, Plus, Minus, Edit2, Trash2, X, Tag, AlertCircle, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Edit2, Trash2, X, Tag, AlertCircle, CheckCircle2, ArrowLeft, Search } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -480,19 +480,68 @@ const UV_Cart: React.FC = () => {
   if (!cartData || cartData.items.length === 0) {
     return (
       <>
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mx-auto">
-            <div className="bg-white rounded-xl shadow-lg p-12 text-center">
-              <ShoppingCart className="size-24 text-gray-300 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
-              <p className="text-gray-600 mb-8 text-lg">Start adding items to create your order</p>
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-              >
-                <ArrowLeft className="size-5" />
-                Browse Restaurants
-              </Link>
+            <div className="bg-white rounded-2xl shadow-xl p-12 text-center relative overflow-hidden">
+              {/* Decorative background */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-orange-100 to-red-100 rounded-full blur-3xl opacity-50"></div>
+              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-br from-amber-100 to-orange-100 rounded-full blur-3xl opacity-50"></div>
+              
+              {/* Content */}
+              <div className="relative z-10">
+                {/* Shopping cart illustration */}
+                <div className="relative inline-block mb-6">
+                  <div className="absolute inset-0 bg-orange-200 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                  <div className="relative bg-gradient-to-br from-orange-100 to-red-100 rounded-full p-8 mb-2">
+                    <ShoppingCart className="w-24 h-24 text-orange-500 mx-auto" strokeWidth={1.5} />
+                  </div>
+                  {/* Floating food icons */}
+                  <div className="absolute -top-2 -right-2 text-4xl animate-bounce">🍕</div>
+                  <div className="absolute -bottom-2 -left-2 text-3xl animate-bounce animation-delay-2000">🍔</div>
+                </div>
+                
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">Your cart is empty</h2>
+                <p className="text-gray-600 mb-8 text-lg max-w-md mx-auto">
+                  Looks like you haven't added any delicious items yet. Start exploring local restaurants!
+                </p>
+                
+                {/* Action buttons */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                  <Link
+                    to="/"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl font-semibold hover:from-orange-700 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                    Browse Restaurants
+                  </Link>
+                  <Link
+                    to="/search"
+                    className="inline-flex items-center gap-2 px-8 py-4 bg-white text-orange-600 border-2 border-orange-200 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-200"
+                  >
+                    <Search className="w-5 h-5" />
+                    Search Menu
+                  </Link>
+                </div>
+
+                {/* Quick suggestions */}
+                <div className="mt-10 pt-8 border-t border-gray-100">
+                  <p className="text-sm text-gray-500 mb-4 font-medium">Popular right now</p>
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    <Link to="/search?query=pizza" className="px-4 py-2 bg-orange-50 text-orange-700 rounded-full text-sm font-medium hover:bg-orange-100 transition-colors">
+                      🍕 Pizza
+                    </Link>
+                    <Link to="/search?query=burgers" className="px-4 py-2 bg-orange-50 text-orange-700 rounded-full text-sm font-medium hover:bg-orange-100 transition-colors">
+                      🍔 Burgers
+                    </Link>
+                    <Link to="/search?query=sushi" className="px-4 py-2 bg-orange-50 text-orange-700 rounded-full text-sm font-medium hover:bg-orange-100 transition-colors">
+                      🍣 Sushi
+                    </Link>
+                    <Link to="/search?query=tacos" className="px-4 py-2 bg-orange-50 text-orange-700 rounded-full text-sm font-medium hover:bg-orange-100 transition-colors">
+                      🌮 Tacos
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -200,36 +200,46 @@ const UV_Login: React.FC = () => {
   
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        {/* Background Image with Overlay */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-5"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200&q=80')"
-          }}
-        ></div>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-amber-50 to-red-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-10 animate-slow-zoom"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&q=80')",
+              filter: 'blur(2px)'
+            }}
+          ></div>
+          <div className="absolute top-0 -right-20 w-72 h-72 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+          <div className="absolute -bottom-20 left-10 w-72 h-72 bg-red-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-amber-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+        </div>
         
-        <div className="max-w-md w-full bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden transform transition-all duration-300 hover:shadow-2xl relative z-10">
+        <div className="max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden transform transition-all duration-300 hover:shadow-3xl relative z-10">
           {/* Header Section with Food Image */}
           <div className="relative">
             <div 
-              className="h-32 bg-cover bg-center"
+              className="h-40 bg-cover bg-center"
               style={{
-                backgroundImage: "url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80')"
+                backgroundImage: "url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80')"
               }}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-blue-600/80 to-indigo-600/90"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-orange-600/90 via-red-500/85 to-red-600/90"></div>
+              {/* Decorative food icons */}
+              <div className="absolute top-4 left-4 text-white/30 text-4xl">🍕</div>
+              <div className="absolute top-6 right-8 text-white/20 text-3xl">🍔</div>
+              <div className="absolute bottom-4 right-4 text-white/25 text-3xl">🌮</div>
             </div>
-            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-xl border-4 border-white">
-                <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-600 shadow-2xl border-4 border-white ring-4 ring-orange-100">
+                <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
             </div>
           </div>
-          <div className="px-8 pt-12 pb-6 text-center bg-gradient-to-b from-blue-50/50 to-white">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+          <div className="px-8 pt-14 pb-6 text-center">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-2">Welcome Back</h1>
             <p className="text-gray-600 leading-relaxed">Sign in to continue your culinary journey</p>
           </div>
 

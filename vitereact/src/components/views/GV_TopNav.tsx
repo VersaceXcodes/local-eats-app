@@ -426,11 +426,17 @@ const GV_TopNav: React.FC = () => {
             {/* ============================================================ */}
             
             <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-all duration-200 group">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                  <UtensilsCrossed className="w-6 h-6 text-white" />
+              <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-all duration-200 group">
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                  <div className="relative w-11 h-11 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all group-hover:scale-105">
+                    <div className="text-xl">🍽️</div>
+                  </div>
                 </div>
-                <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Local Eats</span>
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent leading-tight">Local Eats</span>
+                  <span className="text-xs text-gray-500 font-medium">Hidden Gems</span>
+                </div>
               </Link>
             </div>
 

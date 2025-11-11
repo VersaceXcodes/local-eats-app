@@ -471,35 +471,46 @@ const UV_Landing: React.FC = () => {
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50">
         {/* Hero Section - Unauthenticated users only */}
         {!isAuthenticated && !heroDismissed && (
-          <section className="relative bg-gradient-to-r from-orange-600 via-red-500 to-red-600 text-white py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-            {/* Background Image with Overlay */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-20"
-              style={{
-                backgroundImage: "url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80')",
-                backgroundBlendMode: 'multiply'
-              }}
-            ></div>
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-600/90 via-red-500/90 to-red-600/90"></div>
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+          <section className="relative bg-gradient-to-r from-orange-600 via-red-500 to-red-600 text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            {/* Multi-layered Background with Food Images */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-25 scale-110 animate-slow-zoom"
+                style={{
+                  backgroundImage: "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1600&q=80')",
+                  filter: 'brightness(0.8) contrast(1.1)'
+                }}
+              ></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-600/95 via-red-500/90 to-red-600/95"></div>
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+            </div>
+
             <button
               onClick={handleDismissHero}
-              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-all duration-200 hover:rotate-90 z-10"
+              className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-all duration-200 hover:rotate-90 z-10 backdrop-blur-sm"
               aria-label="Dismiss hero section"
             >
               <X className="w-5 h-5" />
             </button>
+            
             <div className="max-w-7xl mx-auto text-center relative z-10">
-              <div className="inline-block mb-6 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold animate-bounce">
-                🎉 New users get 20% off first order
+              <div className="inline-flex items-center gap-2 mb-6 px-5 py-2.5 bg-white/20 backdrop-blur-md rounded-full text-sm font-bold animate-bounce shadow-xl border border-white/30">
+                <span className="text-2xl">🎉</span>
+                <span>New users get 20% off first order</span>
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight drop-shadow-lg animate-fade-in">
-                Discover Hidden Gem<br />Restaurants
+              
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 leading-tight drop-shadow-2xl">
+                Discover Hidden Gem<br />
+                <span className="bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text text-transparent">
+                  Restaurants
+                </span>
               </h1>
-              <p className="text-xl md:text-2xl mb-10 text-orange-50 max-w-3xl mx-auto leading-relaxed">
-                Support local eateries, earn rewards, and enjoy exclusive deals
+              
+              <p className="text-xl md:text-2xl mb-12 text-orange-50 max-w-3xl mx-auto leading-relaxed drop-shadow-lg">
+                Support local eateries, earn rewards, and enjoy exclusive deals from your neighborhood's best kept secrets
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
                 <Link
                   to="/signup"
                   className="inline-flex items-center px-8 py-4 bg-white text-orange-600 rounded-xl font-bold text-lg hover:bg-orange-50 transition-all duration-200 shadow-2xl hover:shadow-3xl transform hover:scale-105 active:scale-95 group"
@@ -511,10 +522,30 @@ const UV_Landing: React.FC = () => {
                 </Link>
                 <Link
                   to="/search"
-                  className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white rounded-xl font-semibold text-lg hover:bg-white/10 transition-all duration-200 backdrop-blur-sm"
+                  className="inline-flex items-center px-8 py-4 bg-white/10 border-2 border-white/50 text-white rounded-xl font-semibold text-lg hover:bg-white/20 transition-all duration-200 backdrop-blur-md shadow-xl"
                 >
                   Browse Restaurants
                 </Link>
+              </div>
+
+              {/* Feature highlights */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                  <div className="text-3xl mb-2">🍕</div>
+                  <div className="text-sm font-semibold">Local Favorites</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                  <div className="text-3xl mb-2">🎁</div>
+                  <div className="text-sm font-semibold">Exclusive Deals</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                  <div className="text-3xl mb-2">⭐</div>
+                  <div className="text-sm font-semibold">Earn Rewards</div>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+                  <div className="text-3xl mb-2">🚚</div>
+                  <div className="text-sm font-semibold">Fast Delivery</div>
+                </div>
               </div>
             </div>
           </section>

@@ -17,34 +17,41 @@ const UV_404: React.FC = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
-        <div className="max-w-2xl w-full">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-red-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative overflow-hidden">
+        {/* Animated background blobs */}
+        <div className="absolute top-20 -right-20 w-72 h-72 bg-orange-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute -bottom-20 left-10 w-72 h-72 bg-red-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        
+        <div className="max-w-2xl w-full relative z-10">
           {/* Main Error Content - Centered Card */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden p-8 lg:p-12 text-center">
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden p-8 lg:p-12 text-center">
             
-            {/* 404 Icon & Number */}
+            {/* 404 Icon & Illustration */}
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <SearchX className="w-24 h-24 text-orange-500 animate-pulse" strokeWidth={1.5} />
-                <div className="absolute -top-2 -right-2 w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                  <span className="text-orange-600 font-bold text-sm">?</span>
+                <div className="absolute inset-0 bg-orange-200 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+                <div className="relative bg-gradient-to-br from-orange-100 to-red-100 rounded-full p-8">
+                  <SearchX className="w-24 h-24 text-orange-500" strokeWidth={1.5} />
                 </div>
+                {/* Floating food icons */}
+                <div className="absolute -top-3 -right-3 text-4xl animate-bounce">🍕</div>
+                <div className="absolute -bottom-3 -left-3 text-3xl animate-bounce animation-delay-2000">❓</div>
               </div>
             </div>
 
             {/* 404 Heading */}
-            <h1 className="text-6xl lg:text-7xl font-bold text-gray-900 mb-4 tracking-tight">
+            <h1 className="text-6xl lg:text-8xl font-extrabold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-4 tracking-tight">
               404
             </h1>
 
             {/* Primary Error Message */}
             <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3 leading-tight">
-              Oops! We couldn't find that page
+              Oops! This plate is empty
             </h2>
 
             {/* Secondary Message */}
             <p className="text-base text-gray-600 mb-8 leading-relaxed max-w-md mx-auto">
-              The page you're looking for doesn't exist or may have been moved. But don't worry—let's get you back on track!
+              The page you're looking for doesn't exist or may have been moved. But don't worry—let's get you back to delicious discoveries!
             </p>
 
             {/* Helpful Suggestions */}
@@ -77,7 +84,7 @@ const UV_404: React.FC = () => {
               {/* Primary CTA: Go to Home */}
               <Link
                 to="/"
-                className="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-orange-600 text-white font-medium rounded-lg shadow-lg hover:bg-orange-700 hover:shadow-xl transition-all duration-200 hover:scale-105"
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold rounded-xl shadow-lg hover:from-orange-700 hover:to-red-700 hover:shadow-xl transition-all duration-200 transform hover:scale-105"
               >
                 <Home className="w-5 h-5" />
                 <span>Go to Home</span>
@@ -85,11 +92,11 @@ const UV_404: React.FC = () => {
 
               {/* Secondary: Browse Restaurants */}
               <Link
-                to="/"
-                className="group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-gray-900 font-medium rounded-lg border border-gray-300 hover:bg-gray-200 transition-all duration-200"
+                to="/search"
+                className="group inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-orange-600 font-semibold rounded-xl border-2 border-orange-200 hover:bg-orange-50 transition-all duration-200"
               >
-                <UtensilsCrossed className="w-5 h-5" />
-                <span>Browse Restaurants</span>
+                <Search className="w-5 h-5" />
+                <span>Search Menu</span>
               </Link>
             </div>
 
