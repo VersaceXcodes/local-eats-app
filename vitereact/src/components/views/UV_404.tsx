@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { SearchX, Home, Search, ArrowLeft, MapPin, Star, UtensilsCrossed } from 'lucide-react';
+import { SearchX, Home, Search, ArrowLeft, MapPin, Star } from 'lucide-react';
 import { useAppStore } from '@/store/main';
 
 const UV_404: React.FC = () => {
