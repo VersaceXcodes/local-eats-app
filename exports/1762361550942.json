@@ -1,0 +1,19 @@
+{
+  "timestamp": 1762361550942,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_Landing",
+      "version": "latest"
+    }
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/vitereact/src/components/views/UV_Landing.tsx",
+      "type": "text",
+      "size": 56428,
+      "dependencies": false
+    }
+  ]
+}

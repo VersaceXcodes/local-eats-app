@@ -1,0 +1,15 @@
+{
+  "timestamp": 1762358717812,
+  "operation": {
+    "id": "db:schemas:zod"
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/backend/schema.ts",
+      "type": "text",
+      "size": 33365,
+      "dependencies": false
+    }
+  ]
+}

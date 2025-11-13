@@ -1,0 +1,15 @@
+{
+  "timestamp": 1762358919210,
+  "operation": {
+    "id": "backend:specifications:openapi"
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/backend/openapi.yaml",
+      "type": "text",
+      "size": 77270,
+      "dependencies": false
+    }
+  ]
+}

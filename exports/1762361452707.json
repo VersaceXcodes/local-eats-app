@@ -1,0 +1,19 @@
+{
+  "timestamp": 1762361452707,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_Login",
+      "version": "latest"
+    }
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/vitereact/src/components/views/UV_Login.tsx",
+      "type": "text",
+      "size": 14495,
+      "dependencies": false
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup Test</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .test { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        .pass { background: #dfd; }
+        .fail { background: #fdd; }
+    </style>
+</head>
+<body>
+    <h1>Signup Test Results</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function runTests() {
+            const results = document.getElementById('results');
+            
+            // Test 1: Without phone
+            try {
+                const res1 = await fetch('https://123local-eats-app.launchpulse.ai/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'test-' + Date.now() + '@example.com',
+                        password: 'TestPass123!',
+                        full_name: 'Test User'
+                    })
+                });
+                const data1 = await res1.json();
+                results.innerHTML += '<div class="test ' + (data1.auth_token ? 'pass' : 'fail') + '">' +
+                    'Test 1 (No phone): ' + (data1.auth_token ? '✅ PASSED' : '❌ FAILED - ' + JSON.stringify(data1)) +
+                    '</div>';
+            } catch (e) {
+                results.innerHTML += '<div class="test fail">Test 1: ❌ ERROR - ' + e.message + '</div>';
+            }
+            
+            // Test 2: With null phone
+            try {
+                const res2 = await fetch('https://123local-eats-app.launchpulse.ai/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'test-' + Date.now() + '@example.com',
+                        password: 'TestPass123!',
+                        full_name: 'Test User',
+                        phone_number: null
+                    })
+                });
+                const data2 = await res2.json();
+                results.innerHTML += '<div class="test ' + (data2.auth_token ? 'pass' : 'fail') + '">' +
+                    'Test 2 (Null phone): ' + (data2.auth_token ? '✅ PASSED' : '❌ FAILED - ' + JSON.stringify(data2)) +
+                    '</div>';
+            } catch (e) {
+                results.innerHTML += '<div class="test fail">Test 2: ❌ ERROR - ' + e.message + '</div>';
+            }
+            
+            // Test 3: With phone
+            try {
+                const res3 = await fetch('https://123local-eats-app.launchpulse.ai/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'test-' + Date.now() + '@example.com',
+                        password: 'TestPass123!',
+                        full_name: 'Test User',
+                        phone_number: '+12345678901'
+                    })
+                });
+                const data3 = await res3.json();
+                results.innerHTML += '<div class="test ' + (data3.auth_token && data3.user.phone_number ? 'pass' : 'fail') + '">' +
+                    'Test 3 (With phone): ' + (data3.auth_token && data3.user.phone_number ? '✅ PASSED' : '❌ FAILED - ' + JSON.stringify(data3)) +
+                    '</div>';
+            } catch (e) {
+                results.innerHTML += '<div class="test fail">Test 3: ❌ ERROR - ' + e.message + '</div>';
+            }
+        }
+        
+        runTests();
+    </script>
+</body>
+</html>

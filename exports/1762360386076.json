@@ -1,0 +1,15 @@
+{
+  "timestamp": 1762360386076,
+  "operation": {
+    "id": "settings:config:package"
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/backend/.env",
+      "type": "text",
+      "size": 349,
+      "dependencies": false
+    }
+  ]
+}

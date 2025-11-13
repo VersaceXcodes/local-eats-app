@@ -1,0 +1,19 @@
+{
+  "timestamp": 1762361448283,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "GV_TopNav",
+      "version": "latest"
+    }
+  },
+  "projectId": "local-eats-app",
+  "files": [
+    {
+      "path": "/mnt/data/local-eats-app/vitereact/src/components/views/GV_TopNav.tsx",
+      "type": "text",
+      "size": 31513,
+      "dependencies": false
+    }
+  ]
+}
