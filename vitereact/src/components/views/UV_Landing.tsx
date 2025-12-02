@@ -552,104 +552,168 @@ const UV_Landing: React.FC = () => {
         )}
 
         {/* Stats Section */}
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white border-y border-gray-200">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-orange-50 via-white to-red-50 border-y border-gray-200 relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmN2E0NSIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-40"></div>
+          
+          <div className="max-w-7xl mx-auto relative z-10">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 rounded-full">
+                <TrendingUp className="w-5 h-5 text-orange-600" />
+                <span className="text-sm font-semibold text-orange-800">Our Impact</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
                 Supporting Local Communities
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Join thousands of food lovers discovering hidden gems and supporting local restaurants
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Join thousands of food lovers discovering hidden gems and making a real difference in their neighborhoods
               </p>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="mb-3">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl">
-                    <svg className="w-8 h-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+              <div className="text-center transform hover:scale-105 transition-transform duration-300">
+                <div className="mb-4">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow">
+                    <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                   </div>
                 </div>
-                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
-                  500+
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-3">
+                  750+
                 </div>
-                <div className="text-sm md:text-base text-gray-600 font-medium">
+                <div className="text-base md:text-lg text-gray-700 font-semibold">
                   Local Restaurants
+                </div>
+                <div className="text-sm text-gray-500 mt-1">
+                  And growing daily
                 </div>
               </div>
 
-              <div className="text-center">
-                <div className="mb-3">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl">
-                    <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="text-center transform hover:scale-105 transition-transform duration-300">
+                <div className="mb-4">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow">
+                    <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
                 </div>
-                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
-                  50K+
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3">
+                  100K+
                 </div>
-                <div className="text-sm md:text-base text-gray-600 font-medium">
+                <div className="text-base md:text-lg text-gray-700 font-semibold">
                   Happy Customers
+                </div>
+                <div className="text-sm text-gray-500 mt-1">
+                  Loving local food
                 </div>
               </div>
 
-              <div className="text-center">
-                <div className="mb-3">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl">
-                    <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="text-center transform hover:scale-105 transition-transform duration-300">
+                <div className="mb-4">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow">
+                    <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                 </div>
-                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
-                  200K+
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-3">
+                  500K+
                 </div>
-                <div className="text-sm md:text-base text-gray-600 font-medium">
+                <div className="text-base md:text-lg text-gray-700 font-semibold">
                   Orders Delivered
+                </div>
+                <div className="text-sm text-gray-500 mt-1">
+                  With care and speed
                 </div>
               </div>
 
-              <div className="text-center">
-                <div className="mb-3">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-100 to-amber-100 rounded-2xl">
-                    <Star className="w-8 h-8 text-yellow-600 fill-yellow-600" />
+              <div className="text-center transform hover:scale-105 transition-transform duration-300">
+                <div className="mb-4">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow">
+                    <Star className="w-10 h-10 text-white fill-white" />
                   </div>
                 </div>
-                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
-                  4.8
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent mb-3">
+                  4.9
                 </div>
-                <div className="text-sm md:text-base text-gray-600 font-medium">
+                <div className="text-base md:text-lg text-gray-700 font-semibold">
                   Average Rating
+                </div>
+                <div className="text-sm text-gray-500 mt-1">
+                  Out of 5 stars
                 </div>
               </div>
             </div>
 
-            {/* Additional stats row */}
-            <div className="mt-12 pt-12 border-t border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div>
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <TrendingUp className="w-6 h-6 text-orange-600" />
-                    <span className="text-2xl font-bold text-gray-900">$2.5M+</span>
+            {/* Additional stats row with enhanced visuals */}
+            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-3 mb-3">
+                    <div className="p-3 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl">
+                      <TrendingUp className="w-7 h-7 text-orange-600" />
+                    </div>
+                    <span className="text-4xl font-black text-gray-900">$5M+</span>
                   </div>
-                  <p className="text-gray-600">Supporting local businesses annually</p>
+                  <p className="text-gray-600 font-medium text-lg">Supporting local businesses annually</p>
+                  <div className="mt-3 inline-flex items-center gap-1 text-green-600 text-sm font-semibold">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd" />
+                    </svg>
+                    +45% this year
+                  </div>
                 </div>
-                <div>
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <Clock className="w-6 h-6 text-green-600" />
-                    <span className="text-2xl font-bold text-gray-900">30 min</span>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-3 mb-3">
+                    <div className="p-3 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl">
+                      <Clock className="w-7 h-7 text-green-600" />
+                    </div>
+                    <span className="text-4xl font-black text-gray-900">25 min</span>
                   </div>
-                  <p className="text-gray-600">Average delivery time</p>
+                  <p className="text-gray-600 font-medium text-lg">Average delivery time</p>
+                  <div className="mt-3 inline-flex items-center gap-1 text-green-600 text-sm font-semibold">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    5 min faster
+                  </div>
                 </div>
-                <div>
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <Tag className="w-6 h-6 text-red-600" />
-                    <span className="text-2xl font-bold text-gray-900">15%</span>
+                <div className="text-center">
+                  <div className="flex items-center justify-center gap-3 mb-3">
+                    <div className="p-3 bg-gradient-to-br from-red-100 to-pink-100 rounded-2xl">
+                      <Tag className="w-7 h-7 text-red-600" />
+                    </div>
+                    <span className="text-4xl font-black text-gray-900">20%</span>
                   </div>
-                  <p className="text-gray-600">Average savings with deals</p>
+                  <p className="text-gray-600 font-medium text-lg">Average savings with exclusive deals</p>
+                  <div className="mt-3 inline-flex items-center gap-1 text-orange-600 text-sm font-semibold">
+                    <Sparkles className="w-4 h-4" />
+                    New deals weekly
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust indicators */}
+            <div className="mt-16 text-center">
+              <p className="text-gray-500 text-sm mb-6 font-medium">TRUSTED BY FOOD LOVERS EVERYWHERE</p>
+              <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
+                <div className="flex items-center gap-2 text-gray-600">
+                  <div className="flex -space-x-2">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-red-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">A</div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">B</div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">C</div>
+                  </div>
+                  <span className="font-semibold">25K+ Reviews</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Truck className="w-6 h-6 text-orange-600" />
+                  <span className="font-semibold">98% On-time Delivery</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <Heart className="w-6 h-6 text-red-600 fill-red-600" />
+                  <span className="font-semibold">1M+ Favorites Saved</span>
                 </div>
               </div>
             </div>
