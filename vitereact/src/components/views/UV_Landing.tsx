@@ -551,6 +551,111 @@ const UV_Landing: React.FC = () => {
           </section>
         )}
 
+        {/* Stats Section */}
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white border-y border-gray-200">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                Supporting Local Communities
+              </h2>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Join thousands of food lovers discovering hidden gems and supporting local restaurants
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="mb-3">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl">
+                    <svg className="w-8 h-8 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+                  500+
+                </div>
+                <div className="text-sm md:text-base text-gray-600 font-medium">
+                  Local Restaurants
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="mb-3">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl">
+                    <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+                  50K+
+                </div>
+                <div className="text-sm md:text-base text-gray-600 font-medium">
+                  Happy Customers
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="mb-3">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl">
+                    <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+                  200K+
+                </div>
+                <div className="text-sm md:text-base text-gray-600 font-medium">
+                  Orders Delivered
+                </div>
+              </div>
+
+              <div className="text-center">
+                <div className="mb-3">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-yellow-100 to-amber-100 rounded-2xl">
+                    <Star className="w-8 h-8 text-yellow-600 fill-yellow-600" />
+                  </div>
+                </div>
+                <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">
+                  4.8
+                </div>
+                <div className="text-sm md:text-base text-gray-600 font-medium">
+                  Average Rating
+                </div>
+              </div>
+            </div>
+
+            {/* Additional stats row */}
+            <div className="mt-12 pt-12 border-t border-gray-200">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <TrendingUp className="w-6 h-6 text-orange-600" />
+                    <span className="text-2xl font-bold text-gray-900">$2.5M+</span>
+                  </div>
+                  <p className="text-gray-600">Supporting local businesses annually</p>
+                </div>
+                <div>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Clock className="w-6 h-6 text-green-600" />
+                    <span className="text-2xl font-bold text-gray-900">30 min</span>
+                  </div>
+                  <p className="text-gray-600">Average delivery time</p>
+                </div>
+                <div>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <Tag className="w-6 h-6 text-red-600" />
+                    <span className="text-2xl font-bold text-gray-900">15%</span>
+                  </div>
+                  <p className="text-gray-600">Average savings with deals</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Weekly Local Picks */}
         {weeklyPicks && weeklyPicks.picks.length > 0 && (
           <section className="py-12 lg:py-20 px-4 sm:px-6 lg:px-8">
