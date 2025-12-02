@@ -579,14 +579,14 @@ const UV_Landing: React.FC = () => {
                     </svg>
                   </div>
                 </div>
-                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-3">
-                  750+
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mb-3 animate-pulse">
+                  1,200+
                 </div>
                 <div className="text-base md:text-lg text-gray-700 font-semibold">
                   Local Restaurants
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  And growing daily
+                  Across 50 cities
                 </div>
               </div>
 
@@ -598,14 +598,14 @@ const UV_Landing: React.FC = () => {
                     </svg>
                   </div>
                 </div>
-                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3">
-                  100K+
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 animate-pulse">
+                  250K+
                 </div>
                 <div className="text-base md:text-lg text-gray-700 font-semibold">
-                  Happy Customers
+                  Active Users
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  Loving local food
+                  Monthly food lovers
                 </div>
               </div>
 
@@ -617,14 +617,14 @@ const UV_Landing: React.FC = () => {
                     </svg>
                   </div>
                 </div>
-                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-3">
-                  500K+
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mb-3 animate-pulse">
+                  2M+
                 </div>
                 <div className="text-base md:text-lg text-gray-700 font-semibold">
                   Orders Delivered
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  With care and speed
+                  With 99% satisfaction
                 </div>
               </div>
 
@@ -634,62 +634,84 @@ const UV_Landing: React.FC = () => {
                     <Star className="w-10 h-10 text-white fill-white" />
                   </div>
                 </div>
-                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent mb-3">
-                  4.9
+                <div className="text-5xl md:text-6xl font-black bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent mb-3 animate-pulse">
+                  4.8
                 </div>
                 <div className="text-base md:text-lg text-gray-700 font-semibold">
-                  Average Rating
+                  Platform Rating
                 </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  Out of 5 stars
+                  From 50K+ reviews
                 </div>
               </div>
             </div>
 
             {/* Additional stats row with enhanced visuals */}
-            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+            <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-gray-100">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                <div className="text-center">
+                <div className="text-center group hover:scale-105 transition-transform duration-300">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="p-3 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl">
+                    <div className="p-3 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl group-hover:shadow-lg transition-shadow">
                       <TrendingUp className="w-7 h-7 text-orange-600" />
                     </div>
-                    <span className="text-4xl font-black text-gray-900">$5M+</span>
+                    <span className="text-4xl md:text-5xl font-black text-gray-900">$12M+</span>
                   </div>
                   <p className="text-gray-600 font-medium text-lg">Supporting local businesses annually</p>
                   <div className="mt-3 inline-flex items-center gap-1 text-green-600 text-sm font-semibold">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clipRule="evenodd" />
                     </svg>
-                    +45% this year
+                    +78% this year
                   </div>
                 </div>
-                <div className="text-center">
+                <div className="text-center group hover:scale-105 transition-transform duration-300">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="p-3 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl">
+                    <div className="p-3 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl group-hover:shadow-lg transition-shadow">
                       <Clock className="w-7 h-7 text-green-600" />
                     </div>
-                    <span className="text-4xl font-black text-gray-900">25 min</span>
+                    <span className="text-4xl md:text-5xl font-black text-gray-900">22 min</span>
                   </div>
                   <p className="text-gray-600 font-medium text-lg">Average delivery time</p>
                   <div className="mt-3 inline-flex items-center gap-1 text-green-600 text-sm font-semibold">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    5 min faster
+                    8 min faster than average
                   </div>
                 </div>
-                <div className="text-center">
+                <div className="text-center group hover:scale-105 transition-transform duration-300">
                   <div className="flex items-center justify-center gap-3 mb-3">
-                    <div className="p-3 bg-gradient-to-br from-red-100 to-pink-100 rounded-2xl">
+                    <div className="p-3 bg-gradient-to-br from-red-100 to-pink-100 rounded-2xl group-hover:shadow-lg transition-shadow">
                       <Tag className="w-7 h-7 text-red-600" />
                     </div>
-                    <span className="text-4xl font-black text-gray-900">20%</span>
+                    <span className="text-4xl md:text-5xl font-black text-gray-900">25%</span>
                   </div>
                   <p className="text-gray-600 font-medium text-lg">Average savings with exclusive deals</p>
                   <div className="mt-3 inline-flex items-center gap-1 text-orange-600 text-sm font-semibold">
                     <Sparkles className="w-4 h-4" />
-                    New deals weekly
+                    50+ new deals weekly
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional impressive metrics */}
+              <div className="mt-12 pt-12 border-t-2 border-gray-100">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-black text-orange-600 mb-2">95%</div>
+                    <div className="text-sm text-gray-600 font-medium">Customer Retention Rate</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-black text-green-600 mb-2">3.2M</div>
+                    <div className="text-sm text-gray-600 font-medium">Community Reviews</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-black text-blue-600 mb-2">$45</div>
+                    <div className="text-sm text-gray-600 font-medium">Average Order Value</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-black text-purple-600 mb-2">4.2</div>
+                    <div className="text-sm text-gray-600 font-medium">Orders Per User/Month</div>
                   </div>
                 </div>
               </div>
@@ -697,23 +719,28 @@ const UV_Landing: React.FC = () => {
 
             {/* Trust indicators */}
             <div className="mt-16 text-center">
-              <p className="text-gray-500 text-sm mb-6 font-medium">TRUSTED BY FOOD LOVERS EVERYWHERE</p>
+              <p className="text-gray-500 text-sm mb-6 font-medium tracking-wider">TRUSTED BY FOOD LOVERS EVERYWHERE</p>
               <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 hover:text-orange-600 transition-colors">
                   <div className="flex -space-x-2">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-red-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">A</div>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">B</div>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm">C</div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-red-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm shadow-md">A</div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm shadow-md">B</div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm shadow-md">C</div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 border-2 border-white flex items-center justify-center text-white font-bold text-sm shadow-md">D</div>
                   </div>
-                  <span className="font-semibold">25K+ Reviews</span>
+                  <span className="font-semibold">50K+ Verified Reviews</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 hover:text-green-600 transition-colors">
                   <Truck className="w-6 h-6 text-orange-600" />
-                  <span className="font-semibold">98% On-time Delivery</span>
+                  <span className="font-semibold">99% On-time Delivery</span>
                 </div>
-                <div className="flex items-center gap-2 text-gray-600">
+                <div className="flex items-center gap-2 text-gray-600 hover:text-red-600 transition-colors">
                   <Heart className="w-6 h-6 text-red-600 fill-red-600" />
-                  <span className="font-semibold">1M+ Favorites Saved</span>
+                  <span className="font-semibold">2.5M+ Favorites Saved</span>
+                </div>
+                <div className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+                  <ShoppingBag className="w-6 h-6 text-blue-600" />
+                  <span className="font-semibold">85% Repeat Customers</span>
                 </div>
               </div>
             </div>
