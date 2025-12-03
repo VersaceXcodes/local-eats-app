@@ -3,7 +3,8 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles, Truck, ShoppingBag } from 'lucide-react';
+import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles, Truck, ShoppingBag, Mail, CheckCircle2 } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -197,6 +198,9 @@ const UV_Landing: React.FC = () => {
   const [ctaSectionDismissed, setCtaSectionDismissed] = useState(() => {
     return sessionStorage.getItem('cta_section_dismissed') === 'true';
   });
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const [newsletterError, setNewsletterError] = useState('');
 
   // Parse URL params for filters
   const urlFilters = useMemo(() => ({
@@ -304,6 +308,32 @@ const UV_Landing: React.FC = () => {
   // ============================================================================
   // HANDLERS
   // ============================================================================
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setNewsletterError('');
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newsletterEmail)) {
+      setNewsletterError('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      // Simulate API call - replace with actual endpoint when available
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setNewsletterSubmitted(true);
+      setNewsletterEmail('');
+      
+      // Reset after 5 seconds
+      setTimeout(() => {
+        setNewsletterSubmitted(false);
+      }, 5000);
+    } catch (error) {
+      setNewsletterError('Something went wrong. Please try again.');
+    }
+  };
 
   const handleToggleFavorite = (restaurant_id: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -742,6 +772,116 @@ const UV_Landing: React.FC = () => {
                   <ShoppingBag className="w-6 h-6 text-blue-600" />
                   <span className="font-semibold">85% Repeat Customers</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Newsletter Sign Up Section */}
+        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600 relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-40"></div>
+          </div>
+          
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl mb-6 shadow-xl">
+              <Mail className="w-10 h-10 text-white" />
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight">
+              Never Miss a Delicious Deal
+            </h2>
+            
+            <p className="text-xl md:text-2xl text-orange-50 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Get weekly restaurant picks, exclusive offers, and local food updates delivered straight to your inbox
+            </p>
+
+            {/* Benefits */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 max-w-3xl mx-auto">
+              <div className="flex flex-col items-center gap-2 text-white">
+                <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-2">
+                  <Tag className="w-7 h-7" />
+                </div>
+                <span className="font-semibold text-lg">Exclusive Discounts</span>
+                <span className="text-sm text-orange-100">Up to 30% off</span>
+              </div>
+              <div className="flex flex-col items-center gap-2 text-white">
+                <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-2">
+                  <Flame className="w-7 h-7" />
+                </div>
+                <span className="font-semibold text-lg">Weekly Picks</span>
+                <span className="text-sm text-orange-100">Curated just for you</span>
+              </div>
+              <div className="flex flex-col items-center gap-2 text-white">
+                <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-2">
+                  <Sparkles className="w-7 h-7" />
+                </div>
+                <span className="font-semibold text-lg">Early Access</span>
+                <span className="text-sm text-orange-100">New restaurants first</span>
+              </div>
+            </div>
+
+            {/* Newsletter Form */}
+            {!newsletterSubmitted ? (
+              <form onSubmit={handleNewsletterSubmit} className="max-w-xl mx-auto">
+                <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                  <div className="flex-1">
+                    <Input
+                      type="email"
+                      placeholder="Enter your email address"
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      className="w-full h-14 px-6 text-lg bg-white/95 backdrop-blur-sm border-2 border-white/50 rounded-xl focus:border-white focus:ring-4 focus:ring-white/30 placeholder:text-gray-400 text-gray-900"
+                      required
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="px-8 py-4 bg-white text-orange-600 rounded-xl font-bold text-lg hover:bg-orange-50 transition-all duration-200 shadow-2xl hover:shadow-3xl transform hover:scale-105 active:scale-95 whitespace-nowrap flex items-center justify-center gap-2"
+                  >
+                    <Mail className="w-5 h-5" />
+                    <span>Subscribe</span>
+                  </button>
+                </div>
+                
+                {newsletterError && (
+                  <p className="text-white bg-red-500/30 backdrop-blur-sm px-4 py-2 rounded-lg border border-red-300/30">
+                    {newsletterError}
+                  </p>
+                )}
+                
+                <p className="text-sm text-orange-100">
+                  Join 50,000+ food lovers. Unsubscribe anytime. No spam, we promise! 🍕
+                </p>
+              </form>
+            ) : (
+              <div className="max-w-xl mx-auto bg-white/20 backdrop-blur-sm rounded-2xl p-8 border-2 border-white/30 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4 animate-in zoom-in duration-300">
+                  <CheckCircle2 className="w-10 h-10 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  You're all set!
+                </h3>
+                <p className="text-orange-100 text-lg">
+                  Check your inbox for a welcome email with your first exclusive deal 🎉
+                </p>
+              </div>
+            )}
+
+            {/* Trust Badge */}
+            <div className="mt-8 flex items-center justify-center gap-6 flex-wrap text-white/80 text-sm">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5" />
+                <span>No spam, ever</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5" />
+                <span>Unsubscribe anytime</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5" />
+                <span>50K+ subscribers</span>
               </div>
             </div>
           </div>
