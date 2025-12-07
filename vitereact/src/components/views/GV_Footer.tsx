@@ -9,9 +9,10 @@ const GV_Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           {/* Copyright */}
-          <p className="text-gray-400 text-sm text-center md:text-left">
-            © {currentYear} Local Eats. All rights reserved.
-          </p>
+          <div className="text-gray-400 text-sm text-center md:text-left">
+            <p>© {currentYear} Local Eats. All rights reserved.</p>
+            <p>Dublin, Ireland</p>
+          </div>
           
           {/* Links */}
           <div className="flex items-center justify-center md:justify-end gap-6 text-gray-400 text-sm">
