@@ -3,6 +3,17 @@ import { Link } from 'react-router-dom';
 
 const GV_Footer: React.FC = () => {
   const currentYear = useMemo(() => new Date().getFullYear(), []);
+  
+  // Generate a random address
+  const randomAddress = useMemo(() => {
+    const streets = ['Oak Street', 'Main Street', 'Elm Avenue', 'Maple Drive', 'Cedar Lane', 'Pine Road', 'Birch Boulevard', 'Willow Way', 'Cherry Street', 'Ash Avenue'];
+    const cities = ['Dublin', 'Cork', 'Galway', 'Limerick', 'Waterford', 'Kilkenny', 'Sligo', 'Drogheda'];
+    const streetNumber = Math.floor(Math.random() * 999) + 1;
+    const street = streets[Math.floor(Math.random() * streets.length)];
+    const city = cities[Math.floor(Math.random() * cities.length)];
+    
+    return `${streetNumber} ${street}, ${city}, Ireland`;
+  }, []);
 
   return (
     <footer className="bg-gray-900 py-8 mt-auto" role="contentinfo">
@@ -11,7 +22,7 @@ const GV_Footer: React.FC = () => {
           {/* Copyright */}
           <div className="text-gray-400 text-sm text-center md:text-left">
             <p>© {currentYear} Local Eats. All rights reserved.</p>
-            <p>Dublin, Ireland</p>
+            <p>{randomAddress}</p>
           </div>
           
           {/* Links */}
