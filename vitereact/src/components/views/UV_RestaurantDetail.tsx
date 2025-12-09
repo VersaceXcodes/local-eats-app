@@ -22,7 +22,8 @@ import {
   Check,
   Plus,
   Minus,
-  ShoppingCart
+  ShoppingCart,
+  CheckCircle
 } from 'lucide-react';
 
 // ============================================================================
@@ -311,6 +312,8 @@ const UV_RestaurantDetail: React.FC = () => {
   const [copiedCode, setCopiedCode] = useState(false);
   const [expandedDiscountTerms, setExpandedDiscountTerms] = useState<Set<string>>(new Set());
   const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
+  const [showAddedToast, setShowAddedToast] = useState(false);
+  const [addedItemName, setAddedItemName] = useState('');
   
   // Refs for scrolling
   const menuSectionRef = useRef<HTMLDivElement>(null);
@@ -608,8 +611,10 @@ const UV_RestaurantDetail: React.FC = () => {
     // Reset quantity for this item
     setItemQuantities(prev => ({ ...prev, [item.menu_item_id]: 1 }));
     
-    // Show feedback
-    alert(`Added ${quantity} x ${item.item_name} to cart`);
+    // Show toast notification
+    setAddedItemName(`${quantity} x ${item.item_name}`);
+    setShowAddedToast(true);
+    setTimeout(() => setShowAddedToast(false), 4000);
   };
   
   const handleQuantityChange = (itemId: string, delta: number) => {
@@ -1778,6 +1783,44 @@ const UV_RestaurantDetail: React.FC = () => {
               </button>
             </div>
           </div>
+        </div>
+      )}
+      
+      {/* Toast Notification for Added Items */}
+      {showAddedToast && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top duration-300">
+          <div className="bg-green-600 text-white px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 min-w-[300px] max-w-[90vw]">
+            <CheckCircle className="w-6 h-6 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="font-semibold">Added to cart!</p>
+              <p className="text-sm text-green-100">{addedItemName}</p>
+            </div>
+            <button
+              onClick={() => setShowAddedToast(false)}
+              className="text-white hover:text-green-100 transition-colors"
+              aria-label="Close notification"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
+      
+      {/* Floating Cart Button - Mobile Only */}
+      {cartItems.length > 0 && cartRestaurantId === restaurant_id && (
+        <div className="fixed bottom-20 right-4 z-40 md:hidden">
+          <button
+            onClick={() => navigate('/cart')}
+            className="bg-green-600 text-white p-4 rounded-full shadow-2xl hover:bg-green-700 transition-all hover:scale-110 flex items-center gap-3 pr-6"
+          >
+            <div className="relative">
+              <ShoppingCart className="w-6 h-6" />
+              <span className="absolute -top-2 -right-2 bg-white text-green-600 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {cartItems.length}
+              </span>
+            </div>
+            <span className="font-semibold">View Cart</span>
+          </button>
         </div>
       )}
     </>
