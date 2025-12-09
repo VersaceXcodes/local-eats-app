@@ -272,7 +272,7 @@ const UV_Login: React.FC = () => {
                   validationErrors.email
                     ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                     : 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                } focus:outline-none text-gray-900 dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-600 dark:bg-white dark:border-gray-600`}
+                } focus:outline-none text-gray-900 placeholder-gray-500 bg-white`}
                 aria-invalid={validationErrors.email ? 'true' : 'false'}
                 aria-describedby={validationErrors.email ? 'email-error' : undefined}
               />
@@ -312,7 +312,7 @@ const UV_Login: React.FC = () => {
                     validationErrors.password
                       ? 'border-red-500 focus:border-red-500 focus:ring-4 focus:ring-red-100'
                       : 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
-                  } focus:outline-none text-gray-900 dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-600 dark:bg-white dark:border-gray-600`}
+                  } focus:outline-none text-gray-900 placeholder-gray-500 bg-white`}
                   aria-invalid={validationErrors.password ? 'true' : 'false'}
                   aria-describedby={validationErrors.password ? 'password-error' : undefined}
                 />

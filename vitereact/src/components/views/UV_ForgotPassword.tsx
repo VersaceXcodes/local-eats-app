@@ -220,7 +220,7 @@ const UV_ForgotPassword: React.FC = () => {
                             validationErrors.email
                               ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
                               : 'border-gray-200 focus:border-blue-500 focus:ring-blue-100'
-                          } focus:ring-4 transition-all duration-200 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-600 focus:outline-none`}
+                          } focus:ring-4 transition-all duration-200 text-gray-900 placeholder-gray-400 bg-white focus:outline-none`}
                         />
                         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                           <svg className={`h-5 w-5 ${
