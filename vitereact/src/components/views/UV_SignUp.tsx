@@ -400,7 +400,7 @@ const UV_SignUp: React.FC = () => {
                   validationErrors.full_name
                     ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
                     : 'border-gray-200 focus:border-orange-500 focus:ring-orange-100'
-                } focus:outline-none focus:ring-4 text-gray-900 placeholder-gray-400`}
+                } focus:outline-none focus:ring-4 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-600`}
               />
               {validationErrors.full_name && (
                 <div className="mt-1.5 flex items-center gap-1.5 text-red-600">
@@ -435,7 +435,7 @@ const UV_SignUp: React.FC = () => {
                   validationErrors.email
                     ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
                     : 'border-gray-200 focus:border-orange-500 focus:ring-orange-100'
-                } focus:outline-none focus:ring-4 text-gray-900 placeholder-gray-400`}
+                } focus:outline-none focus:ring-4 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-600`}
               />
               {validationErrors.email && (
                 <div className="mt-1.5 flex items-center gap-1.5 text-red-600">
@@ -468,7 +468,7 @@ const UV_SignUp: React.FC = () => {
                   validationErrors.phone_number
                     ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
                     : 'border-gray-200 focus:border-orange-500 focus:ring-orange-100'
-                } focus:outline-none focus:ring-4 text-gray-900 placeholder-gray-400`}
+                } focus:outline-none focus:ring-4 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-600`}
               />
               {validationErrors.phone_number && (
                 <div className="mt-1.5 flex items-center gap-1.5 text-red-600">
@@ -503,7 +503,7 @@ const UV_SignUp: React.FC = () => {
                     validationErrors.password
                       ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
                       : 'border-gray-200 focus:border-orange-500 focus:ring-orange-100'
-                  } focus:outline-none focus:ring-4 text-gray-900 placeholder-gray-400`}
+                  } focus:outline-none focus:ring-4 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-600`}
                 />
                 <button
                   type="button"
@@ -576,7 +576,7 @@ const UV_SignUp: React.FC = () => {
                       : confirmPasswordTouched && !validationErrors.confirm_password && confirmPassword
                       ? 'border-green-300 focus:border-green-500 focus:ring-green-100'
                       : 'border-gray-200 focus:border-orange-500 focus:ring-orange-100'
-                  } focus:outline-none focus:ring-4 text-gray-900 placeholder-gray-400`}
+                  } focus:outline-none focus:ring-4 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 dark:bg-gray-800 dark:border-gray-600`}
                 />
                 <button
                   type="button"

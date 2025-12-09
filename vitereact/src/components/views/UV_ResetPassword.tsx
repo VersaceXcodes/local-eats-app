@@ -446,7 +446,7 @@ const UV_ResetPassword: React.FC = () => {
                             validationErrors.new_password
                               ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
                               : 'border-gray-300 focus:border-orange-500 focus:ring-orange-100'
-                          } rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-4 transition-colors text-sm`}
+                          } rounded-lg placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-600 focus:outline-none focus:ring-4 transition-colors text-sm`}
                         />
                         <button
                           type="button"
@@ -506,7 +506,7 @@ const UV_ResetPassword: React.FC = () => {
                             validationErrors.confirm_password
                               ? 'border-red-300 focus:border-red-500 focus:ring-red-100'
                               : 'border-gray-300 focus:border-orange-500 focus:ring-orange-100'
-                          } rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-4 transition-colors text-sm`}
+                          } rounded-lg placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 dark:bg-gray-800 dark:border-gray-600 focus:outline-none focus:ring-4 transition-colors text-sm`}
                         />
                         <button
                           type="button"
