@@ -46,4 +46,5 @@ export default defineConfig({
 	build: {
 		outDir: "public",
 	},
+	publicDir: false, // Disable public dir to avoid conflict with outDir
 });
