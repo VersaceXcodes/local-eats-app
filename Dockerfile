@@ -18,8 +18,8 @@ RUN npm ci --production
 # Copy backend source
 COPY backend ./
 
-# Copy frontend build
-COPY --from=frontend-build /app/vitereact/dist ./public
+# Copy frontend build (Vite outputs to 'public' in this project)
+COPY --from=frontend-build /app/vitereact/public ./public
 
 # Cloud Run uses PORT env var (defaults to 8080)
 ENV PORT=8080
