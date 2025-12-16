@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { Search, ShoppingCart, Bell, User, LogOut, Package, Heart, Settings, X, Clock, ChefHat, UtensilsCrossed, Filter } from 'lucide-react';
+import { Search, ShoppingCart, Bell, User, LogOut, Package, Heart, Settings, X, Clock, ChefHat, UtensilsCrossed, Filter, MapPin, AlertCircle } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -52,6 +52,7 @@ const GV_TopNav: React.FC = () => {
   const cartItems = useAppStore(state => state.cart_state.items);
   const unreadNotificationCount = useAppStore(state => state.notification_state.unread_count);
   const activeFilters = useAppStore(state => state.active_filters);
+  const locationPermissionGranted = useAppStore(state => state.user_location.permission_granted);
   const logoutUser = useAppStore(state => state.logout_user);
 
   // Calculate derived values
@@ -548,6 +549,20 @@ const GV_TopNav: React.FC = () => {
             
             <div className="flex items-center space-x-1">
               
+              {/* Map Button */}
+              <Link
+                to="/map"
+                className="relative p-2.5 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+                aria-label="Map"
+              >
+                <MapPin className="w-5 h-5" />
+                {!locationPermissionGranted && (
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5">
+                    <AlertCircle className="w-4 h-4 text-orange-500" />
+                  </span>
+                )}
+              </Link>
+
               {/* Filters Button (conditional) */}
               {showFilterButton && (
                 <button
