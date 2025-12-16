@@ -447,7 +447,7 @@ const GV_TopNav: React.FC = () => {
             
             <div className="flex-1 max-w-2xl mx-8 relative" ref={searchDropdownRef}>
               <form onSubmit={handleSearchSubmit}>
-                <div className="relative">
+                <div className="relative group">
                   <input
                     type="text"
                     placeholder="Search restaurants, cuisines, dishes..."
@@ -457,9 +457,9 @@ const GV_TopNav: React.FC = () => {
                       setSearchFocused(true);
                       setDropdownOpenState('search');
                     }}
-                    className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+                    className="w-full pl-12 pr-12 py-3.5 bg-white border-2 border-gray-200 rounded-xl text-sm font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-4 focus:ring-orange-500/20 focus:border-orange-500 hover:border-gray-300 shadow-sm hover:shadow-md transition-all duration-200"
                   />
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-orange-500 transition-colors" />
                   {searchQuery && (
                     <button
                       type="button"
@@ -467,7 +467,7 @@ const GV_TopNav: React.FC = () => {
                         setSearchQuery('');
                         setDebouncedSearchQuery('');
                       }}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all duration-200"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -477,24 +477,24 @@ const GV_TopNav: React.FC = () => {
 
               {/* Search Dropdown */}
               {dropdownOpenState === 'search' && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 max-h-[400px] overflow-y-auto z-50">
+                <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 max-h-[450px] overflow-y-auto z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                   {/* Search Suggestions */}
                   {searchQuery.trim() && searchSuggestions.length > 0 && (
-                    <div className="p-2">
-                      <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3 py-2">
+                    <div className="p-3">
+                      <div className="text-xs font-bold text-gray-500 uppercase tracking-wider px-4 py-2.5">
                         Suggestions
                       </div>
                       {searchSuggestions.map((suggestion, index) => (
                         <button
                           key={index}
                           onClick={() => handleSuggestionClick(suggestion)}
-                          className="w-full flex items-center space-x-3 px-3 py-2.5 hover:bg-gray-50 rounded-md transition-colors text-left"
+                          className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl transition-all duration-200 text-left group border border-transparent hover:border-orange-200 hover:shadow-sm"
                         >
-                          {suggestion.type === 'restaurant' && <UtensilsCrossed className="w-4 h-4 text-gray-400 flex-shrink-0" />}
-                          {suggestion.type === 'cuisine' && <ChefHat className="w-4 h-4 text-gray-400 flex-shrink-0" />}
-                          {suggestion.type === 'dish' && <UtensilsCrossed className="w-4 h-4 text-gray-400 flex-shrink-0" />}
-                          <span className="text-sm text-gray-900 flex-1">{suggestion.value}</span>
-                          <span className="text-xs text-gray-500 capitalize">{suggestion.type}</span>
+                          {suggestion.type === 'restaurant' && <UtensilsCrossed className="w-5 h-5 text-gray-400 group-hover:text-orange-500 flex-shrink-0 transition-colors" />}
+                          {suggestion.type === 'cuisine' && <ChefHat className="w-5 h-5 text-gray-400 group-hover:text-orange-500 flex-shrink-0 transition-colors" />}
+                          {suggestion.type === 'dish' && <UtensilsCrossed className="w-5 h-5 text-gray-400 group-hover:text-orange-500 flex-shrink-0 transition-colors" />}
+                          <span className="text-sm font-medium text-gray-900 flex-1 group-hover:text-orange-600 transition-colors">{suggestion.value}</span>
+                          <span className="text-xs font-semibold text-gray-500 capitalize px-2 py-1 bg-gray-100 rounded-full group-hover:bg-orange-100 group-hover:text-orange-700 transition-colors">{suggestion.type}</span>
                         </button>
                       ))}
                     </div>
@@ -502,14 +502,14 @@ const GV_TopNav: React.FC = () => {
 
                   {/* Recent Searches */}
                   {isAuthenticated && !searchQuery.trim() && recentSearches.length > 0 && (
-                    <div className="p-2">
-                      <div className="flex items-center justify-between px-3 py-2">
-                        <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    <div className="p-3">
+                      <div className="flex items-center justify-between px-4 py-2.5">
+                        <div className="text-xs font-bold text-gray-500 uppercase tracking-wider">
                           Recent Searches
                         </div>
                         <button
                           onClick={() => clearSearchHistoryMutation.mutate()}
-                          className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+                          className="text-xs text-orange-600 hover:text-orange-700 font-bold hover:underline transition-all"
                         >
                           Clear All
                         </button>
@@ -518,10 +518,10 @@ const GV_TopNav: React.FC = () => {
                         <button
                           key={search.search_id}
                           onClick={() => handleRecentSearchClick(search.search_query)}
-                          className="w-full flex items-center space-x-3 px-3 py-2.5 hover:bg-gray-50 rounded-md transition-colors text-left group"
+                          className="w-full flex items-center space-x-3 px-4 py-3 hover:bg-gradient-to-r hover:from-orange-50 hover:to-red-50 rounded-xl transition-all duration-200 text-left group border border-transparent hover:border-orange-200 hover:shadow-sm"
                         >
-                          <Clock className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                          <span className="text-sm text-gray-900 flex-1">{search.search_query}</span>
+                          <Clock className="w-5 h-5 text-gray-400 group-hover:text-orange-500 flex-shrink-0 transition-colors" />
+                          <span className="text-sm font-medium text-gray-900 flex-1 group-hover:text-orange-600 transition-colors">{search.search_query}</span>
                         </button>
                       ))}
                     </div>
@@ -529,14 +529,27 @@ const GV_TopNav: React.FC = () => {
 
                   {/* Empty State */}
                   {!searchQuery.trim() && (!isAuthenticated || recentSearches.length === 0) && (
-                    <div className="p-8 text-center text-sm text-gray-500">
-                      Start typing to search restaurants, cuisines, or dishes
+                    <div className="p-10 text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-100 to-red-100 rounded-2xl mb-4">
+                        <Search className="w-8 h-8 text-orange-500" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Start typing to search restaurants, cuisines, or dishes
+                      </p>
                     </div>
                   )}
 
                   {searchQuery.trim() && searchSuggestions.length === 0 && (
-                    <div className="p-8 text-center text-sm text-gray-500">
-                      No suggestions found. Press Enter to search.
+                    <div className="p-10 text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl mb-4">
+                        <Search className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <p className="text-sm font-semibold text-gray-700 mb-2">
+                        No suggestions found
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Press Enter to search for "{searchQuery}"
+                      </p>
                     </div>
                   )}
                 </div>
