@@ -3,7 +3,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles, Truck, ShoppingBag, Mail, CheckCircle2 } from 'lucide-react';
+import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles, Truck, ShoppingBag, Mail, CheckCircle2, Gift, Copy, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 // ============================================================================
@@ -201,6 +201,11 @@ const UV_Landing: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
   const [newsletterError, setNewsletterError] = useState('');
+  
+  // Discount popup state
+  const [showDiscountPopup, setShowDiscountPopup] = useState(false);
+  const [discountCodeCopied, setDiscountCodeCopied] = useState(false);
+  const DISCOUNT_CODE = 'WELCOME20';
 
   // Parse URL params for filters
   const urlFilters = useMemo(() => ({
@@ -222,6 +227,20 @@ const UV_Landing: React.FC = () => {
   useEffect(() => {
     setActiveFilters(urlFilters);
   }, [urlFilters]);
+
+  // Show discount popup after delay for non-authenticated users
+  useEffect(() => {
+    const hasSeenPopup = sessionStorage.getItem('discount_popup_shown');
+    
+    if (!isAuthenticated && !hasSeenPopup) {
+      const timer = setTimeout(() => {
+        setShowDiscountPopup(true);
+        sessionStorage.setItem('discount_popup_shown', 'true');
+      }, 3000); // Show after 3 seconds
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated]);
 
   // ============================================================================
   // REACT QUERY - DATA FETCHING
@@ -477,6 +496,20 @@ const UV_Landing: React.FC = () => {
   const handleDismissCTA = () => {
     setCtaSectionDismissed(true);
     sessionStorage.setItem('cta_section_dismissed', 'true');
+  };
+
+  const handleCopyDiscountCode = async () => {
+    try {
+      await navigator.clipboard.writeText(DISCOUNT_CODE);
+      setDiscountCodeCopied(true);
+      setTimeout(() => setDiscountCodeCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy discount code:', err);
+    }
+  };
+
+  const handleCloseDiscountPopup = () => {
+    setShowDiscountPopup(false);
   };
 
   // Count active filters
@@ -1736,6 +1769,129 @@ const UV_Landing: React.FC = () => {
                 >
                   Apply Filters
                 </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Discount Popup Modal */}
+        {showDiscountPopup && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 transition-opacity animate-in fade-in duration-300"
+              onClick={handleCloseDiscountPopup}
+            ></div>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+              <div className="relative bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden pointer-events-auto animate-in zoom-in-95 slide-in-from-bottom-4 duration-500">
+                {/* Background decoration */}
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 opacity-10"></div>
+                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-br from-red-500 to-pink-500 rounded-full blur-3xl opacity-20 translate-y-1/2 -translate-x-1/2"></div>
+                
+                {/* Close button */}
+                <button
+                  onClick={handleCloseDiscountPopup}
+                  className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-all duration-200 hover:rotate-90 z-10"
+                  aria-label="Close discount popup"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
+
+                {/* Content */}
+                <div className="relative p-8 text-center">
+                  {/* Gift icon with animation */}
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-full mb-6 shadow-xl animate-bounce">
+                    <Gift className="w-10 h-10 text-white" />
+                  </div>
+
+                  {/* Badge */}
+                  <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 rounded-full">
+                    <Sparkles className="w-4 h-4 text-orange-600" />
+                    <span className="text-sm font-bold text-orange-800">Limited Time Offer</span>
+                  </div>
+
+                  {/* Heading */}
+                  <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+                    Get <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">20% OFF</span>
+                  </h2>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Your first order from any local restaurant!
+                  </p>
+
+                  {/* Discount code box */}
+                  <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-6 mb-6 border-2 border-dashed border-orange-300">
+                    <p className="text-sm text-gray-600 mb-3 font-medium">Use code at checkout:</p>
+                    <div className="flex items-center justify-center gap-3">
+                      <span className="text-3xl font-black tracking-widest text-orange-600 bg-white px-6 py-3 rounded-xl shadow-inner border border-orange-200">
+                        {DISCOUNT_CODE}
+                      </span>
+                      <button
+                        onClick={handleCopyDiscountCode}
+                        className={`p-3 rounded-xl transition-all duration-200 ${
+                          discountCodeCopied
+                            ? 'bg-green-500 text-white'
+                            : 'bg-orange-600 text-white hover:bg-orange-700'
+                        }`}
+                        aria-label="Copy discount code"
+                      >
+                        {discountCodeCopied ? (
+                          <Check className="w-5 h-5" />
+                        ) : (
+                          <Copy className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    {discountCodeCopied && (
+                      <p className="text-sm text-green-600 mt-2 font-medium animate-in fade-in duration-200">
+                        Code copied to clipboard!
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Features */}
+                  <div className="grid grid-cols-3 gap-3 mb-6">
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                        <Truck className="w-5 h-5 text-orange-600" />
+                      </div>
+                      <span className="text-xs text-gray-600 font-medium">Free Delivery</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                        <Clock className="w-5 h-5 text-red-600" />
+                      </div>
+                      <span className="text-xs text-gray-600 font-medium">Fast Service</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                      <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
+                        <Star className="w-5 h-5 text-pink-600" />
+                      </div>
+                      <span className="text-xs text-gray-600 font-medium">Top Rated</span>
+                    </div>
+                  </div>
+
+                  {/* CTA buttons */}
+                  <div className="space-y-3">
+                    <Link
+                      to="/signup"
+                      onClick={handleCloseDiscountPopup}
+                      className="block w-full py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl font-bold text-lg hover:from-orange-700 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      Sign Up & Save 20%
+                    </Link>
+                    <button
+                      onClick={handleCloseDiscountPopup}
+                      className="w-full py-3 text-gray-500 hover:text-gray-700 font-medium transition-colors"
+                    >
+                      Maybe Later
+                    </button>
+                  </div>
+
+                  {/* Terms */}
+                  <p className="text-xs text-gray-400 mt-4">
+                    Valid for new customers only. Minimum order $15. Expires in 7 days.
+                  </p>
+                </div>
               </div>
             </div>
           </>
