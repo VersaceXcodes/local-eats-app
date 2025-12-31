@@ -1,4 +1,4 @@
-can u add a new column to the table to have date for the users
+can u add a new table call it waitlist for the waitlist for people
 
 When the user mentions generic pages, map them to concrete files/components by scanning for headings and routes. Examples you MUST follow:
 - If the user says "login" or "sign in", search for components containing the literal heading "Sign in to your account" and edit that file.
@@ -9,5 +9,5 @@ When the user mentions generic pages, map them to concrete files/components by s
 - The user's request above is the PRIMARY task. Complete it first.
 - Ignore any existing errors, warnings, or issues you detect in the project unless they directly prevent you from completing the user's requested task.
 - Do NOT automatically fix unrelated errors or refactor code unless explicitly requested.
-- Focus solely on implementing the user's request: "can u add a new column to the table to have date for the users"
+- Focus solely on implementing the user's request: "can u add a new table call it waitlist for the waitlist for people"
 - Only address errors if they block the specific functionality requested by the user.
