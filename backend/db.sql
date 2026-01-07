@@ -419,6 +419,12 @@ CREATE TABLE test_sync_table4 (
     test_data TEXT
 );
 
+-- test_sync_table7 table
+CREATE TABLE test_sync_table7 (
+    id SERIAL PRIMARY KEY,
+    test_data TEXT
+);
+
 -- ============================================
 -- SEED DATA
 -- ============================================
