@@ -407,6 +407,12 @@ CREATE TABLE weekly_local_picks (
     created_at TEXT NOT NULL
 );
 
+-- test_sync_table2 table
+CREATE TABLE test_sync_table2 (
+    id SERIAL PRIMARY KEY,
+    test_data TEXT
+);
+
 -- ============================================
 -- SEED DATA
 -- ============================================
