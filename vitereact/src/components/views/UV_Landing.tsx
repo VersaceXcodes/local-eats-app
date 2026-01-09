@@ -349,7 +349,7 @@ const UV_Landing: React.FC = () => {
       setTimeout(() => {
         setNewsletterSubmitted(false);
       }, 5000);
-    } catch (error) {
+    } catch {
       setNewsletterError('Something went wrong. Please try again.');
     }
   };
