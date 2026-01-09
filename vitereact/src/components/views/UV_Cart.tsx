@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { ShoppingCart, Plus, Minus, Edit2, Trash2, X, Tag, AlertCircle, CheckCircle2, ArrowLeft, Search } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, Edit2, Trash2, X, Tag, AlertCircle, CheckCircle, ArrowLeft, Search } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -167,7 +167,7 @@ const ToastNotification: React.FC<{
   return (
     <div className={`${bgColor} border rounded-lg shadow-lg p-4 flex items-center justify-between gap-4 min-w-[300px] max-w-md animate-in slide-in-from-bottom-5 duration-300`}>
       <div className="flex items-center gap-3 flex-1">
-        {toast.type === 'success' && <CheckCircle2 className="size-5 text-green-600 flex-shrink-0" />}
+        {toast.type === 'success' && <CheckCircle className="size-5 text-green-600 flex-shrink-0" />}
         {toast.type === 'error' && <AlertCircle className="size-5 text-red-600 flex-shrink-0" />}
         <p className={`${textColor} text-sm font-medium`}>{toast.message}</p>
       </div>
@@ -738,7 +738,7 @@ const UV_Cart: React.FC = () => {
                 {cartData.applied_discount ? (
                   <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-4">
                     <div className="flex items-center gap-3">
-                      <CheckCircle2 className="size-5 text-green-600" />
+                      <CheckCircle className="size-5 text-green-600" />
                       <div>
                         <p className="font-semibold text-green-900">{cartData.applied_discount.code}</p>
                         <p className="text-sm text-green-700">

@@ -3,7 +3,7 @@ import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useAppStore } from '@/store/main';
-import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles, Truck, ShoppingBag, Mail, CheckCircle2, Gift, Copy, Check } from 'lucide-react';
+import { MapPin, Star, Heart, X, SlidersHorizontal, ChevronDown, RefreshCw, Flame, Clock, TrendingUp, Tag, Sparkles, Truck, ShoppingBag, Mail, CheckCircle, Gift, Copy, Check } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 // ============================================================================
@@ -891,7 +891,7 @@ const UV_Landing: React.FC = () => {
             ) : (
               <div className="max-w-xl mx-auto bg-white/20 backdrop-blur-sm rounded-2xl p-8 border-2 border-white/30 animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500 rounded-full mb-4 animate-in zoom-in duration-300">
-                  <CheckCircle2 className="w-10 h-10 text-white" />
+                  <CheckCircle className="w-10 h-10 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">
                   You're all set!
@@ -905,15 +905,15 @@ const UV_Landing: React.FC = () => {
             {/* Trust Badge */}
             <div className="mt-8 flex items-center justify-center gap-6 flex-wrap text-white/80 text-sm">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5" />
+                <CheckCircle className="w-5 h-5" />
                 <span>No spam, ever</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5" />
+                <CheckCircle className="w-5 h-5" />
                 <span>Unsubscribe anytime</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5" />
+                <CheckCircle className="w-5 h-5" />
                 <span>50K+ subscribers</span>
               </div>
             </div>

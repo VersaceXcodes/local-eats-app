@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Download, FileText, Lock, Eye, UserCheck, Globe, Mail, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Shield, Download, FileText, Lock, Eye, UserCheck, Globe, Mail, ChevronRight, CheckCircle } from 'lucide-react';
 
 const UV_Privacy: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>('');
@@ -130,7 +130,7 @@ const UV_Privacy: React.FC = () => {
                 </p>
                 <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg">
                   <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+                    <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                     <div>
                       <h3 className="font-semibold text-blue-900 mb-2">What this means:</h3>
                       <p className="text-blue-800 text-sm leading-relaxed">
@@ -202,7 +202,7 @@ const UV_Privacy: React.FC = () => {
 
                   <div className="bg-green-50 border-l-4 border-green-600 p-6 rounded-lg mt-6">
                     <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                      <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h3 className="font-semibold text-green-900 mb-2">What this means:</h3>
                         <p className="text-green-800 text-sm leading-relaxed">
@@ -270,7 +270,7 @@ const UV_Privacy: React.FC = () => {
 
                   <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg mt-6">
                     <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+                      <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                       <div>
                         <h3 className="font-semibold text-blue-900 mb-2">What this means:</h3>
                         <p className="text-blue-800 text-sm leading-relaxed">
@@ -349,7 +349,7 @@ const UV_Privacy: React.FC = () => {
 
                   <div className="bg-green-50 border-l-4 border-green-600 p-6 rounded-lg mt-6">
                     <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                      <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h3 className="font-semibold text-green-900 mb-2">What this means:</h3>
                         <p className="text-green-800 text-sm leading-relaxed">
@@ -417,7 +417,7 @@ const UV_Privacy: React.FC = () => {
 
                   <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg mt-6">
                     <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+                      <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                       <div>
                         <h3 className="font-semibold text-blue-900 mb-2">What this means:</h3>
                         <p className="text-blue-800 text-sm leading-relaxed">
@@ -499,7 +499,7 @@ const UV_Privacy: React.FC = () => {
 
                   <div className="bg-green-50 border-l-4 border-green-600 p-6 rounded-lg mt-6">
                     <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                      <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
                       <div>
                         <h3 className="font-semibold text-green-900 mb-2">What this means:</h3>
                         <p className="text-green-800 text-sm leading-relaxed">
@@ -573,7 +573,7 @@ const UV_Privacy: React.FC = () => {
 
                   <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-lg mt-6">
                     <div className="flex items-start gap-3">
-                      <CheckCircle2 className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
+                      <CheckCircle className="w-6 h-6 text-blue-600 flex-shrink-0 mt-1" />
                       <div>
                         <h3 className="font-semibold text-blue-900 mb-2">What this means:</h3>
                         <p className="text-blue-800 text-sm leading-relaxed">
@@ -765,19 +765,19 @@ const UV_Privacy: React.FC = () => {
                     <h3 className="font-semibold text-purple-900 mb-3">Your California Privacy Rights</h3>
                     <ul className="space-y-2 text-purple-800 text-sm">
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <span><strong>Right to Know:</strong> Request information about personal data we've collected about you</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <span><strong>Right to Delete:</strong> Request deletion of your personal information</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <span><strong>Right to Opt-Out:</strong> We do not sell your personal information</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <span><strong>Right to Non-Discrimination:</strong> We will not discriminate against you for exercising your rights</span>
                       </li>
                     </ul>
@@ -822,7 +822,7 @@ const UV_Privacy: React.FC = () => {
 
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
                     <h3 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
-                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                      <CheckCircle className="w-5 h-5 text-blue-600" />
                       We Do Not Sell Your Personal Information
                     </h3>
                     <p className="text-gray-700 text-sm">

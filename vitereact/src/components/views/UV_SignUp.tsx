@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppStore } from '@/store/main';
-import { Eye, EyeOff, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -597,7 +597,7 @@ const UV_SignUp: React.FC = () => {
 
               {confirmPasswordTouched && !validationErrors.confirm_password && confirmPassword && (
                 <div className="mt-1.5 flex items-center gap-1.5 text-green-600">
-                  <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 flex-shrink-0" />
                   <p className="text-sm">Passwords match</p>
                 </div>
               )}
